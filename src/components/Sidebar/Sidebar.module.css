@@ -1,0 +1,64 @@
+* {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+}
+
+.container {
+  display: flex;
+}
+main {
+  width: 100%;
+}
+.sidebar {
+  background: #002349;
+  color: #fff;
+  height: 100vh;
+  width: 300px;
+  transition: all 0.5s;
+}
+.top_section {
+  display: flex;
+  align-items: center;
+  padding: 15px 15px;
+  background-color: #001731;
+}
+.logo {
+  font-size: 30px;
+  display: block;
+}
+.bars {
+  display: flex;
+  font-size: 25px;
+  margin-left: 120px;
+  transition: all 0.5s;
+  padding: 14px 0;
+}
+.link {
+  display: flex;
+  color: #fff;
+  padding: 10px 15px;
+  gap: 15px;
+  transition: all 0.5s;
+}
+.link:hover {
+  background: #004fa5;
+  color: #fff;
+  transition: all 0.5s;
+}
+.active {
+  background: #004fa5;
+  color: #fff;
+}
+.icon,
+.link_text {
+  font-size: 17px;
+  transition: all 0.5s;
+}
+.icon svg {
+  margin: 5px 3px;
+}
+.toggle {
+  cursor: pointer;
+  transition: 0.3s;
+}

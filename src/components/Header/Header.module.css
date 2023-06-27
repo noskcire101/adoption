@@ -1,0 +1,12 @@
+img {
+  height: 50px;
+}
+nav {
+  background-color: #002349;
+}
+button {
+  background-color: #002349;
+  &:hover {
+    background-color: #004fa5;
+  }
+}
