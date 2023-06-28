@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Login.module.css";
 import { useForm } from "react-hook-form";
 import { AuthForm, authFormSchema } from "../../models/Form";
@@ -8,12 +8,14 @@ import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import { auth, db } from "../../database/firebase";
 import { setDoc, doc } from "firebase/firestore";
-import { useAppDispatch } from "../../hooks/storeHooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/storeHooks";
 import { login } from "../../features/authSlice";
-import ResetPassword from "../../components/ResetPassword/ResetPassword";
+import ResetPassword from "../../components/resetPassword/ResetPassword";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [authType, setAuthType] = useState<"login" | "signup">("login");
@@ -21,8 +23,37 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState<null | string>(null);
   const [closeWarningMessage, setCloseWarningMessage] = useState(false);
   const [resetPassword, setResetPassword] = useState(false);
+  const [resetPasswordEmail, setResetPasswordEmail] = useState("");
+  const [resetPasswordSuccess, setResetPasswordSuccess] = useState<
+    string | null
+  >(null);
+  const [resetPasswordError, setResetPasswordError] = useState<string | null>(
+    null
+  );
 
+  const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (Boolean(user)) {
+      navigate("/");
+    }
+  }, [user, navigate]);
+
+  const handlePasswordReset = async () => {
+    if (!resetPasswordEmail.length) return;
+    try {
+      await sendPasswordResetEmail(auth, resetPasswordEmail);
+      setResetPasswordSuccess(
+        "Password reset email sent. Please check your inbox."
+      );
+      setResetPasswordError(null);
+    } catch (error: any) {
+      setResetPasswordError(error.message);
+      setResetPasswordSuccess(null);
+    }
+  };
 
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
@@ -107,8 +138,13 @@ const Login = () => {
   return (
     <>
       <ResetPassword
+        resetPasswordEmail={resetPasswordEmail}
+        resetPasswordSuccess={resetPasswordSuccess}
+        resetPasswordError={resetPasswordError}
+        setResetPasswordEmail={setResetPasswordEmail}
         isOpen={resetPassword}
         onClose={() => setResetPassword(false)}
+        handlePasswordReset={handlePasswordReset}
       />
       <div className="w-full max-w-screen-sm mt-10 m-auto">
         <form

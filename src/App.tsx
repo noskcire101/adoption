@@ -1,11 +1,11 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import Sidebar from "./components/Sidebar/Sidebar";
+import Sidebar from "./components/sidebar/Sidebar";
 import Dashboard from "./pages/Dashboard";
 import Blog from "./pages/Blog";
 import { Provider } from "react-redux";
 import { store } from "./store";
-import Header from "./components/Header/Header";
+import Header from "./components/header/Header";
 import Login from "./pages/login/Login";
 
 const App = () => {
@@ -19,6 +19,7 @@ const App = () => {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/login" element={<Login />} />
+            {/* <Route path="/profile" element={<Profile />} /> */}
           </Routes>
         </Sidebar>
       </Provider>

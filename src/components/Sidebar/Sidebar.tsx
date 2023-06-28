@@ -7,6 +7,7 @@ import { SlLogout } from "react-icons/sl";
 import { NavLink } from "react-router-dom";
 import { ReactNode } from "react";
 import styles from "./Sidebar.module.css";
+import { useAppSelector } from "../../hooks/storeHooks";
 
 interface Props {
   children: ReactNode;
@@ -14,9 +15,9 @@ interface Props {
 
 const Sidebar = ({ children }: Props) => {
   const [isOpen, setIsOpen] = useState(true);
-  const toggle = () => setIsOpen(!isOpen);
+  // const toggle = () => setIsOpen(!isOpen);
   const toggleOpen = () => setIsOpen(true);
-
+  const { user } = useAppSelector((state) => state.auth);
   function getWindowDimensions(): {
     windowWidth: number;
     windowHeight: number;
@@ -79,50 +80,63 @@ const Sidebar = ({ children }: Props) => {
     },
   ];
   return (
-    <div className={styles.container}>
-      <div
-        style={{ width: isOpen ? "300px" : "55px" }}
-        className={styles.sidebar}
-      >
-        <div className={styles.top_section}>
-          <h1
-            style={{ display: isOpen ? "block" : "none" }}
-            className={styles.logo}
-          >
-            Logo
-          </h1>
+    <>
+      <div className={styles.container}>
+        <span
+          style={{
+            display: Boolean(!user) ? "none" : "block",
+          }}
+        >
           <div
-            style={{ marginLeft: isOpen ? "120px" : "0px" }}
-            className={styles.bars}
+            style={{ width: isOpen ? "300px" : "55px" }}
+            className={styles.sidebar}
           >
-            {isOpen ? (
-              <GoSidebarExpand className={styles.toggle} onClick={toggle} />
-            ) : (
-              <GoSidebarCollapse className={styles.toggle} onClick={toggle} />
-            )}
+            <div className={styles.top_section}>
+              <h1
+                style={{ display: isOpen ? "block" : "none" }}
+                className={styles.logo}
+              >
+                Logo
+              </h1>
+              {/* <div
+                style={{ marginLeft: isOpen ? "120px" : "0px" }}
+                className={styles.bars}
+              >
+                {isOpen ? (
+                  <GoSidebarExpand className={styles.toggle} onClick={toggle} />
+                ) : (
+                  <GoSidebarCollapse
+                    className={styles.toggle}
+                    onClick={toggle}
+                  />
+                )}
+              </div> */}
+            </div>
+            {menuItem.map((item, index) => (
+              <NavLink
+                to={item.path}
+                key={index}
+                onClick={toggleOpen}
+                className={({ isActive }) =>
+                  isActive
+                    ? [styles.active, styles.link].join(" ")
+                    : styles.link
+                }
+              >
+                <div className={styles.icon}>{item.icon}</div>
+                <p
+                  style={{ display: isOpen ? "block" : "none" }}
+                  className={styles.link_text}
+                >
+                  {item.name}
+                </p>
+              </NavLink>
+            ))}
           </div>
-        </div>
-        {menuItem.map((item, index) => (
-          <NavLink
-            to={item.path}
-            key={index}
-            onClick={toggleOpen}
-            className={({ isActive }) =>
-              isActive ? [styles.active, styles.link].join(" ") : styles.link
-            }
-          >
-            <div className={styles.icon}>{item.icon}</div>
-            <p
-              style={{ display: isOpen ? "block" : "none" }}
-              className={styles.link_text}
-            >
-              {item.name}
-            </p>
-          </NavLink>
-        ))}
+        </span>
+        <main>{children}</main>
       </div>
-      <main>{children}</main>
-    </div>
+    </>
   );
 };
 

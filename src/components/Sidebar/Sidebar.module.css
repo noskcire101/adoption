@@ -22,6 +22,7 @@ main {
   align-items: center;
   padding: 15px 15px;
   background-color: #001731;
+  height: 78px;
 }
 .logo {
   font-size: 30px;
