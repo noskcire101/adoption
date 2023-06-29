@@ -3,7 +3,6 @@ import { FaTh } from "react-icons/fa";
 import { GoSidebarCollapse, GoSidebarExpand } from "react-icons/go";
 
 import { ImBlogger } from "react-icons/im";
-import { SlLogout } from "react-icons/sl";
 import { NavLink } from "react-router-dom";
 import { ReactNode } from "react";
 import styles from "./Sidebar.module.css";
@@ -72,11 +71,6 @@ const Sidebar = ({ children }: Props) => {
       path: "/blog",
       name: "Blog",
       icon: <ImBlogger />,
-    },
-    {
-      path: "/login",
-      name: "Logout",
-      icon: <SlLogout />,
     },
   ];
   return (

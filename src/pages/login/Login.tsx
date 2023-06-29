@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./Login.module.css";
 import { useForm } from "react-hook-form";
 import { AuthForm, authFormSchema } from "../../models/Form";
@@ -135,6 +135,14 @@ const Login = () => {
   function closeWarning() {
     setCloseWarningMessage((prev) => !prev);
   }
+  const showForm = useRef<any>();
+  function loadPageDelay() {
+    const timer = setTimeout(() => {
+      if (showForm.current) showForm.current.style.display = "block";
+    }, 1000);
+    return () => clearTimeout(timer);
+  }
+  loadPageDelay();
   return (
     <>
       <ResetPassword
@@ -146,7 +154,11 @@ const Login = () => {
         onClose={() => setResetPassword(false)}
         handlePasswordReset={handlePasswordReset}
       />
-      <div className="w-full max-w-screen-sm mt-10 m-auto">
+      <div
+        ref={showForm}
+        style={{ display: "none" }}
+        className="w-full max-w-screen-sm mt-10 m-auto"
+      >
         <form
           className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
           onSubmit={handleSubmit(handleFormSubmit)}

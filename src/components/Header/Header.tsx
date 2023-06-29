@@ -34,11 +34,11 @@ const Header = () => {
     dispatch(logout());
   };
 
-  useEffect(() => {
-    if (Boolean(!user)) {
-      navigate("/login");
-    }
-  }, [navigate, user]);
+  // useEffect(() => {
+  //   if (Boolean(!user)) {
+  //     navigate("/login");
+  //   }
+  // }, [navigate, user]);
 
   const handlePasswordReset = async () => {
     if (!resetPasswordEmail.length) return;
@@ -66,13 +66,14 @@ const Header = () => {
         setResetPasswordEmail={setResetPasswordEmail}
       />
       <nav className="bg-[#002349] min-w-[315px]">
-        <div className="max-w-screen-xl  flex flex-wrap items-center justify-between mx-auto p-3">
+        <div
+          style={{
+            display: Boolean(!user) ? "none" : "flex",
+          }}
+          className="max-w-screen-xl  flex flex-wrap items-center justify-between mx-auto p-3"
+        >
           <span className="flex items-center">
-            <form
-              style={{
-                display: Boolean(!user) ? "none" : "block",
-              }}
-            >
+            <form>
               <div className="flex">
                 <select
                   id="dropdown"
