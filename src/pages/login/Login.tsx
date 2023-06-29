@@ -17,7 +17,11 @@ import { login } from "../../features/authSlice";
 import ResetPassword from "../../components/resetPassword/ResetPassword";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+interface Props {
+  toastMessageSuccess: (param: string) => void;
+  toastMessageError: (param: string) => void;
+}
+const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
   const [authType, setAuthType] = useState<"login" | "signup">("login");
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<null | string>(null);
@@ -46,6 +50,9 @@ const Login = () => {
     try {
       await sendPasswordResetEmail(auth, resetPasswordEmail);
       setResetPasswordSuccess(
+        "Password reset email sent. Please check your inbox."
+      );
+      toastMessageSuccess(
         "Password reset email sent. Please check your inbox."
       );
       setResetPasswordError(null);

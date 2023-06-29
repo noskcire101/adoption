@@ -1,6 +1,9 @@
 import React from "react";
-
-const Blog = () => {
+interface Props {
+  toastMessageSuccess: (param: string) => void;
+  toastMessageError: (param: string) => void;
+}
+const Blog = ({ toastMessageSuccess, toastMessageError }: Props) => {
   return <div>Blog</div>;
 };
 
