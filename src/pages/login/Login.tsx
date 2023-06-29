@@ -23,17 +23,10 @@ interface Props {
 }
 const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
   const [authType, setAuthType] = useState<"login" | "signup">("login");
-  const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<null | string>(null);
-  const [closeWarningMessage, setCloseWarningMessage] = useState(false);
-  const [resetPassword, setResetPassword] = useState(false);
+  const [buttonDisabling, setbuttonDisabling] = useState(false);
+  const [resetPasswordContainerVisibily, setResetPasswordContainerVisibily] =
+    useState(false);
   const [resetPasswordEmail, setResetPasswordEmail] = useState("");
-  const [resetPasswordSuccess, setResetPasswordSuccess] = useState<
-    string | null
-  >(null);
-  const [resetPasswordError, setResetPasswordError] = useState<string | null>(
-    null
-  );
 
   const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
@@ -49,16 +42,12 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
     if (!resetPasswordEmail.length) return;
     try {
       await sendPasswordResetEmail(auth, resetPasswordEmail);
-      setResetPasswordSuccess(
-        "Password reset email sent. Please check your inbox."
-      );
       toastMessageSuccess(
-        "Password reset email sent. Please check your inbox."
+        "Reset password request sent. Please check your email."
       );
-      setResetPasswordError(null);
+      setResetPasswordContainerVisibily(false);
     } catch (error: any) {
-      setResetPasswordError(error.message);
-      setResetPasswordSuccess(null);
+      toastMessageError(error.message);
     }
   };
 
@@ -66,6 +55,7 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
     const provider = new GoogleAuthProvider();
     try {
       const { user } = await signInWithPopup(auth, provider);
+      // await setDoc(doc(db, "users", user.uid), { email});
       if (user && user.email) {
         dispatch(
           login({
@@ -74,16 +64,16 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
             photoUrl: user.photoURL || null,
           })
         );
+        toastMessageSuccess("Singin Succesfully");
       }
     } catch (error) {
-      console.log("Error Signin:", error);
+      toastMessageError("Error Occured. Please Try Again");
     }
   };
 
   const handleFormSubmit = async (data: AuthForm) => {
     const { email, password } = data;
-    setErrorMessage(null);
-    setLoading(true);
+    setbuttonDisabling(true);
     if (authType === "signup") {
       try {
         const { user } = await createUserWithEmailAndPassword(
@@ -93,7 +83,7 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
         );
         console.log(user);
         await setDoc(doc(db, "user", user.uid), { email });
-        setLoading(false);
+        setbuttonDisabling(false);
         if (user && user.email)
           dispatch(
             login({
@@ -102,17 +92,15 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
               photoUrl: user.photoURL || null,
             })
           );
+        toastMessageSuccess("Account Succesfully Created");
       } catch (error: any) {
-        setLoading(false);
+        setbuttonDisabling(false);
         const errorCode = error.code;
-        setErrorMessage(errorCode);
-        if (errorCode) {
-          setCloseWarningMessage((prev) => !prev);
-        }
+        toastMessageError(errorCode);
       }
     } else {
       const { user } = await signInWithEmailAndPassword(auth, email, password);
-      setLoading(false);
+      setbuttonDisabling(false);
       if (user && user.email) {
         dispatch(
           login({
@@ -121,6 +109,7 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
             photoUrl: user.photoURL || null,
           })
         );
+        toastMessageSuccess("Login Success");
       }
     }
   };
@@ -139,9 +128,6 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
     resolver: yupResolver(authFormSchema),
   });
 
-  function closeWarning() {
-    setCloseWarningMessage((prev) => !prev);
-  }
   const showForm = useRef<any>();
   function loadPageDelay() {
     const timer = setTimeout(() => {
@@ -154,11 +140,9 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
     <>
       <ResetPassword
         resetPasswordEmail={resetPasswordEmail}
-        resetPasswordSuccess={resetPasswordSuccess}
-        resetPasswordError={resetPasswordError}
         setResetPasswordEmail={setResetPasswordEmail}
-        isOpen={resetPassword}
-        onClose={() => setResetPassword(false)}
+        isOpen={resetPasswordContainerVisibily}
+        onClose={() => setResetPasswordContainerVisibily(false)}
         handlePasswordReset={handlePasswordReset}
       />
       <div
@@ -170,29 +154,6 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
           className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
           onSubmit={handleSubmit(handleFormSubmit)}
         >
-          <div
-            style={
-              closeWarningMessage ? { display: "block" } : { display: "none" }
-            }
-            className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-            role="alert"
-          >
-            <span className="block sm:inline">{errorMessage}</span>
-            <span
-              className="absolute top-0 bottom-0 right-0 px-4 py-3"
-              onClick={closeWarning}
-            >
-              <svg
-                className="fill-current h-6 w-6 text-red-500"
-                role="button"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-              >
-                <title>Close</title>
-                <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
-              </svg>
-            </span>
-          </div>
           <h3 className="text-[37px] text-center py-7 font-bold dark:text-white">
             {authType === "login" ? "Sign In" : "Sign Up"}
           </h3>
@@ -252,7 +213,7 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
           </div>
           <div className="pt-5 flex items-center justify-between">
             <button
-              disabled={loading}
+              disabled={buttonDisabling}
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
             >
@@ -260,7 +221,7 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
             </button>
             <span
               className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
-              onClick={() => setResetPassword(true)}
+              onClick={() => setResetPasswordContainerVisibily(true)}
             >
               Forgot Password?
             </span>

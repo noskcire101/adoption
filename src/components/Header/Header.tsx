@@ -7,18 +7,18 @@ import { logout } from "../../features/authSlice";
 import { auth } from "../../database/firebase";
 import ResetPassword from "../resetPassword/ResetPassword";
 
-const Header = () => {
+interface Props {
+  toastMessageSuccess: (param: string) => void;
+  toastMessageError: (param: string) => void;
+}
+
+const Header = ({ toastMessageSuccess, toastMessageError }: Props) => {
   const { user } = useAppSelector((state) => state.auth);
   const [profileDropdown, setProfileDropdown] = useState(false);
   const [resetPasswordEmail, setResetPasswordEmail] = useState("");
-  const [resetPasswordSuccess, setResetPasswordSuccess] = useState<
-    string | null
-  >(null);
-  const [resetPasswordError, setResetPasswordError] = useState<string | null>(
-    null
-  );
-  const [resetPassword, setResetPassword] = useState(false);
 
+  const [resetPasswordContainerVisibily, setResetPasswordContainerVisibily] =
+    useState(false);
   const [filter, setFilter] = useState(false);
   function blurHandler() {
     const timer = setTimeout(() => {
@@ -32,6 +32,7 @@ const Header = () => {
   const handleLogout = async () => {
     await signOut(auth);
     dispatch(logout());
+    toastMessageSuccess("You are now Logout");
   };
 
   // useEffect(() => {
@@ -44,13 +45,12 @@ const Header = () => {
     if (!resetPasswordEmail.length) return;
     try {
       await sendPasswordResetEmail(auth, resetPasswordEmail);
-      setResetPasswordSuccess(
-        "Password reset email sent. Please check your inbox."
+      toastMessageSuccess(
+        "Change password request sent. Please check your email."
       );
-      setResetPasswordError(null);
+      setResetPasswordContainerVisibily(false);
     } catch (error: any) {
-      setResetPasswordError(error.message);
-      setResetPasswordSuccess(null);
+      toastMessageError(error.message);
     }
   };
 
@@ -58,11 +58,9 @@ const Header = () => {
     <>
       <ResetPassword
         handlePasswordReset={handlePasswordReset}
-        isOpen={resetPassword}
-        onClose={() => setResetPassword(false)}
+        isOpen={resetPasswordContainerVisibily}
+        onClose={() => setResetPasswordContainerVisibily(false)}
         resetPasswordEmail={resetPasswordEmail}
-        resetPasswordError={resetPasswordError}
-        resetPasswordSuccess={resetPasswordSuccess}
         setResetPasswordEmail={setResetPasswordEmail}
       />
       <nav className="bg-[#002349] min-w-[315px]">
@@ -144,7 +142,7 @@ const Header = () => {
               <ul className="py-2" aria-labelledby="user-menu-button">
                 <li>
                   <a
-                    onClick={() => setResetPassword(true)}
+                    onClick={() => setResetPasswordContainerVisibily(true)}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                   >
                     Change Password

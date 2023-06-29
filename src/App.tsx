@@ -37,7 +37,7 @@ const App = () => {
     });
   };
   const showToastMessageError = (toastMessage: string) => {
-    toast.success(toastMessage, {
+    toast.error(toastMessage, {
       position: toast.POSITION.TOP_RIGHT,
     });
   };
@@ -45,7 +45,10 @@ const App = () => {
   return (
     <>
       <Sidebar>
-        <Header />
+        <Header
+          toastMessageSuccess={showToastMessageSuccess}
+          toastMessageError={showToastMessageError}
+        />
         <Routes>
           <Route element={<LoginRoutes />}>
             <Route
