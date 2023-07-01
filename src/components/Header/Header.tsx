@@ -32,7 +32,7 @@ const Header = ({ toastMessageSuccess, toastMessageError }: Props) => {
   const handleLogout = async () => {
     await signOut(auth);
     dispatch(logout());
-    toastMessageSuccess("You are now Logout");
+    toastMessageSuccess("You have successfully been logged out");
   };
 
   // useEffect(() => {
@@ -68,7 +68,7 @@ const Header = ({ toastMessageSuccess, toastMessageError }: Props) => {
           style={{
             display: Boolean(!user) ? "none" : "flex",
           }}
-          className="max-w-screen-xl  flex flex-wrap items-center justify-between mx-auto p-3"
+          className="max-w-screen-2xl  flex flex-wrap items-center justify-between mx-auto p-3"
         >
           <span className="flex items-center">
             <form>
@@ -94,15 +94,6 @@ const Header = ({ toastMessageSuccess, toastMessageError }: Props) => {
             </form>
           </span>
           <div className="flex flex-col content-end items-center md:order-2">
-            {Boolean(!user) && (
-              <Link
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                to="/login"
-              >
-                Sign in
-              </Link>
-            )}
-
             {user ? (
               <button
                 className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 "
@@ -132,9 +123,9 @@ const Header = ({ toastMessageSuccess, toastMessageError }: Props) => {
               className="z-50 top-10 right-12 fixed my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
             >
               <div className="px-4 py-3">
-                {/* <span className="block text-sm text-gray-900 dark:text-white">
-                  Name Here
-                </span> */}
+                <span className="block text-sm text-gray-900 dark:text-white">
+                  {user?.fullName}
+                </span>
                 <span className="block text-sm  text-gray-500 truncate dark:text-gray-400">
                   {user?.email}
                 </span>
@@ -143,7 +134,7 @@ const Header = ({ toastMessageSuccess, toastMessageError }: Props) => {
                 <li>
                   <a
                     onClick={() => setResetPasswordContainerVisibily(true)}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 font-bold  text-sm text-blue-500 hover:text-blue-800 cursor-pointer"
                   >
                     Change Password
                   </a>
@@ -151,9 +142,9 @@ const Header = ({ toastMessageSuccess, toastMessageError }: Props) => {
                 <li>
                   <a
                     onClick={handleLogout}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 font-bold  text-sm text-blue-500 hover:text-blue-800 cursor-pointer"
                   >
-                    Sign out
+                    Log Out
                   </a>
                 </li>
               </ul>

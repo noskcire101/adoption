@@ -5,7 +5,8 @@ import Dashboard from "./pages/Dashboard";
 import Blog from "./pages/Blog";
 
 import Header from "./components/header/Header";
-import Login from "./pages/login/Login";
+import Login from "./pages/authentication/Login";
+import SignUp from "./pages/authentication/Signup";
 import { useEffect } from "react";
 import { login } from "./features/authSlice";
 import { auth } from "./database/firebase";
@@ -22,8 +23,9 @@ const App = () => {
       if (user && user.email)
         dispatch(
           login({
-            email: user.email,
             id: user.uid,
+            fullName: user.displayName || null,
+            email: user.email,
             photoUrl: user?.photoURL || null,
           })
         );
@@ -31,6 +33,7 @@ const App = () => {
 
     return () => unsubscribe();
   }, [dispatch]);
+
   const showToastMessageSuccess = (toastMessage: string) => {
     toast.success(toastMessage, {
       position: toast.POSITION.TOP_RIGHT,
@@ -79,9 +82,19 @@ const App = () => {
               />
             }
           />
+          <Route
+            path="/signup"
+            element={
+              <SignUp
+                toastMessageSuccess={showToastMessageSuccess}
+                toastMessageError={showToastMessageError}
+              />
+            }
+          />
           {/* <Route path="/profile" element={<Profile />} /> */}
         </Routes>
       </Sidebar>
+
       <ToastContainer />
     </>
   );

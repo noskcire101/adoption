@@ -1,10 +1,15 @@
 
 import { createSlice } from "@reduxjs/toolkit";
-import { User } from "../models/User";
 import type {PayloadAction} from "@reduxjs/toolkit";
-import { useState } from "react";
 
 
+interface User{
+    id:string;
+    fullName:string | null;
+    email:string; 
+    photoUrl:string |null;
+    
+}
 export interface AuthState{
     user:null | User;
 }
@@ -18,7 +23,6 @@ initialState,
 reducers:{
     login:(state,action:PayloadAction<User>) =>{
         state.user = action.payload;
-        console.log(state.user, 'hey');
     },
     logout: (state) => {
         state.user = null;
