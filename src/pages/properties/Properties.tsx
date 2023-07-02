@@ -91,11 +91,6 @@ const Properties = ({ toastMessageSuccess, toastMessageError }: Props) => {
     setminPageNumberLimit(minPageNumberLimit - pageNumberLimit);
   }
 
-  let pageIncrementBtn = null;
-  if (pages.length > maxPageNumberLimit) {
-    pageIncrementBtn = <li onClick={renderNextBatch}> &hellip; </li>;
-  }
-
   function handleLoadMore() {
     if (data.length >= currentPage * (itemsPerPage + 5)) {
       setitemsPerPage(itemsPerPage + 5);
@@ -104,7 +99,7 @@ const Properties = ({ toastMessageSuccess, toastMessageError }: Props) => {
 
   return (
     <>
-      <div className="overflow-auto h-[90vh] py-[8%] px-[5%] pl-[4%] mx-[0%]">
+      <div className="overflow-auto h-[90vh] py-[5vh] px-[5%] pl-[4%] mx-[0%]">
         <div className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-l hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
           <img
             className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-96 md:rounded-none md:rounded-l-lg"
