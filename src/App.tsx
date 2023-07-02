@@ -2,19 +2,20 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Sidebar from "./components/sidebar/Sidebar";
 import Dashboard from "./pages/Dashboard";
-import Blog from "./pages/Blog";
+import Blog from "./pages/properties/Properties";
 
 import Header from "./components/header/Header";
 import Login from "./pages/authentication/Login";
 import SignUp from "./pages/authentication/Signup";
 import { useEffect } from "react";
-import { login } from "./features/authSlice";
+import { login } from "./storeReduxTools/authSlice";
 import { auth } from "./database/firebase";
 import { unsubscribe } from "diagnostics_channel";
-import { useAppDispatch } from "./hooks/storeHooks";
+import { useAppDispatch } from "./storeReduxTools/storeHooks";
 import LoginRoutes from "./components/HOC/LoginRoutes";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Properties from "./pages/properties/Properties";
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -64,9 +65,9 @@ const App = () => {
               }
             />
             <Route
-              path="/blog"
+              path="/properties"
               element={
-                <Blog
+                <Properties
                   toastMessageSuccess={showToastMessageSuccess}
                   toastMessageError={showToastMessageError}
                 />

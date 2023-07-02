@@ -8,11 +8,7 @@ import React, {
 } from "react";
 import styles from "./Login.module.css";
 import { useForm } from "react-hook-form";
-import {
-  AuthFormLogin,
-  authFormSchemaLogin,
-  convertToTitleCase,
-} from "../../formModels/Form";
+import { AuthFormLogin, authFormSchemaLogin } from "../../yupModels/Form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   createUserWithEmailAndPassword,
@@ -24,10 +20,14 @@ import {
 } from "firebase/auth";
 import { auth, db } from "../../database/firebase";
 import { setDoc, doc } from "firebase/firestore";
-import { useAppDispatch, useAppSelector } from "../../hooks/storeHooks";
-import { login } from "../../features/authSlice";
-import ResetPassword from "../../components/resetPassword/ResetPassword";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../storeReduxTools/storeHooks";
+import { login } from "../../storeReduxTools/authSlice";
+import ResetPassword from "./ResetPassword";
 import { Link, useNavigate } from "react-router-dom";
+import { convertToTitleCase } from "../../reusableFunctions/reusablefunctions";
 
 interface Props {
   toastMessageSuccess: (param: string) => void;

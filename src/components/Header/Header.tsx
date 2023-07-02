@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./Header.module.css";
 import { Link, useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../hooks/storeHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../storeReduxTools/storeHooks";
 import { sendPasswordResetEmail, signOut } from "firebase/auth";
-import { logout } from "../../features/authSlice";
+import { logout } from "../../storeReduxTools/authSlice";
 import { auth } from "../../database/firebase";
-import ResetPassword from "../resetPassword/ResetPassword";
+import ResetPassword from "../../pages/authentication/ResetPassword";
 
 interface Props {
   toastMessageSuccess: (param: string) => void;

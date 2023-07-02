@@ -6,7 +6,7 @@ import { ImBlogger } from "react-icons/im";
 import { NavLink } from "react-router-dom";
 import { ReactNode } from "react";
 import styles from "./Sidebar.module.css";
-import { useAppSelector } from "../../hooks/storeHooks";
+import { useAppSelector } from "../../storeReduxTools/storeHooks";
 
 interface Props {
   children: ReactNode;
@@ -68,8 +68,8 @@ const Sidebar = ({ children }: Props) => {
       icon: <FaTh />,
     },
     {
-      path: "/blog",
-      name: "Blog",
+      path: "/properties",
+      name: "Properties",
       icon: <ImBlogger />,
     },
   ];
@@ -110,7 +110,6 @@ const Sidebar = ({ children }: Props) => {
               <NavLink
                 to={item.path}
                 key={index}
-                onClick={toggleOpen}
                 className={({ isActive }) =>
                   isActive
                     ? [styles.active, styles.link].join(" ")
