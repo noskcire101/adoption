@@ -38,23 +38,6 @@ const Properties = ({ toastMessageSuccess, toastMessageError }: Props) => {
     setcurrentPage(Number(event.target.id));
   }
 
-  const renderPageNumbers = pages.map((number) => {
-    if (number < maxPageNumberLimit + 1 && number > minPageNumberLimit) {
-      return (
-        <li
-          key={number}
-          id={String(number)}
-          onClick={handleClick}
-          className={currentPage == number ? styles.active : ""}
-        >
-          {number}
-        </li>
-      );
-    } else {
-      return null;
-    }
-  });
-
   useEffect(() => {
     fetch("https://jsonplaceholder.typicode.com/todos")
       .then((response) => response.json())
@@ -92,10 +75,42 @@ const Properties = ({ toastMessageSuccess, toastMessageError }: Props) => {
   }
 
   function handleLoadMore() {
-    if (data.length >= currentPage * (itemsPerPage + 5)) {
-      setitemsPerPage(itemsPerPage + 5);
+    if (data.length >= currentPage * (itemsPerPage + pageNumberLimit)) {
+      setitemsPerPage(itemsPerPage + pageNumberLimit);
+    } else {
+      setitemsPerPage(itemsPerPage + pageNumberLimit);
+
+      setmaxPageNumberLimit(
+        Math.ceil(
+          data.length / (itemsPerPage + pageNumberLimit) / pageNumberLimit
+        ) * pageNumberLimit
+      );
+      setminPageNumberLimit(
+        Math.ceil(
+          data.length / (itemsPerPage + pageNumberLimit) / pageNumberLimit
+        ) *
+          pageNumberLimit -
+          pageNumberLimit
+      );
+      setcurrentPage(Math.ceil(data.length / (itemsPerPage + pageNumberLimit)));
     }
   }
+  console.log(currentPage, "current page");
+  console.log(minPageNumberLimit, "minPageNumberLimit");
+  console.log(maxPageNumberLimit, "maxPageNumberLimit");
+  console.log(Math.ceil(data.length / itemsPerPage), "total page");
+  console.log(data.length, "total items");
+
+  // console.log(Math.ceil(data.length / itemsPerPage), "lastpage");
+  // console.log(
+  //   Math.round(data.length / itemsPerPage / pageNumberLimit) * pageNumberLimit,
+  //   "maxpagenumberlimit"
+  // );
+  // console.log(
+  //   Math.round(data.length / itemsPerPage / pageNumberLimit) * pageNumberLimit -
+  //     pageNumberLimit
+  // );
+  // console.log(currentPage);
 
   return (
     <>
@@ -130,7 +145,11 @@ const Properties = ({ toastMessageSuccess, toastMessageError }: Props) => {
         <h1>Todo List</h1> <br />
         <ul>
           {currentItems?.map((data: any, index: number) => {
-            return <li key={index}>{data.title}</li>;
+            return (
+              <li style={{ cursor: "pointer" }} key={index}>
+                {data.title}
+              </li>
+            );
           })}
         </ul>
         <nav aria-label="Page navigation example">
@@ -182,10 +201,10 @@ const Properties = ({ toastMessageSuccess, toastMessageError }: Props) => {
                     className={
                       currentPage == number
                         ? [
-                            "px-3 py-1.5 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white",
+                            "cursor-pointer px-3 py-1.5 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white",
                             styles.active,
                           ].join(" ")
-                        : "px-3 py-1.5 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white"
+                        : "cursor-pointer px-3 py-1.5 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white"
                     }
                   >
                     {number}
@@ -240,7 +259,7 @@ const Properties = ({ toastMessageSuccess, toastMessageError }: Props) => {
             }
           >
             {data.length >= currentPage * (itemsPerPage + 5)
-              ? "Expand More"
+              ? "Expand Pages"
               : "Expansion Limit Reached"}
           </button>
         </div>

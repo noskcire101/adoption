@@ -2,7 +2,6 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Sidebar from "./components/sidebar/Sidebar";
 import Dashboard from "./pages/Dashboard";
-import Blog from "./pages/properties/Properties";
 
 import Header from "./components/header/Header";
 import Login from "./pages/authentication/Login";
