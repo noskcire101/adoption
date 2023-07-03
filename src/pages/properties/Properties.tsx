@@ -6,7 +6,6 @@ import {
   TfiAngleLeft,
   TfiAngleRight,
 } from "react-icons/tfi";
-import { MdOutlineArrowBackIos } from "react-icons/md";
 
 interface Props {
   toastMessageSuccess: (param: string) => void;
@@ -33,6 +32,10 @@ const Properties = ({ toastMessageSuccess, toastMessageError }: Props) => {
   // console.log(indexOfLastItem, "-indexOfLastItem ,must not over total items");
   // console.log(itemsPerPage, "-itemsPerPage soon be +5");
   // console.log(currentPage, "-currentPage");
+
+  function currentListOfEachItemsIndexFromPagination(param: any) {
+    ///add useState inside to get the value;
+  }
 
   function handleClick(event: any) {
     setcurrentPage(Number(event.target.id));
