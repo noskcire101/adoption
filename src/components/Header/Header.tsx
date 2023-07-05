@@ -66,36 +66,56 @@ const Header = ({ toastMessageSuccess, toastMessageError }: Props) => {
         resetPasswordEmail={resetPasswordEmail}
         setResetPasswordEmail={setResetPasswordEmail}
       />
-      <nav className="bg-[#002349] min-w-[315px]">
+      <nav className="bg-[#002349] min-w-[345px]">
         <div
           style={{
             display: Boolean(!user) ? "none" : "flex",
           }}
           className="max-w-screen-2xl  flex flex-wrap items-center justify-between mx-auto p-3"
         >
-          <span className="flex items-center">
-            <form>
-              <div className="flex">
-                <select
-                  id="dropdown"
-                  className=" px-3  text-sm font-medium text-gray-900 bg-[#ddefff] rounded-l-lg hover:bg-gray-200"
-                >
-                  <option>Mockups</option>
-                  <option>Templates</option>
-                  <option>Design</option>
-                  <option>Logos</option>
-                </select>
-                <div className="relative w-full">
-                  <input
-                    type="search"
-                    id="search-dropdown"
-                    className="block p-2.5 md:w-[400px] sm:w-[200px] w-[100px] z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
-                    placeholder="Search..."
-                  />
-                </div>
+          <div className="list-item md:inline-flex md:flex-row-reverse  items-center">
+            <div className="flex">
+              <div className="relative w-full">
+                <input
+                  type="search"
+                  id="search-dropdown"
+                  className="block p-2 md:w-[250px] sm:w-[295px] w-[245px] z-20 text-[10px] sm:text-xs text-gray-900 bg-gray-50 rounded-r-lg rounded-l-lg md:rounded-l-none border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
+                  placeholder="Search..."
+                />
               </div>
-            </form>
-          </span>
+            </div>
+            <div className="flex pt-1 md:pt-0 items-center">
+              <select
+                id="dropdown"
+                className=" px-1 py-2 text-[9px] sm:text-xs text-gray-900 bg-[#ddefff] rounded-l-lg hover:bg-gray-200"
+              >
+                <option>All Types</option>
+                <option>Dogs</option>
+                <option>Cats</option>
+                <option>Rabbits</option>
+                <option>Guinea Pigs</option>
+                <option>Birds</option>
+              </select>
+              <select
+                id="dropdown2"
+                className=" px-1 py-2 text-[9px] sm:text-xs  text-gray-900 bg-[#ddefff] hover:bg-gray-200"
+              >
+                <option>All Gender</option>
+                <option>Male</option>
+                <option>Female</option>
+              </select>
+              <select
+                id="dropdown4"
+                className=" px-1 py-2 text-[9px] sm:text-xs text-gray-900 rounded-r-lg md:rounded-r-none bg-[#ddefff] hover:bg-gray-200"
+              >
+                {" "}
+                <option>All Ages</option>
+                <option>Below 3 Months</option>
+                <option>3-12 Months</option>
+                <option>Above 1 Year</option>
+              </select>
+            </div>
+          </div>
           <div className="flex flex-col content-end items-center md:order-2">
             {user ? (
               <button

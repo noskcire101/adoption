@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { FaTh } from "react-icons/fa";
-import { GoSidebarCollapse, GoSidebarExpand } from "react-icons/go";
-
-import { ImBlogger } from "react-icons/im";
+import { MdOutlinePets } from "react-icons/md";
+import { BsPostcardHeart, BsFillPersonVcardFill } from "react-icons/bs";
+import { LuMailSearch } from "react-icons/lu";
+import { TbMoodSearch } from "react-icons/tb";
 import { NavLink } from "react-router-dom";
 import { ReactNode } from "react";
 import styles from "./Sidebar.module.css";
@@ -64,19 +64,30 @@ const Sidebar = ({ children }: Props) => {
   const menuItem = [
     {
       path: "/",
-      name: "Dashboard",
-      icon: <FaTh />,
+      name: "Pets For Adoption",
+      icon: <MdOutlinePets />,
     },
     {
-      path: "/properties",
-      name: "Properties",
-      icon: <ImBlogger />,
+      path: "/adopters",
+      name: "Pet Adopters",
+      icon: <TbMoodSearch />,
+    },
+    {
+      path: "/mypost",
+      name: "My Posts",
+      icon: <BsPostcardHeart />,
+    },
+    {
+      path: "/messages",
+      name: "Applicant Received",
+      icon: <BsFillPersonVcardFill />,
     },
   ];
   return (
     <>
       <div className={styles.container}>
         <span
+          className={styles.innerCon}
           style={{
             display: Boolean(!user) ? "none" : "block",
           }}

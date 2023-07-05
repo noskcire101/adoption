@@ -1,7 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Sidebar from "./components/sidebar/Sidebar";
-import Dashboard from "./pages/Dashboard";
 
 import Header from "./components/header/Header";
 import Login from "./pages/authentication/Login";
@@ -14,7 +13,9 @@ import { useAppDispatch } from "./storeReduxTools/storeHooks";
 import LoginRoutes from "./components/HOC/LoginRoutes";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Properties from "./pages/properties/Properties";
+import Feed from "./pages/feed/Feed";
+import FeedDetails from "./pages/feed/FeedDetails";
+import NotFoundPage from "./pages/notFoundPage/notFoundPage";
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -54,24 +55,18 @@ const App = () => {
         />
         <Routes>
           <Route element={<LoginRoutes />}>
-            <Route
-              path="/"
-              element={
-                <Dashboard
-                  toastMessageSuccess={showToastMessageSuccess}
-                  toastMessageError={showToastMessageError}
-                />
-              }
-            />
-            <Route
-              path="/properties"
-              element={
-                <Properties
-                  toastMessageSuccess={showToastMessageSuccess}
-                  toastMessageError={showToastMessageError}
-                />
-              }
-            />
+            <Route path="/">
+              <Route
+                index
+                element={
+                  <Feed
+                    toastMessageSuccess={showToastMessageSuccess}
+                    toastMessageError={showToastMessageError}
+                  />
+                }
+              />
+              <Route path=":id" element={<FeedDetails />} />
+            </Route>
           </Route>
           <Route
             path="/login"
@@ -91,6 +86,7 @@ const App = () => {
               />
             }
           />
+          <Route path="/*" element={<NotFoundPage />} />
           {/* <Route path="/profile" element={<Profile />} /> */}
         </Routes>
       </Sidebar>

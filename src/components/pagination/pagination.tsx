@@ -1,214 +1,225 @@
-import React, { useState } from "react";
+import React, { Dispatch } from "react";
 import styles from "./Pagination.module.css";
 import {
+  TfiAngleDoubleDown,
   TfiAngleDoubleLeft,
   TfiAngleDoubleRight,
   TfiAngleLeft,
   TfiAngleRight,
 } from "react-icons/tfi";
-
+import {
+  handleClick,
+  handleNextbtn,
+  handlePrevbtn,
+  handleNextBatch,
+  handlePrevBatch,
+  createPages,
+  handleLoadMore,
+} from "./paginationFunctions";
+import { blogProps } from "../../yupModels/blog";
 interface Props {
-  listOfDataFromDb: [];
-  numberOfItemsRenderPerPage: number;
-  pageNumberLimitPerBatch: number;
-  currentListOfEachItemsIndexFromPagination(param: any): any;
+  dataFromDB: blogProps[];
+  itemLimitPerPage: number;
+  pageNumberLimit: number;
+  currentPage: number;
+  setcurrentPage: Dispatch<React.SetStateAction<number>>;
+  startingPageNumberInCurrentBatch: number;
+  setStartingPageNumberInCurrentBatch: Dispatch<React.SetStateAction<number>>;
+  lastPageNumberInCurrentBatch: number;
+  setLastPageNumberInCurrentBatch: Dispatch<React.SetStateAction<number>>;
+  setitemLimitPerPage: Dispatch<React.SetStateAction<number>>;
 }
 
-const pagination = ({
-  listOfDataFromDb,
-  numberOfItemsRenderPerPage,
-  pageNumberLimitPerBatch,
-  currentListOfEachItemsIndexFromPagination,
+const Pagination = ({
+  setitemLimitPerPage,
+  lastPageNumberInCurrentBatch,
+  dataFromDB,
+  itemLimitPerPage,
+  currentPage,
+  setStartingPageNumberInCurrentBatch,
+  pageNumberLimit,
+  startingPageNumberInCurrentBatch,
+  setcurrentPage,
+  setLastPageNumberInCurrentBatch,
 }: Props) => {
-  const [currentPage, setcurrentPage] = useState(1);
-  const [lastPageNumberInCurrentBatch, setlastPageNumberInCurrentBatch] =
-    useState(pageNumberLimitPerBatch);
-  const [
-    startingPageNumberInCurrentBatch,
-    setStartingPageNumberInCurrentBatch,
-  ] = useState(0);
-  const indexOfLastItemInCurrentBatch =
-    currentPage * numberOfItemsRenderPerPage;
-  const indexOfFirstItemInCurrentBatch =
-    indexOfLastItemInCurrentBatch - numberOfItemsRenderPerPage;
-  currentListOfEachItemsIndexFromPagination(
-    listOfDataFromDb.slice(
-      indexOfFirstItemInCurrentBatch,
-      indexOfLastItemInCurrentBatch
-    )
-  );
-  //preparing number for each pages
-  const pagesNumbers = [];
-  for (
-    let i = 1;
-    i <= Math.ceil(listOfDataFromDb.length / numberOfItemsRenderPerPage);
-    i++
-  ) {
-    pagesNumbers.push(i);
-  }
-
-  function handleClick(event: any) {
-    setcurrentPage(Number(event.target.id));
-  }
-  function handleNextbtn() {
-    setcurrentPage(currentPage + 1);
-
-    if (currentPage + 1 > lastPageNumberInCurrentBatch) {
-      setlastPageNumberInCurrentBatch(
-        lastPageNumberInCurrentBatch + pageNumberLimitPerBatch
-      );
-      setStartingPageNumberInCurrentBatch(
-        startingPageNumberInCurrentBatch + pageNumberLimitPerBatch
-      );
-    }
-  }
-  function handlePrevbtn() {
-    setcurrentPage(currentPage - 1);
-
-    if ((currentPage - 1) % pageNumberLimitPerBatch == 0) {
-      setlastPageNumberInCurrentBatch(
-        lastPageNumberInCurrentBatch - pageNumberLimitPerBatch
-      );
-      setStartingPageNumberInCurrentBatch(
-        startingPageNumberInCurrentBatch - pageNumberLimitPerBatch
-      );
-    }
-  }
-
-  function renderNextBatch() {
-    setcurrentPage(lastPageNumberInCurrentBatch + 1);
-    setlastPageNumberInCurrentBatch(
-      lastPageNumberInCurrentBatch + pageNumberLimitPerBatch
-    );
-    setStartingPageNumberInCurrentBatch(lastPageNumberInCurrentBatch);
-  }
-
-  function renderPrevBatch() {
-    setcurrentPage(
-      startingPageNumberInCurrentBatch + 1 - pageNumberLimitPerBatch
-    );
-    setlastPageNumberInCurrentBatch(startingPageNumberInCurrentBatch);
-    setStartingPageNumberInCurrentBatch(
-      startingPageNumberInCurrentBatch - pageNumberLimitPerBatch
-    );
-  }
-
+  const pages: any[] = createPages(dataFromDB, itemLimitPerPage);
+  console.log(itemLimitPerPage, "itemLimitPerPage");
+  console.log(dataFromDB.length, "dataFromDB.length");
   return (
     <>
       {" "}
-      <nav aria-label="Page navigation example">
-        <ul className="inline-flex -space-x-px">
-          <li>
-            <button
-              style={{
-                opacity: startingPageNumberInCurrentBatch >= 1 ? "1" : "0.3",
-              }}
-              disabled={startingPageNumberInCurrentBatch >= 1 ? false : true}
-              onClick={renderPrevBatch}
-              className={
-                startingPageNumberInCurrentBatch >= 1
-                  ? "cursor-pointer px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white"
-                  : "cursor-not-allowed px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 "
-              }
-            >
-              <TfiAngleDoubleLeft />
-            </button>
-          </li>
+      <div className="overflow-auto pb-[2vh] px-[5%] pl-[4%] mx-[0%]">
+        <nav aria-label="Pagination" className="border-t-2">
+          <p className="text-gray-500 text-xs pt-[2vh]">
+            Page {currentPage} of{" "}
+            {Math.ceil(dataFromDB.length / itemLimitPerPage)}
+          </p>
+          <ul className="inline-flex -space-x-px mt-1">
+            <li>
+              <button
+                style={{
+                  opacity: startingPageNumberInCurrentBatch >= 1 ? "1" : "0.3",
+                }}
+                disabled={startingPageNumberInCurrentBatch >= 1 ? false : true}
+                onClick={() =>
+                  handlePrevBatch(
+                    setcurrentPage,
+                    setLastPageNumberInCurrentBatch,
+                    pageNumberLimit,
+                    setStartingPageNumberInCurrentBatch,
+                    startingPageNumberInCurrentBatch
+                  )
+                }
+                className={
+                  startingPageNumberInCurrentBatch >= 1
+                    ? "cursor-pointer text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white"
+                    : "cursor-not-allowed text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 "
+                }
+              >
+                <TfiAngleDoubleLeft />
+              </button>
+            </li>
 
-          <li>
-            <button
-              style={{
-                opacity: currentPage == pagesNumbers[0] ? "0.3" : "1",
-              }}
-              onClick={handlePrevbtn}
-              disabled={currentPage == pagesNumbers[0] ? true : false}
-              className={
-                currentPage == pagesNumbers[0]
-                  ? "cursor-not-allowed px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 "
-                  : "cursor-pointer px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white"
-              }
-            >
-              <TfiAngleLeft />
-            </button>
-          </li>
+            <li>
+              <button
+                style={{
+                  opacity: currentPage == pages[0] ? "0.3" : "1",
+                }}
+                onClick={() =>
+                  handlePrevbtn(
+                    setcurrentPage,
+                    currentPage,
+                    lastPageNumberInCurrentBatch,
+                    setLastPageNumberInCurrentBatch,
+                    pageNumberLimit,
+                    setStartingPageNumberInCurrentBatch,
+                    startingPageNumberInCurrentBatch
+                  )
+                }
+                disabled={currentPage == pages[0] ? true : false}
+                className={
+                  currentPage == pages[0]
+                    ? "cursor-not-allowed text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 "
+                    : "cursor-pointer text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white"
+                }
+              >
+                <TfiAngleLeft />
+              </button>
+            </li>
 
-          {pagesNumbers.map((number) => {
-            if (
-              number < lastPageNumberInCurrentBatch + 1 &&
-              number > startingPageNumberInCurrentBatch
-            ) {
-              return (
-                <li
-                  key={number}
-                  id={String(number)}
-                  onClick={handleClick}
-                  className={
-                    currentPage == number
-                      ? [
-                          "cursor-pointer px-3 py-1.5 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white",
-                          styles.active,
-                        ].join(" ")
-                      : "cursor-pointer px-3 py-1.5 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white"
-                  }
-                >
-                  {number}
-                </li>
-              );
-            } else {
-              return null;
-            }
-          })}
-          <li>
-            <button
-              onClick={handleNextbtn}
-              style={{
-                opacity:
-                  currentPage == pagesNumbers[pagesNumbers.length - 1]
-                    ? "0.4"
-                    : "1",
-              }}
-              disabled={
-                currentPage == pagesNumbers[pagesNumbers.length - 1]
-                  ? true
-                  : false
+            {pages.map((number: number) => {
+              if (
+                number < lastPageNumberInCurrentBatch + 1 &&
+                number > startingPageNumberInCurrentBatch
+              ) {
+                return (
+                  <li
+                    key={number}
+                    id={String(number)}
+                    onClick={() => handleClick(number, setcurrentPage)}
+                    className={
+                      currentPage == number
+                        ? [
+                            "cursor-pointer  text-xs px-2 py-1.5 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white",
+                            styles.active,
+                          ].join(" ")
+                        : "cursor-pointer  text-xs px-2 py-1.5 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white"
+                    }
+                  >
+                    {number}
+                  </li>
+                );
+              } else {
+                return null;
               }
-              className={
-                currentPage == pagesNumbers[pagesNumbers.length - 1]
-                  ? "cursor-not-allowed px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 "
-                  : "cursor-pointer px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white"
-              }
-            >
-              <TfiAngleRight />
-            </button>
-          </li>
+            })}
+            <li>
+              <button
+                onClick={() =>
+                  handleNextbtn(
+                    setcurrentPage,
+                    currentPage,
+                    lastPageNumberInCurrentBatch,
+                    setLastPageNumberInCurrentBatch,
+                    pageNumberLimit,
+                    setStartingPageNumberInCurrentBatch,
+                    startingPageNumberInCurrentBatch
+                  )
+                }
+                style={{
+                  opacity: currentPage == pages[pages.length - 1] ? "0.4" : "1",
+                }}
+                disabled={currentPage == pages[pages.length - 1] ? true : false}
+                className={
+                  currentPage == pages[pages.length - 1]
+                    ? "cursor-not-allowed text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 "
+                    : "cursor-pointer text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white"
+                }
+              >
+                <TfiAngleRight />
+              </button>
+            </li>
 
-          <li>
-            <button
-              style={{
-                opacity:
-                  pagesNumbers.length > lastPageNumberInCurrentBatch
-                    ? "1"
-                    : "0.4",
-              }}
-              disabled={
-                pagesNumbers.length > lastPageNumberInCurrentBatch
-                  ? false
-                  : true
-              }
-              onClick={renderNextBatch}
-              className={
-                pagesNumbers.length > lastPageNumberInCurrentBatch
-                  ? "cursor-pointer px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white"
-                  : "cursor-not-allowed px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 "
-              }
-            >
-              <TfiAngleDoubleRight />
-            </button>
-          </li>
-        </ul>
-      </nav>
+            <li>
+              <button
+                style={{
+                  opacity:
+                    pages.length > lastPageNumberInCurrentBatch ? "1" : "0.4",
+                }}
+                disabled={
+                  pages.length > lastPageNumberInCurrentBatch ? false : true
+                }
+                onClick={() =>
+                  handleNextBatch(
+                    setcurrentPage,
+                    lastPageNumberInCurrentBatch,
+                    setLastPageNumberInCurrentBatch,
+                    pageNumberLimit,
+                    setStartingPageNumberInCurrentBatch
+                  )
+                }
+                className={
+                  pages.length > lastPageNumberInCurrentBatch
+                    ? "cursor-pointer text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white"
+                    : "cursor-not-allowed text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 "
+                }
+              >
+                <TfiAngleDoubleRight />
+              </button>
+            </li>
+            <span className="w-[10px]"></span>
+            <li>
+              <button
+                style={{
+                  opacity: itemLimitPerPage <= dataFromDB.length ? "1" : "0.3",
+                }}
+                disabled={itemLimitPerPage <= dataFromDB.length ? false : true}
+                onClick={() =>
+                  handleLoadMore(
+                    dataFromDB,
+                    currentPage,
+                    itemLimitPerPage,
+                    pageNumberLimit,
+                    setitemLimitPerPage,
+                    setLastPageNumberInCurrentBatch,
+                    setStartingPageNumberInCurrentBatch,
+                    setcurrentPage
+                  )
+                }
+                className={
+                  itemLimitPerPage <= dataFromDB.length
+                    ? "cursor-pointer text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white"
+                    : "cursor-not-allowed text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300"
+                }
+              >
+                <TfiAngleDoubleDown />
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </>
   );
 };
 
-export default pagination;
+export default Pagination;
