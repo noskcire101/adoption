@@ -1,0 +1,46 @@
+ul.dropDown {
+  font-size: 15px;
+  background-color: #001730;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+}
+ul.dropDown li {
+  text-indent: 47px;
+  padding: 8px;
+  cursor: pointer;
+}
+ul.dropDown li:hover {
+  background: #01458f;
+  color: #fff;
+  transition: all 0.5s;
+}
+.link {
+  display: flex;
+  white-space: nowrap;
+  color: #fff;
+  padding: 10px 15px;
+  gap: 15px;
+  transition: all 0.5s;
+}
+.link:hover {
+  background: #004fa5;
+  color: #fff;
+  transition: all 0.5s;
+  cursor: pointer;
+}
+.active {
+  background: #004fa5;
+  color: #fff;
+}
+.icon,
+.link_text {
+  font-size: 17px;
+  transition: all 0.5s;
+}
+.icon svg {
+  margin: 5px 3px;
+}
+.toggle {
+  cursor: pointer;
+  transition: 0.3s;
+}

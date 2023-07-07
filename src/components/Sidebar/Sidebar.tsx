@@ -1,66 +1,36 @@
 import React, { useEffect, useState } from "react";
-import { MdOutlinePets } from "react-icons/md";
+import { MdOutlinePets, MdAccountBox } from "react-icons/md";
 import { BsPostcardHeart, BsFillPersonVcardFill } from "react-icons/bs";
-import { LuMailSearch } from "react-icons/lu";
+import { BiLogOut } from "react-icons/bi";
+import { TfiAlignRight, TfiClose } from "react-icons/tfi";
+import { TfiAngleUp, TfiAngleDown } from "react-icons/tfi";
 import { TbMoodSearch } from "react-icons/tb";
 import { NavLink } from "react-router-dom";
 import { ReactNode } from "react";
 import styles from "./Sidebar.module.css";
 import { useAppSelector } from "../../storeReduxTools/storeHooks";
+import SidebarItems from "./SidebarItems";
 
 interface Props {
   children: ReactNode;
 }
+function closeAllTabs(setState: React.Dispatch<React.SetStateAction<boolean>>) {
+  return setState(false);
+}
 
 const Sidebar = ({ children }: Props) => {
-  const [isOpen, setIsOpen] = useState(true);
-  // const toggle = () => setIsOpen(!isOpen);
+  function blurHandler() {
+    setIsOpen(false);
+  }
+  const [isOpen, setIsOpen] = useState(false);
+  const toggle = () => setIsOpen(!isOpen);
   const toggleOpen = () => setIsOpen(true);
   const { user } = useAppSelector((state) => state.auth);
-  function getWindowDimensions(): {
-    windowWidth: number;
-    windowHeight: number;
-  } {
-    if (typeof window === "undefined") {
-      const windowWidth = 0;
-      const windowHeight = 0;
-      return { windowWidth, windowHeight };
-    }
-
-    const { innerWidth: windowWidth, innerHeight: windowHeight } = window;
-
-    return {
-      windowWidth,
-      windowHeight,
-    };
+  const [openSub, setopenSub] = useState(false);
+  function handleClick() {
+    blurHandler();
+    closeAllTabs(setopenSub);
   }
-
-  function UseWindowDimensions(): {
-    windowWidth: number;
-    windowHeight: number;
-  } {
-    const [windowDimensions, setWindowDimensions] = useState(
-      getWindowDimensions()
-    );
-
-    useEffect(() => {
-      function handleResize(): void {
-        setWindowDimensions(getWindowDimensions());
-      }
-
-      window.addEventListener("resize", handleResize);
-
-      return (): void => window.removeEventListener("resize", handleResize);
-    }, []);
-
-    return windowDimensions;
-  }
-  const { windowWidth } = UseWindowDimensions();
-
-  useEffect(() => {
-    windowWidth > 947 ? setIsOpen(true) : setIsOpen(false);
-  }, [windowWidth]);
-
   const menuItem = [
     {
       path: "/",
@@ -69,19 +39,29 @@ const Sidebar = ({ children }: Props) => {
     },
     {
       path: "/adopters",
-      name: "Pet Adopters",
+      name: "Search Adopters",
       icon: <TbMoodSearch />,
+    },
+    {
+      path: "/messages",
+      name: "Request Received",
+      icon: <BsFillPersonVcardFill />,
     },
     {
       path: "/mypost",
       name: "My Posts",
       icon: <BsPostcardHeart />,
     },
-    {
-      path: "/messages",
-      name: "Applicant Received",
-      icon: <BsFillPersonVcardFill />,
-    },
+
+    // {
+    //   path: "/myaccount",
+    //   name: "My Account",
+    //   icon: <MdAccountBox />,
+    //   submenu: [
+    //     { subpath: "/item1", subname: "Update Information" },
+    //     { subpath: "/item2", subname: "Change Password" },
+    //   ],
+    // },
   ];
   return (
     <>
@@ -93,52 +73,109 @@ const Sidebar = ({ children }: Props) => {
           }}
         >
           <div
-            style={{ width: isOpen ? "300px" : "55px" }}
+            style={{ width: isOpen ? "250px" : "0px" }}
             className={styles.sidebar}
           >
             <div className={styles.top_section}>
-              <h1
-                style={{ display: isOpen ? "block" : "none" }}
+              <div
+                style={{ display: isOpen ? "flex" : "none" }}
                 className={styles.logo}
               >
-                Logo
-              </h1>
-              {/* <div
-                style={{ marginLeft: isOpen ? "120px" : "0px" }}
+                {" "}
+                {user?.photoUrl ? (
+                  <img className="w-12 h-12 rounded-full" src={user.photoUrl} />
+                ) : (
+                  <div
+                    style={{ padding: "11px" }}
+                    className="w-12 h-12 text-[30px] bg-[#fff] rounded-full"
+                  >
+                    {" "}
+                    {user?.email[0].toUpperCase()}
+                  </div>
+                )}{" "}
+                <div className="ml-[10px]">
+                  <p className="text-xs">You are Login as:</p>
+                  <p className="text-sm">{user?.fullName}</p>
+                </div>
+              </div>
+              <button
+                // onBlur={blurHandler}
+                onClick={toggle}
+                style={{ marginLeft: isOpen ? "0px" : "0px" }}
                 className={styles.bars}
               >
                 {isOpen ? (
-                  <GoSidebarExpand className={styles.toggle} onClick={toggle} />
+                  <TfiClose className={styles.toggle} />
                 ) : (
-                  <GoSidebarCollapse
-                    className={styles.toggle}
-                    onClick={toggle}
-                  />
+                  <TfiAlignRight className={styles.toggle} />
                 )}
-              </div> */}
+              </button>
             </div>
+
             {menuItem.map((item, index) => (
-              <NavLink
-                to={item.path}
-                key={index}
-                className={({ isActive }) =>
-                  isActive
-                    ? [styles.active, styles.link].join(" ")
-                    : styles.link
-                }
-              >
-                <div className={styles.icon}>{item.icon}</div>
-                <p
-                  style={{ display: isOpen ? "block" : "none" }}
-                  className={styles.link_text}
-                >
-                  {item.name}
-                </p>
-              </NavLink>
+              <>
+                <SidebarItems
+                  path={item.path}
+                  name={item.name}
+                  icon={item.icon}
+                  index={index}
+                  isOpen={isOpen}
+                  parenthandleClick={handleClick}
+                  // submenu={item.submenu}
+                  blurHandler={blurHandler}
+                  closeAllTabs={closeAllTabs}
+                />
+              </>
             ))}
+
+            <div
+              onClick={() => setopenSub(!openSub)}
+              className={
+                openSub ? [styles.active, styles.link].join(" ") : styles.link
+              }
+            >
+              <div className={styles.icon}>
+                <MdAccountBox />
+              </div>
+              <p
+                style={{ display: isOpen ? "block" : "none" }}
+                className={styles.link_text}
+              >
+                My Account
+              </p>
+              {openSub ? (
+                <TfiAngleUp className="self-center duration-1000" />
+              ) : (
+                <TfiAngleDown className="self-center duration-1000" />
+              )}
+            </div>
+            <ul
+              style={{ display: openSub ? "block" : "none" }}
+              className={styles.dropDown}
+            >
+              <li onClick={handleClick} className="text-sm">
+                Update Information
+              </li>
+              <li onClick={handleClick} className="text-sm">
+                Change Password
+              </li>
+            </ul>
+
+            <div className={styles.link}>
+              <div className={styles.icon}>
+                <BiLogOut />
+              </div>
+              <p
+                style={{ display: isOpen ? "block" : "none" }}
+                className={styles.link_text}
+              >
+                Logout
+              </p>
+            </div>
           </div>
         </span>
-        <main>{children}</main>
+
+        <main onClick={handleClick}>{children}</main>
       </div>
     </>
   );

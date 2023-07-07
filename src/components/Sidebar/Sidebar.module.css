@@ -6,9 +6,15 @@
 
 .container {
   display: flex;
+  justify-content: flex-end;
+  min-width: 345px;
 }
+
 .innerCon {
   background: #002349;
+  display: block;
+  position: fixed;
+  z-index: 9999;
 }
 main {
   width: 100%;
@@ -29,17 +35,41 @@ main {
 }
 .logo {
   font-size: 30px;
-  display: block;
+  display: flex;
+  white-space: nowrap;
+  align-items: center;
 }
 .bars {
   display: flex;
   font-size: 25px;
-  margin-left: 120px;
+  margin-left: 0px;
   transition: all 0.5s;
-  padding: 14px 0;
+  padding: 23px;
+  background-color: #001730;
+  position: absolute;
+  left: -70px;
+  cursor: pointer;
+}
+
+ul.dropDown {
+  font-size: 15px;
+  background-color: #001730;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+}
+ul.dropDown li {
+  text-indent: 47px;
+  padding: 8px;
+  cursor: pointer;
+}
+ul.dropDown li:hover {
+  background: #01458f;
+  color: #fff;
+  transition: all 0.5s;
 }
 .link {
   display: flex;
+  white-space: nowrap;
   color: #fff;
   padding: 10px 15px;
   gap: 15px;
@@ -49,6 +79,7 @@ main {
   background: #004fa5;
   color: #fff;
   transition: all 0.5s;
+  cursor: pointer;
 }
 .active {
   background: #004fa5;

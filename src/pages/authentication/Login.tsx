@@ -136,7 +136,7 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
   function loadPageDelay() {
     const timer = setTimeout(() => {
       if (showForm.current) showForm.current.style.display = "block";
-    }, 1000);
+    }, 5000);
     return () => clearTimeout(timer);
   }
   loadPageDelay();

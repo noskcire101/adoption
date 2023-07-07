@@ -48,9 +48,9 @@ const Pagination = ({
   return (
     <>
       {" "}
-      <div className="overflow-auto pb-[2vh] px-[5%] pl-[4%] mx-[0%]">
+      <div className="overflow-auto pb-[2vh] text-center px-[5%] pl-[4%] mx-[0%]">
         <nav aria-label="Pagination" className="border-t-2">
-          <p className="text-gray-500 text-xs pt-[2vh]">
+          <p className="text-gray-500 text-xs pb-[1vh] pt-[2vh]">
             Page {currentPage} of{" "}
             {Math.ceil(dataFromDB.length / itemLimitPerPage)}
           </p>
@@ -72,8 +72,8 @@ const Pagination = ({
                 }
                 className={
                   startingPageNumberInCurrentBatch >= 1
-                    ? "cursor-pointer text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white"
-                    : "cursor-not-allowed text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 "
+                    ? "cursor-pointer md:text-sm md:px-3 md:py-3 text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white"
+                    : "cursor-not-allowed md:text-sm md:px-3 md:py-3 text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 "
                 }
               >
                 <TfiAngleDoubleLeft />
@@ -99,8 +99,8 @@ const Pagination = ({
                 disabled={currentPage == pages[0] ? true : false}
                 className={
                   currentPage == pages[0]
-                    ? "cursor-not-allowed text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 "
-                    : "cursor-pointer text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white"
+                    ? "cursor-not-allowed md:text-sm md:px-3 md:py-3 text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 "
+                    : "cursor-pointer md:text-sm md:px-3 md:py-3 text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white"
                 }
               >
                 <TfiAngleLeft />
@@ -120,10 +120,10 @@ const Pagination = ({
                     className={
                       currentPage == number
                         ? [
-                            "cursor-pointer  text-xs px-2 py-1.5 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white",
+                            "cursor-pointer md:text-sm md:px-4 md:py-2 text-xs px-2 py-1.5 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white",
                             styles.active,
                           ].join(" ")
-                        : "cursor-pointer  text-xs px-2 py-1.5 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white"
+                        : "cursor-pointer md:text-sm md:px-4 md:py-2 text-xs px-2 py-1.5 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white"
                     }
                   >
                     {number}
@@ -152,8 +152,8 @@ const Pagination = ({
                 disabled={currentPage == pages[pages.length - 1] ? true : false}
                 className={
                   currentPage == pages[pages.length - 1]
-                    ? "cursor-not-allowed text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 "
-                    : "cursor-pointer text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white"
+                    ? "cursor-not-allowed md:text-sm md:px-3 md:py-3 text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 "
+                    : "cursor-pointer md:text-sm md:px-3 md:py-3 text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white"
                 }
               >
                 <TfiAngleRight />
@@ -180,8 +180,8 @@ const Pagination = ({
                 }
                 className={
                   pages.length > lastPageNumberInCurrentBatch
-                    ? "cursor-pointer text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white"
-                    : "cursor-not-allowed text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 "
+                    ? "cursor-pointer md:text-sm md:px-3 md:py-3 text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white"
+                    : "cursor-not-allowed md:text-sm md:px-3 md:py-3 text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 "
                 }
               >
                 <TfiAngleDoubleRight />
@@ -208,8 +208,8 @@ const Pagination = ({
                 }
                 className={
                   itemLimitPerPage <= dataFromDB.length
-                    ? "cursor-pointer text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white"
-                    : "cursor-not-allowed text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300"
+                    ? "cursor-pointer md:text-sm md:px-3 md:py-3 text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white"
+                    : "cursor-not-allowed md:text-sm md:px-3 md:py-3 text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300"
                 }
               >
                 <TfiAngleDoubleDown />

@@ -4,3 +4,7 @@ export const convertToTitleCase = (str:any) => {
   }).join(' ');
   return titleCase;
   }
+
+export const delayingRender = (delay: number) =>{
+    return new Promise( res => setTimeout(res, delay) );
+}

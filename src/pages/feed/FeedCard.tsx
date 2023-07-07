@@ -2,7 +2,7 @@ import React from "react";
 import { blogProps } from "../../yupModels/blog";
 import { Link } from "react-router-dom";
 import { GoHeart } from "react-icons/go";
-
+import { MdOutlinePets } from "react-icons/md";
 interface Props {
   index: number;
   title: any;
@@ -64,21 +64,31 @@ const FeedCard = ({ index, title, description, id }: Props) => {
             </p>
             <p className="text-gray-500 text-xs">Dewormed: Yes</p>
           </div>
-          <footer className="flex items-center justify-between leading-none pr-2 pl-2 md:pr-4 md:pl-4 pt-2 pb-5 ">
+          <footer className="flex-col min-[400px]:flex-row  flex items-center  justify-center min-[400px]:justify-between leading-none pr-2 pl-2 md:pr-4 md:pl-4 pt-2 pb-5 ">
             <Link
               to={`/${id}`}
               className="flex items-center no-underline hover:underline text-black"
             >
-              <img
-                alt="Placeholder"
-                className="block rounded-full"
-                src="https://picsum.photos/32/32/?random"
-              />
-              <p className="text-gray-500 text-[10px] ml-2">
-                Posted By:<br></br>
-                Erickson Sernero
-              </p>
+              <div className="inline-flex items-center">
+                <img
+                  alt="Placeholder"
+                  className="block rounded-full"
+                  src="https://picsum.photos/32/32/?random"
+                />
+                <p className="text-gray-500 text-[11px] min-[400px]:text-[8px] max-w-[100px] min-[1280px]:max-w-auto min-[1280px]:text-[9px] ml-2 mr-2 inline-flex">
+                  By: Erickson Sernero
+                  <br></br>
+                  Date: June 1, 2023
+                </p>
+              </div>
             </Link>
+
+            <button
+              type="button"
+              className="text-white min-w-[153px] bg-[#002349] hover:bg-[#001730]/90 w-full mt-3 min-[400px]:mt-0 min-[400px]:w-auto place-content-center font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
+            >
+              Request to Adopt
+            </button>
           </footer>
         </article>
       </li>

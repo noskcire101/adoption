@@ -66,12 +66,12 @@ const Header = ({ toastMessageSuccess, toastMessageError }: Props) => {
         resetPasswordEmail={resetPasswordEmail}
         setResetPasswordEmail={setResetPasswordEmail}
       />
-      <nav className="bg-[#002349] min-w-[345px]">
+      <nav className="sticky top-0 ... bg-[#002349] min-w-[345px] ">
         <div
           style={{
             display: Boolean(!user) ? "none" : "flex",
           }}
-          className="max-w-screen-2xl  flex flex-wrap items-center justify-between mx-auto p-3"
+          className="max-w-[1630px] flex flex-wrap items-center justify-between mx-auto  py-3 pl-[10px] pr-[70px] md:px-[75px] xl:px-[6%] 2xl:px-[5%]"
         >
           <div className="list-item md:inline-flex md:flex-row-reverse  items-center">
             <div className="flex">
@@ -79,7 +79,7 @@ const Header = ({ toastMessageSuccess, toastMessageError }: Props) => {
                 <input
                   type="search"
                   id="search-dropdown"
-                  className="block p-2 md:w-[250px] sm:w-[295px] w-[245px] z-20 text-[10px] sm:text-xs text-gray-900 bg-gray-50 rounded-r-lg rounded-l-lg md:rounded-l-none border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
+                  className="block p-1 sm:p-1.5 md:w-[250px] sm:w-[295px] w-[193px] z-20 text-[10px] sm:text-xs text-gray-900 bg-gray-50 rounded-r-lg rounded-l-lg md:rounded-l-none border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
                   placeholder="Search..."
                 />
               </div>
@@ -87,7 +87,7 @@ const Header = ({ toastMessageSuccess, toastMessageError }: Props) => {
             <div className="flex pt-1 md:pt-0 items-center">
               <select
                 id="dropdown"
-                className=" px-1 py-2 text-[9px] sm:text-xs text-gray-900 bg-[#ddefff] rounded-l-lg hover:bg-gray-200"
+                className=" px-1 py-1.5 text-[6px] sm:text-xs text-gray-900 bg-[#ddefff] rounded-l-lg hover:bg-gray-200"
               >
                 <option>All Types</option>
                 <option>Dogs</option>
@@ -98,7 +98,7 @@ const Header = ({ toastMessageSuccess, toastMessageError }: Props) => {
               </select>
               <select
                 id="dropdown2"
-                className=" px-1 py-2 text-[9px] sm:text-xs  text-gray-900 bg-[#ddefff] hover:bg-gray-200"
+                className=" px-1 py-1.5 text-[6px] sm:text-xs  text-gray-900 bg-[#ddefff] hover:bg-gray-200"
               >
                 <option>All Gender</option>
                 <option>Male</option>
@@ -106,7 +106,7 @@ const Header = ({ toastMessageSuccess, toastMessageError }: Props) => {
               </select>
               <select
                 id="dropdown4"
-                className=" px-1 py-2 text-[9px] sm:text-xs text-gray-900 rounded-r-lg md:rounded-r-none bg-[#ddefff] hover:bg-gray-200"
+                className=" px-1 py-1.5 text-[6px] sm:text-xs text-gray-900 rounded-r-lg md:rounded-r-none bg-[#ddefff] hover:bg-gray-200"
               >
                 {" "}
                 <option>All Ages</option>
@@ -143,7 +143,7 @@ const Header = ({ toastMessageSuccess, toastMessageError }: Props) => {
               style={{
                 display: profileDropdown ? "block" : "none",
               }}
-              className="z-50 top-10 right-12 fixed my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+              className="z-50 top-[50px] right-[100px] fixed my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
             >
               <div className="px-4 py-3">
                 <span className="block text-sm text-gray-900 dark:text-white">

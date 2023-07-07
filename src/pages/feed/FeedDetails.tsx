@@ -5,9 +5,11 @@ const PropertiesUpdate = () => {
   const { id } = useParams();
 
   return (
-    <div>
-      <h2>{id}</h2>
-    </div>
+    <>
+      <div>
+        <h2>{id}</h2>
+      </div>
+    </>
   );
 };
 
