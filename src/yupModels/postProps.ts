@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-export interface blogProps {
+export interface postProps {
     author?: string;
     cover?: string;
     date?: string;

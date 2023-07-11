@@ -9,14 +9,13 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { auth, db } from "../../database/firebase";
-import { setDoc, doc, collection } from "firebase/firestore";
+import { setDoc, doc } from "firebase/firestore";
 import {
   useAppDispatch,
   useAppSelector,
 } from "../../storeReduxTools/storeHooks";
 import { login } from "../../storeReduxTools/authSlice";
 import { Link, useNavigate } from "react-router-dom";
-import useLocalStorage from "../../database/useLocalStorage";
 import { convertToTitleCase } from "../../reusableFunctions/reusablefunctions";
 
 interface Props {
@@ -25,19 +24,14 @@ interface Props {
 }
 const Signup = ({ toastMessageSuccess, toastMessageError }: Props) => {
   const [buttonDisabling, setbuttonDisabling] = useState(false);
-  const [storeLocalStorage, setstoreLocalStorage] = useLocalStorage(
-    "email",
-    ""
-  );
+
   const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
   useEffect(() => {
-    if (Boolean(user)) {
-      navigate("/");
-    }
-  }, [user, navigate]);
+    Boolean(user) && navigate("/");
+  }, [user]);
 
   const signInWithGoogle = async () => {
     try {
@@ -89,7 +83,7 @@ const Signup = ({ toastMessageSuccess, toastMessageError }: Props) => {
         dispatch(
           login({
             id: user.uid,
-            fullName: user.displayName,
+            fullName: fullName,
             email: user.email,
             photoUrl: user.photoURL || null,
           })

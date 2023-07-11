@@ -6,7 +6,9 @@ import { Dispatch, SetStateAction } from "react";
 
 export const getAllDocsInACollection = async (collectionName:any,setDataFromDB:Dispatch<SetStateAction<any[]>>,) =>{
   const querySnapshot = await getDocs(collection(db, collectionName));
+  
   const document:any =[];
+  if (querySnapshot) {
       querySnapshot.forEach((doc) => {
         document.push({
           ...doc.data(),
@@ -14,6 +16,10 @@ export const getAllDocsInACollection = async (collectionName:any,setDataFromDB:D
         });
       });
       setDataFromDB(document);
+    }
+    else{
+      console.log("not connected")
+    }
 }
 
 

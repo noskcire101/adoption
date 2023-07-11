@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
 import Sidebar from "./components/sidebar/Sidebar";
 
@@ -13,9 +13,10 @@ import { useAppDispatch } from "./storeReduxTools/storeHooks";
 import LoginRoutes from "./components/HOC/LoginRoutes";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Feed from "./pages/feed/Feed";
-import FeedDetails from "./pages/feed/FeedDetails";
+import AllPost from "./pages/allpost/AllPost";
+import FeedDetails from "./pages/allpost/PostDetails";
 import NotFoundPage from "./pages/notFoundPage/notFoundPage";
+import CreatePost from "./pages/allpost/CreatePost";
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -48,26 +49,39 @@ const App = () => {
 
   return (
     <>
-      <Sidebar>
+      <Sidebar
+        toastMessageSuccess={showToastMessageSuccess}
+        toastMessageError={showToastMessageError}
+      >
         <Header
           toastMessageSuccess={showToastMessageSuccess}
           toastMessageError={showToastMessageError}
         />
         <Routes>
-          <Route element={<LoginRoutes />}>
-            <Route path="/">
-              <Route
-                index
-                element={
-                  <Feed
-                    toastMessageSuccess={showToastMessageSuccess}
-                    toastMessageError={showToastMessageError}
-                  />
-                }
-              />
-              <Route path=":id" element={<FeedDetails />} />
-            </Route>
+          {/* <Route element={<LoginRoutes />}> */}
+          <Route path="/">
+            <Route
+              index
+              element={
+                <AllPost
+                  toastMessageSuccess={showToastMessageSuccess}
+                  toastMessageError={showToastMessageError}
+                />
+              }
+            />
+            <Route path=":id" element={<FeedDetails />} />
+            <Route
+              path="/new"
+              element={
+                <CreatePost
+                  toastMessageSuccess={showToastMessageSuccess}
+                  toastMessageError={showToastMessageError}
+                />
+              }
+            />
           </Route>
+
+          {/* </Route> */}
           <Route
             path="/login"
             element={
@@ -87,6 +101,7 @@ const App = () => {
             }
           />
           <Route path="/*" element={<NotFoundPage />} />
+
           {/* <Route path="/profile" element={<Profile />} /> */}
         </Routes>
       </Sidebar>

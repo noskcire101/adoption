@@ -4,7 +4,6 @@ import { Navigate, Outlet } from "react-router-dom";
 
 const LoginRoutes = () => {
   const { user } = useAppSelector((state) => state.auth);
-
   return Boolean(user) ? <Outlet /> : <Navigate to="/login" />;
 };
 

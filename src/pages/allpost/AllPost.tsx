@@ -1,20 +1,22 @@
-import React, { Fragment, ReactNode, useEffect, useState } from "react";
-import styles from "./Feed.module.css";
+import React, { Fragment, ReactNode, useEffect, useRef, useState } from "react";
+import styles from "./AllPost.module.css";
 
 import Pagination from "../../components/pagination/pagination";
 
 import { getAllDocsInACollection } from "../../database/crud";
 import { Link } from "react-router-dom";
-import { blogProps } from "../../yupModels/blog";
-import FeedCard from "./FeedCard";
+import { postProps } from "../../yupModels/postProps";
+import PostCard from "./PostCard";
 import { useAppSelector } from "../../storeReduxTools/storeHooks";
+import NeedsLoginMessage from "../../components/needsLoginMessage/NeedsLoginMessage";
+import MainContentTitle from "../../components/mainContentTitle/mainContentTitle";
 
 interface Props {
   toastMessageSuccess: (param: string) => void;
   toastMessageError: (param: string) => void;
 }
 
-const Feed = ({ toastMessageSuccess, toastMessageError }: Props) => {
+const AllPost = ({ toastMessageSuccess, toastMessageError }: Props) => {
   const { user } = useAppSelector((state) => state.auth);
   const [currentPage, setcurrentPage] = useState(1);
   const [itemLimitPerPage, setitemLimitPerPage] = useState(5);
@@ -28,7 +30,7 @@ const Feed = ({ toastMessageSuccess, toastMessageError }: Props) => {
   const indexOfLastItemInCurrentBatch = currentPage * itemLimitPerPage;
   const indexOfFirstItemInCurrrentBatch =
     indexOfLastItemInCurrentBatch - itemLimitPerPage;
-  const [dataFromDB, setDataFromDB] = useState<blogProps[]>([]);
+  const [dataFromDB, setDataFromDB] = useState<postProps[]>([]);
   const currentItems: any[] = dataFromDB.slice(
     indexOfFirstItemInCurrrentBatch,
     indexOfLastItemInCurrentBatch
@@ -38,19 +40,23 @@ const Feed = ({ toastMessageSuccess, toastMessageError }: Props) => {
     getAllDocsInACollection("blog", setDataFromDB);
   }, []);
 
-  // fetch("https://jsonplaceholder.typicode.com/todos")
-  //   .then((response) => response.json())
-  //   .then((json) => setDataFromDB(json));
+  const [delayExecute, setdelayExecute] = useState(false);
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setdelayExecute(true);
+    }, 5000);
+    return () => clearTimeout(timeout);
+  }, [delayExecute]);
 
   return (
     <>
-      {/* <div className="overflow-auto h-[81vh] sm:h-[100%] pb-[4vh] mx-[0%]"></div> */}
-      {/* {user && (
-        <h2 className="drop-shadow-[2px_2px_var(--tw-shadow-color)] shadow-white bg-gradient-to-b from-white ... text-2xl  p-10 text-center sticky top-[71px] ... text-[#002349] md:text-3xl   ">
-          Free Pets For Adoption
-        </h2>
-      )} */}
-      <div className="overflow-auto pb-[4vh] mx-[0%]">
+      <MainContentTitle />
+      {delayExecute && !user && <NeedsLoginMessage />}
+
+      <div
+        style={{ display: user ? "block" : "none" }}
+        className="overflow-auto pb-[4vh] mx-[0%]"
+      >
         <div className="container mx-auto px-[5%] md:px-12">
           <ul className="flex flex-wrap -mx-1 lg:-mx-4">
             {currentItems?.map((data, index) => {
@@ -62,7 +68,7 @@ const Feed = ({ toastMessageSuccess, toastMessageError }: Props) => {
                 //   {data.id}
                 // </p>
 
-                <FeedCard
+                <PostCard
                   id={data.id}
                   index={index}
                   title={data.title}
@@ -311,22 +317,23 @@ const Feed = ({ toastMessageSuccess, toastMessageError }: Props) => {
           </ul>
         </div>
       </div>
-
-      <Pagination
-        setitemLimitPerPage={setitemLimitPerPage}
-        itemLimitPerPage={itemLimitPerPage}
-        dataFromDB={dataFromDB}
-        pageNumberLimit={pageNumberLimit}
-        currentPage={currentPage}
-        setcurrentPage={setcurrentPage}
-        startingPageNumberInCurrentBatch={startingPageNumberInCurrentBatch}
-        setStartingPageNumberInCurrentBatch={
-          setStartingPageNumberInCurrentBatch
-        }
-        lastPageNumberInCurrentBatch={lastPageNumberInCurrentBatch}
-        setLastPageNumberInCurrentBatch={setLastPageNumberInCurrentBatch}
-      />
+      {user && (
+        <Pagination
+          setitemLimitPerPage={setitemLimitPerPage}
+          itemLimitPerPage={itemLimitPerPage}
+          dataFromDB={dataFromDB}
+          pageNumberLimit={pageNumberLimit}
+          currentPage={currentPage}
+          setcurrentPage={setcurrentPage}
+          startingPageNumberInCurrentBatch={startingPageNumberInCurrentBatch}
+          setStartingPageNumberInCurrentBatch={
+            setStartingPageNumberInCurrentBatch
+          }
+          lastPageNumberInCurrentBatch={lastPageNumberInCurrentBatch}
+          setLastPageNumberInCurrentBatch={setLastPageNumberInCurrentBatch}
+        />
+      )}
     </>
   );
 };
-export default Feed;
+export default AllPost;

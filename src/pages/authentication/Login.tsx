@@ -40,16 +40,11 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
   const [resetPasswordEmail, setResetPasswordEmail] = useState("");
   const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const showForm = useRef<any>();
 
+  const navigate = useNavigate();
   useEffect(() => {
-    if (localStorage) {
-      if (Boolean(user)) {
-        navigate("/");
-      }
-    }
-  }, [user, navigate]);
+    Boolean(user) && navigate("/");
+  }, [user]);
 
   const handlePasswordReset = async () => {
     if (!resetPasswordEmail.length) return;
@@ -89,7 +84,6 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
               })
             );
           }
-
           toastMessageSuccess("Sign In Succesfully");
         })
         .catch((err) => console.log(err.message));
@@ -133,14 +127,6 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
     resolver: yupResolver(authFormSchemaLogin),
   });
 
-  function loadPageDelay() {
-    const timer = setTimeout(() => {
-      if (showForm.current) showForm.current.style.display = "block";
-    }, 5000);
-    return () => clearTimeout(timer);
-  }
-  loadPageDelay();
-
   return (
     <>
       <ResetPassword
@@ -150,11 +136,7 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
         onClose={() => setResetPasswordContainerVisibily(false)}
         handlePasswordReset={handlePasswordReset}
       />
-      <div
-        ref={showForm}
-        style={{ display: "none" }}
-        className="w-full max-w-md mt-10 m-auto"
-      >
+      <div className="w-full max-w-md mt-10 m-auto">
         <form
           className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
           onSubmit={handleSubmit(handleFormSubmit)}

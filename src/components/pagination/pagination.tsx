@@ -16,9 +16,9 @@ import {
   createPages,
   handleLoadMore,
 } from "./paginationFunctions";
-import { blogProps } from "../../yupModels/blog";
+import { postProps } from "../../yupModels/postProps";
 interface Props {
-  dataFromDB: blogProps[];
+  dataFromDB: postProps[];
   itemLimitPerPage: number;
   pageNumberLimit: number;
   currentPage: number;

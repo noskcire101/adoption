@@ -1,5 +1,5 @@
 import React from "react";
-import { blogProps } from "../../yupModels/blog";
+import { postProps } from "../../yupModels/postProps";
 import { Link } from "react-router-dom";
 import { GoHeart } from "react-icons/go";
 import { MdOutlinePets } from "react-icons/md";
@@ -10,7 +10,7 @@ interface Props {
   id: any;
 }
 
-const FeedCard = ({ index, title, description, id }: Props) => {
+const PostCard = ({ index, title, description, id }: Props) => {
   return (
     <>
       <li
@@ -133,4 +133,4 @@ const FeedCard = ({ index, title, description, id }: Props) => {
   );
 };
 
-export default FeedCard;
+export default PostCard;

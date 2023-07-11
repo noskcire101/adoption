@@ -31,7 +31,7 @@ main {
   align-items: center;
   padding: 15px 15px;
   background-color: #001731;
-  height: 71px;
+  height: 67px;
 }
 .logo {
   font-size: 30px;
@@ -44,10 +44,10 @@ main {
   font-size: 25px;
   margin-left: 0px;
   transition: all 0.5s;
-  padding: 23px;
+  padding: 20px;
   background-color: #001730;
   position: absolute;
-  left: -70px;
+  left: -64px;
   cursor: pointer;
 }
 
@@ -55,7 +55,8 @@ ul.dropDown {
   font-size: 15px;
   background-color: #001730;
   margin-bottom: 20px;
-  padding-bottom: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 ul.dropDown li {
   text-indent: 47px;

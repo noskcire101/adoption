@@ -3,22 +3,35 @@ import { MdOutlinePets, MdAccountBox } from "react-icons/md";
 import { BsPostcardHeart, BsFillPersonVcardFill } from "react-icons/bs";
 import { BiLogOut } from "react-icons/bi";
 import { TfiAlignRight, TfiClose } from "react-icons/tfi";
-import { TfiAngleUp, TfiAngleDown } from "react-icons/tfi";
+import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import { TbMoodSearch } from "react-icons/tb";
-import { NavLink } from "react-router-dom";
+import { NavLink, Navigate, useNavigate } from "react-router-dom";
 import { ReactNode } from "react";
 import styles from "./Sidebar.module.css";
-import { useAppSelector } from "../../storeReduxTools/storeHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../storeReduxTools/storeHooks";
 import SidebarItems from "./SidebarItems";
+import ResetPassword from "../../pages/authentication/ResetPassword";
+import { auth } from "../../database/firebase";
+import { sendPasswordResetEmail, signOut } from "firebase/auth";
+import { logout } from "../../storeReduxTools/authSlice";
 
 interface Props {
   children: ReactNode;
+  toastMessageSuccess: (param: string) => void;
+  toastMessageError: (param: string) => void;
 }
 function closeAllTabs(setState: React.Dispatch<React.SetStateAction<boolean>>) {
   return setState(false);
 }
 
-const Sidebar = ({ children }: Props) => {
+const Sidebar = ({
+  children,
+  toastMessageSuccess,
+  toastMessageError,
+}: Props) => {
   function blurHandler() {
     setIsOpen(false);
   }
@@ -27,10 +40,41 @@ const Sidebar = ({ children }: Props) => {
   const toggleOpen = () => setIsOpen(true);
   const { user } = useAppSelector((state) => state.auth);
   const [openSub, setopenSub] = useState(false);
+  const [resetPasswordEmail, setResetPasswordEmail] = useState("");
+  const [resetPasswordContainerVisibily, setResetPasswordContainerVisibily] =
+    useState(false);
+  const dispatch = useAppDispatch();
+
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    await signOut(auth);
+    dispatch(logout());
+    toastMessageSuccess("You have successfully been logged out");
+    navigate("/login");
+  };
+  const handlePasswordReset = async () => {
+    if (!resetPasswordEmail.length) return;
+    try {
+      await sendPasswordResetEmail(auth, resetPasswordEmail);
+      toastMessageSuccess(
+        "Change password request sent. Please check your email."
+      );
+      setResetPasswordContainerVisibily(false);
+    } catch (error: any) {
+      toastMessageError(error.message);
+    }
+  };
+
   function handleClick() {
     blurHandler();
     closeAllTabs(setopenSub);
   }
+  function handleClickChangePassword() {
+    blurHandler();
+    closeAllTabs(setopenSub);
+    setResetPasswordContainerVisibily(true);
+  }
+
   const menuItem = [
     {
       path: "/",
@@ -48,8 +92,8 @@ const Sidebar = ({ children }: Props) => {
       icon: <BsFillPersonVcardFill />,
     },
     {
-      path: "/mypost",
-      name: "My Posts",
+      path: "/createpost",
+      name: "Create Post",
       icon: <BsPostcardHeart />,
     },
 
@@ -65,6 +109,13 @@ const Sidebar = ({ children }: Props) => {
   ];
   return (
     <>
+      <ResetPassword
+        handlePasswordReset={handlePasswordReset}
+        isOpen={resetPasswordContainerVisibily}
+        onClose={() => setResetPasswordContainerVisibily(false)}
+        resetPasswordEmail={resetPasswordEmail}
+        setResetPasswordEmail={setResetPasswordEmail}
+      />
       <div className={styles.container}>
         <span
           className={styles.innerCon}
@@ -86,10 +137,9 @@ const Sidebar = ({ children }: Props) => {
                   <img className="w-12 h-12 rounded-full" src={user.photoUrl} />
                 ) : (
                   <div
-                    style={{ padding: "11px" }}
-                    className="w-12 h-12 text-[30px] bg-[#fff] rounded-full"
+                    style={{ padding: "0px" }}
+                    className="w-12 text-center h-12 text-[30px] text-black bg-[#fff] rounded-full"
                   >
-                    {" "}
                     {user?.email[0].toUpperCase()}
                   </div>
                 )}{" "}
@@ -144,9 +194,9 @@ const Sidebar = ({ children }: Props) => {
                 My Account
               </p>
               {openSub ? (
-                <TfiAngleUp className="self-center duration-1000" />
+                <FaAngleUp className="text-lg self-center duration-1000" />
               ) : (
-                <TfiAngleDown className="self-center duration-1000" />
+                <FaAngleDown className="text-lg self-center duration-1000" />
               )}
             </div>
             <ul
@@ -156,12 +206,12 @@ const Sidebar = ({ children }: Props) => {
               <li onClick={handleClick} className="text-sm">
                 Update Information
               </li>
-              <li onClick={handleClick} className="text-sm">
+              <li onClick={handleClickChangePassword} className="text-sm">
                 Change Password
               </li>
             </ul>
 
-            <div className={styles.link}>
+            <div onClick={handleLogout} className={styles.link}>
               <div className={styles.icon}>
                 <BiLogOut />
               </div>

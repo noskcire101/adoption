@@ -1,8 +1,8 @@
 
 import React, { Dispatch } from "react";
-import { blogProps } from "../../yupModels/blog";
+import { postProps } from "../../yupModels/postProps";
 
-export const createPages = (dataFromDB:blogProps[],itemLimitPerPage:number) =>{
+export const createPages = (dataFromDB:postProps[],itemLimitPerPage:number) =>{
     const pages = [];
     for (let i = 1; i <= Math.ceil(dataFromDB.length / itemLimitPerPage); i++) {
       pages.push(i);
@@ -53,7 +53,7 @@ export const handlePrevBatch = (setcurrentPage:Dispatch<React.SetStateAction<num
   return [setcurrentPage, setLastPageNumberInCurrentBatch,setStartingPageNumberInCurrentBatch ]
   }
 
-export const handleLoadMore = (dataFromDB: blogProps[], currentPage:number, itemLimitPerPage:number, pageNumberLimit:number, setitemLimitPerPage :Dispatch<React.SetStateAction<number>>,setLastPageNumberInCurrentBatch:Dispatch<React.SetStateAction<number>>,setStartingPageNumberInCurrentBatch:Dispatch<React.SetStateAction<number>>,setcurrentPage:Dispatch<React.SetStateAction<number>>  ) => {
+export const handleLoadMore = (dataFromDB: postProps[], currentPage:number, itemLimitPerPage:number, pageNumberLimit:number, setitemLimitPerPage :Dispatch<React.SetStateAction<number>>,setLastPageNumberInCurrentBatch:Dispatch<React.SetStateAction<number>>,setStartingPageNumberInCurrentBatch:Dispatch<React.SetStateAction<number>>,setcurrentPage:Dispatch<React.SetStateAction<number>>  ) => {
   if (
     dataFromDB.length >=
     currentPage * (itemLimitPerPage + pageNumberLimit)

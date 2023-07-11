@@ -1,14 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import styles from "./Header.module.css";
-import { Link, useNavigate } from "react-router-dom";
-import {
-  useAppDispatch,
-  useAppSelector,
-} from "../../storeReduxTools/storeHooks";
+import { useAppSelector } from "../../storeReduxTools/storeHooks";
 import { sendPasswordResetEmail, signOut } from "firebase/auth";
-import { logout } from "../../storeReduxTools/authSlice";
 import { auth } from "../../database/firebase";
 import ResetPassword from "../../pages/authentication/ResetPassword";
+import { Link } from "react-router-dom";
 
 interface Props {
   toastMessageSuccess: (param: string) => void;
@@ -17,32 +13,10 @@ interface Props {
 
 const Header = ({ toastMessageSuccess, toastMessageError }: Props) => {
   const { user } = useAppSelector((state) => state.auth);
-  const [profileDropdown, setProfileDropdown] = useState(false);
   const [resetPasswordEmail, setResetPasswordEmail] = useState("");
 
   const [resetPasswordContainerVisibily, setResetPasswordContainerVisibily] =
     useState(false);
-  const [filter, setFilter] = useState(false);
-  function blurHandler() {
-    const timer = setTimeout(() => {
-      setProfileDropdown(false);
-    }, 200);
-    return () => clearTimeout(timer);
-  }
-
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const handleLogout = async () => {
-    await signOut(auth);
-    dispatch(logout());
-    toastMessageSuccess("You have successfully been logged out");
-  };
-
-  // useEffect(() => {
-  //   if (Boolean(!user)) {
-  //     navigate("/login");
-  //   }
-  // }, [navigate, user]);
 
   const handlePasswordReset = async () => {
     if (!resetPasswordEmail.length) return;
@@ -66,14 +40,29 @@ const Header = ({ toastMessageSuccess, toastMessageError }: Props) => {
         resetPasswordEmail={resetPasswordEmail}
         setResetPasswordEmail={setResetPasswordEmail}
       />
-      <nav className="sticky top-0 ... bg-[#002349] min-w-[345px] ">
-        <div
-          style={{
-            display: Boolean(!user) ? "none" : "flex",
-          }}
-          className="max-w-[1630px] flex flex-wrap items-center justify-between mx-auto  py-3 pl-[10px] pr-[70px] md:px-[75px] xl:px-[6%] 2xl:px-[5%]"
-        >
-          <div className="list-item md:inline-flex md:flex-row-reverse  items-center">
+      <nav className="z-50 sticky top-0 ... bg-[#002349] min-w-[345px] ">
+        <div className="max-w-[1630px] flex flex-wrap items-center  mx-auto  py-2.5 pl-[10px] pr-[70px] md:px-[75px] xl:px-[6%] 2xl:px-[5%]">
+          <Link to="/">
+            <div className="cursor-pointer list-item md:inline-flex mr-1 min-[795px]:mr-[50px] items-center">
+              <button className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 ">
+                <img
+                  className="w-12 h-12 rounded-full"
+                  src="https://firebasestorage.googleapis.com/v0/b/webproject-6f2f2.appspot.com/o/mylogo%2Fmylogowhite.png?alt=media&token=ed33baad-63c3-48ae-873d-220b5860dd43"
+                />
+              </button>
+              <p className="text-white text-lg ml-3 hidden font-bold lg:block ">
+                Pet Adoption
+              </p>
+            </div>
+          </Link>
+
+          <div
+            className={
+              Boolean(!user)
+                ? "hidden"
+                : "list-item md:inline-flex md:flex-row-reverse  items-center"
+            }
+          >
             <div className="flex">
               <div className="relative w-full">
                 <input
@@ -95,6 +84,7 @@ const Header = ({ toastMessageSuccess, toastMessageError }: Props) => {
                 <option>Rabbits</option>
                 <option>Guinea Pigs</option>
                 <option>Birds</option>
+                <option>Others</option>
               </select>
               <select
                 id="dropdown2"
@@ -114,63 +104,6 @@ const Header = ({ toastMessageSuccess, toastMessageError }: Props) => {
                 <option>3-12 Months</option>
                 <option>Above 1 Year</option>
               </select>
-            </div>
-          </div>
-          <div className="flex flex-col content-end items-center md:order-2">
-            {user ? (
-              <button
-                className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 "
-                onBlur={blurHandler}
-                onClick={() => setProfileDropdown(!profileDropdown)}
-              >
-                {user?.photoUrl ? (
-                  <img className="w-12 h-12 rounded-full" src={user.photoUrl} />
-                ) : (
-                  <div
-                    style={{ padding: "11px" }}
-                    className="w-12 h-12 text-[30px] bg-[#fff] rounded-full"
-                  >
-                    {" "}
-                    {user?.email[0].toUpperCase()}
-                  </div>
-                )}{" "}
-              </button>
-            ) : (
-              <></>
-            )}
-
-            <div
-              style={{
-                display: profileDropdown ? "block" : "none",
-              }}
-              className="z-50 top-[50px] right-[100px] fixed my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
-            >
-              <div className="px-4 py-3">
-                <span className="block text-sm text-gray-900 dark:text-white">
-                  {user?.fullName}
-                </span>
-                <span className="block text-sm  text-gray-500 truncate dark:text-gray-400">
-                  {user?.email}
-                </span>
-              </div>
-              <ul className="py-2" aria-labelledby="user-menu-button">
-                <li>
-                  <a
-                    onClick={() => setResetPasswordContainerVisibily(true)}
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 font-bold  text-sm text-blue-500 hover:text-blue-800 cursor-pointer"
-                  >
-                    Change Password
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={handleLogout}
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 font-bold  text-sm text-blue-500 hover:text-blue-800 cursor-pointer"
-                  >
-                    Log Out
-                  </a>
-                </li>
-              </ul>
             </div>
           </div>
         </div>
