@@ -71,6 +71,7 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
             {
               fullname: user.displayName,
               email: user.email,
+              photoUrl: user.photoURL || null,
             },
             { merge: true }
           );

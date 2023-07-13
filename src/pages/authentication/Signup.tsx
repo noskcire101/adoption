@@ -45,6 +45,7 @@ const Signup = ({ toastMessageSuccess, toastMessageError }: Props) => {
             {
               fullname: user.displayName,
               email: user.email,
+              photoUrl: user.photoURL ? user.photoURL : null,
             },
             { merge: true }
           );
@@ -77,7 +78,11 @@ const Signup = ({ toastMessageSuccess, toastMessageError }: Props) => {
         email,
         password
       );
-      await setDoc(doc(db, "users", user.uid), { fullName, email });
+      await setDoc(doc(db, "users", user.uid), {
+        fullName,
+        email,
+        photoUrl: null,
+      });
       setbuttonDisabling(false);
       if (user && user.email)
         dispatch(

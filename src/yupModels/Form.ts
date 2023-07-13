@@ -55,44 +55,24 @@ function subtractMonths(date:Date, months:number) {
   return date;
 }
 
-
-
-  // let years10 = d.setFullYear(d.getFullYear() - 10);
-  // var input = '01/01/1997';
-
-  // var pattern =/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
-  
-
-
-// const d = new Date();
-// let year = d.getFullYear();
-// let day = d.getDate();
-// let month = d.getMonth();
-// let years10 = d.setFullYear(d.getFullYear() - 10);
-  
-
-
-
-
-
 const currentDate = new Date();
 const fifthteenYearsEarlier = subtractMonths(currentDate, 180);
 
-export const postFormSchemaCreate = yup.object().shape({
+export const petsFormSchemaCreate = yup.object().shape({
   street: yup
     .string()
-    .min(8,"Street should be a minimum lenght of 8")
-    .max(30,"Street should have a maximum length of 30")
+    .min(4,"Street should be a minimum lenght of 4")
+    .max(40,"Street should have a maximum length of 40")
     .required("Address required"),
   city: yup
     .string()
     .min(4,"City should be a minimum lenght of 4")
-    .max(20,"City should have a maximum length of 12")
+    .max(20,"City should have a maximum length of 20")
     .required("City name required"),
   state: yup
     .string()
     .min(4,"State should be a minimum lenght of 4")
-    .max(20,"State should have a maximum length of 12")
+    .max(20,"State should have a maximum length of 20")
     .required("State or Province name required"),
   contact: yup
     .string()
@@ -115,7 +95,7 @@ export const postFormSchemaCreate = yup.object().shape({
   breed:yup
   .string()
   .min(2,"Pet's breed should be a minimum lenght of 2")
-  .max(12,"Pet's breed should have a maximum length of 12")
+  .max(20,"Pet's breed should have a maximum length of 20")
   .required("Pet's breed required"),
   birthdate:yup
   .date()
@@ -138,7 +118,7 @@ export const postFormSchemaCreate = yup.object().shape({
   .required("Please add reason"),
 });
 
-export interface postForm {
+export interface petsForm {
   street: string
   city: string
   state: string
@@ -153,7 +133,7 @@ export interface postForm {
   vaccinated:string
   reason:string
 }
-export interface postFormSavingState {
+export interface petsFormFinal {
   street: string
   city: string
   state: string
@@ -168,4 +148,9 @@ export interface postFormSavingState {
   vaccinated:string
   reason:string
   coverImage:string
+  id?:string
+  uid?:string
+  timestamp?:Date
+  heart?:string[]
+
 }

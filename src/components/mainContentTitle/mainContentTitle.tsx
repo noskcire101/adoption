@@ -16,7 +16,7 @@ const MainContentTitle = () => {
 
   return (
     <>
-      <div className="drop-shadow-[1px_1px_var(--tw-shadow-color)] items-center justify-between sm:justify-center flex shadow-white bg-gradient-to-b from-white ...   p-5 lg:p-10 text-center sticky top-[74px] ...">
+      <div className="z-50 drop-shadow-[1px_1px_var(--tw-shadow-color)] items-center justify-between sm:justify-center flex shadow-white bg-gradient-to-b from-white ...   p-5 lg:p-10 text-center sticky top-[74px] ...">
         <h2 className="text-[18px] sm:text-3xl text-[#002349] mr-2">
           List For Adoption
         </h2>

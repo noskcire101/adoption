@@ -7,7 +7,7 @@ import { collection } from "firebase/firestore";
 import { db, storage } from "../../database/firebase";
 import { v4 } from "uuid";
 import { CiSquareRemove } from "react-icons/ci";
-import { postForm, postFormSchemaCreate } from "../../yupModels/Form";
+import { petsForm, petsFormSchemaCreate } from "../../yupModels/Form";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Resizer from "react-image-file-resizer";
@@ -29,6 +29,7 @@ const CreatePost = ({ toastMessageSuccess, toastMessageError }: Props) => {
   const categories = images;
   const [cover, setCover] = useState(categories[0]?.name ?? 0);
   const navigate = useNavigate();
+  const { user } = useAppSelector((state) => state.auth);
 
   function selectFiles() {
     fileInputRef.current.click();
@@ -83,15 +84,18 @@ const CreatePost = ({ toastMessageSuccess, toastMessageError }: Props) => {
       }
     }
   }
-  function NewImageName(cover: any, images: any, id: any) {
+  function NewImageName(cover: any, images: any, coverImage: any) {
     if (cover == images) {
-      return images + "<Ñ:v4>" + v4() + "<Ñ:id>" + id;
+      return coverImage;
     } else {
       return images + "<Ñ:v4>" + v4();
     }
   }
-  const handleFormSubmit = async (data: postForm) => {
-    const coverImage = cover;
+  const handleFormSubmit = async (data: petsForm) => {
+    const coverImage = cover + "<Ñ:v4>" + v4();
+    const uid = user?.id;
+    const heart: any = [];
+    const timestamp = new Date();
     const {
       street,
       city,
@@ -122,6 +126,9 @@ const CreatePost = ({ toastMessageSuccess, toastMessageError }: Props) => {
       dewormed,
       vaccinated,
       reason,
+      uid,
+      timestamp,
+      heart,
     })
       .then((petIdfromDb) => {
         const uploadImages = async (petIdfromDb: any) => {
@@ -133,7 +140,7 @@ const CreatePost = ({ toastMessageSuccess, toastMessageError }: Props) => {
               `/pets/${petIdfromDb}/${NewImageName(
                 cover,
                 images[i].name,
-                petIdfromDb
+                coverImage
               )}`
             );
             await uploadBytes(customRef, images[i].blob)
@@ -171,8 +178,8 @@ const CreatePost = ({ toastMessageSuccess, toastMessageError }: Props) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<postForm>({
-    resolver: yupResolver(postFormSchemaCreate),
+  } = useForm<petsForm>({
+    resolver: yupResolver(petsFormSchemaCreate),
   });
   return (
     <>

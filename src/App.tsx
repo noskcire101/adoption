@@ -14,9 +14,10 @@ import LoginRoutes from "./components/HOC/LoginRoutes";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AllPost from "./pages/allpost/AllPost";
-import FeedDetails from "./pages/allpost/PostDetails";
+
 import NotFoundPage from "./pages/notFoundPage/notFoundPage";
 import CreatePost from "./pages/allpost/CreatePost";
+import PostDetails from "./pages/allpost/PostDetails";
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -69,7 +70,7 @@ const App = () => {
                 />
               }
             />
-            <Route path=":id" element={<FeedDetails />} />
+            <Route path="/:id" element={<PostDetails />} />
             <Route
               path="/new"
               element={

@@ -16,9 +16,9 @@ import {
   createPages,
   handleLoadMore,
 } from "./paginationFunctions";
-import { postProps } from "../../yupModels/postProps";
+import { petsFormFinal } from "../../yupModels/Form";
 interface Props {
-  dataFromDB: postProps[];
+  dataFromDB: petsFormFinal[];
   itemLimitPerPage: number;
   pageNumberLimit: number;
   currentPage: number;
@@ -28,6 +28,7 @@ interface Props {
   lastPageNumberInCurrentBatch: number;
   setLastPageNumberInCurrentBatch: Dispatch<React.SetStateAction<number>>;
   setitemLimitPerPage: Dispatch<React.SetStateAction<number>>;
+  displayLoadMore: boolean;
 }
 
 const Pagination = ({
@@ -41,10 +42,10 @@ const Pagination = ({
   startingPageNumberInCurrentBatch,
   setcurrentPage,
   setLastPageNumberInCurrentBatch,
+  displayLoadMore,
 }: Props) => {
   const pages: any[] = createPages(dataFromDB, itemLimitPerPage);
-  console.log(itemLimitPerPage, "itemLimitPerPage");
-  console.log(dataFromDB.length, "dataFromDB.length");
+
   return (
     <>
       {" "}
@@ -187,34 +188,42 @@ const Pagination = ({
                 <TfiAngleDoubleRight />
               </button>
             </li>
-            <span className="w-[10px]"></span>
-            <li>
-              <button
-                style={{
-                  opacity: itemLimitPerPage <= dataFromDB.length ? "1" : "0.3",
-                }}
-                disabled={itemLimitPerPage <= dataFromDB.length ? false : true}
-                onClick={() =>
-                  handleLoadMore(
-                    dataFromDB,
-                    currentPage,
-                    itemLimitPerPage,
-                    pageNumberLimit,
-                    setitemLimitPerPage,
-                    setLastPageNumberInCurrentBatch,
-                    setStartingPageNumberInCurrentBatch,
-                    setcurrentPage
-                  )
-                }
-                className={
-                  itemLimitPerPage <= dataFromDB.length
-                    ? "cursor-pointer md:text-sm md:px-3 md:py-3 text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white"
-                    : "cursor-not-allowed md:text-sm md:px-3 md:py-3 text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300"
-                }
-              >
-                <TfiAngleDoubleDown />
-              </button>
-            </li>
+
+            {displayLoadMore && (
+              <>
+                <span className="w-[10px]"></span>
+                <li>
+                  <button
+                    style={{
+                      opacity:
+                        itemLimitPerPage <= dataFromDB.length ? "1" : "0.3",
+                    }}
+                    disabled={
+                      itemLimitPerPage <= dataFromDB.length ? false : true
+                    }
+                    onClick={() =>
+                      handleLoadMore(
+                        dataFromDB,
+                        currentPage,
+                        itemLimitPerPage,
+                        pageNumberLimit,
+                        setitemLimitPerPage,
+                        setLastPageNumberInCurrentBatch,
+                        setStartingPageNumberInCurrentBatch,
+                        setcurrentPage
+                      )
+                    }
+                    className={
+                      itemLimitPerPage <= dataFromDB.length
+                        ? "cursor-pointer md:text-sm md:px-3 md:py-3 text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-blue-700 hover:border-blue-700 hover:text-white"
+                        : "cursor-not-allowed md:text-sm md:px-3 md:py-3 text-xs px-1.5 py-2 leading-tight text-gray-500 bg-white border border-gray-300"
+                    }
+                  >
+                    <TfiAngleDoubleDown />
+                  </button>
+                </li>
+              </>
+            )}
           </ul>
         </nav>
       </div>

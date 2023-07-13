@@ -37,9 +37,8 @@ const SidebarItems = ({
     blurHandler();
     closeAllTabs(setopenSub);
     parenthandleClick();
-    console.log(openSub, "hey1");
   }
-  console.log(openSub, "hey");
+
   return (
     <>
       {!submenu ? (
