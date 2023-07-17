@@ -2,12 +2,18 @@ import React, { useEffect, useRef, useState } from "react";
 import { useAppSelector } from "../../storeReduxTools/storeHooks";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
-  addingDocument,
+  updatingData,
   deletingFiles,
   getAllInfoInADocument,
   selectingFiles,
 } from "./PostFunctions";
-import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
+import {
+  deleteObject,
+  getDownloadURL,
+  listAll,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
 import { Timestamp, collection } from "firebase/firestore";
 import { db, storage } from "../../database/firebase";
 import { v4 } from "uuid";
@@ -129,6 +135,7 @@ const UpdatePost = ({
                 blob: imageBlob,
                 name: files![i].name,
                 url: URL.createObjectURL(files[i]),
+                age: "new",
               },
             ]);
           } else {
@@ -142,17 +149,25 @@ const UpdatePost = ({
       }
     }
   }
-  function NewImageName(cover: any, images: any, coverImage: any) {
-    if (cover == images) {
-      return coverImage;
+  function addV4(images: any, declairedCoverImage: any) {
+    if (images.age === "new") {
+      if (images.name.includes("<Ñ:v4>")) {
+        return images.name;
+      } else {
+        if (images.name == cover) {
+          return declairedCoverImage;
+        } else {
+          return images.name + "<Ñ:v4>" + v4();
+        }
+      }
     } else {
-      return images + "<Ñ:v4>" + v4();
+      return images.name;
     }
   }
   const handleFormSubmit = async (data: petsForm) => {
-    const coverImage = cover + "<Ñ:v4>" + v4();
-    const uid = user?.id;
-    const heart: any = [];
+    const coverImage = cover.includes("<Ñ:v4>")
+      ? cover
+      : cover + "<Ñ:v4>" + v4();
     const timestamp = new Date();
     const {
       street,
@@ -169,8 +184,8 @@ const UpdatePost = ({
       vaccinated,
       reason,
     } = data;
-    const petsDirectory = collection(db, "pets");
-    await addingDocument(petsDirectory, {
+    const petsDirectory = `/pets/${id}`;
+    await updatingData(petsDirectory, {
       coverImage,
       street,
       city,
@@ -185,40 +200,50 @@ const UpdatePost = ({
       dewormed,
       vaccinated,
       reason,
-      uid,
       timestamp,
-      heart,
     })
-      .then((petIdfromDb) => {
-        const uploadImages = async (petIdfromDb: any) => {
-          if (images == undefined) return;
+      .then(() => {
+        const uploadImages = async (id: any) => {
           let successChecker = false;
-          for (let i = 0; i < images.length; i++) {
-            const customRef = ref(
-              storage,
-              `/pets/${petIdfromDb}/${NewImageName(
-                cover,
-                images[i].name,
-                coverImage
-              )}`
-            );
-            await uploadBytes(customRef, images[i].blob)
-              .then(() => {
-                successChecker = true;
-              })
-              .catch((error) => {
-                toastMessageError(error);
+          if (images == undefined) {
+            successChecker = true;
+          }
+          listAll(ref(storage, `/pets/${id}`)).then((response) => {
+            response.items.forEach((item) => {
+              getDownloadURL(item).then((url: any) => {
+                if (!images.some((e: any) => e.name === item.name)) {
+                  deleteObject(ref(storage, `/pets/${id}/${item.name}`));
+                }
               });
+            });
+          });
+
+          for (let i = 0; i < images.length; i++) {
+            if (images[i].age === "new") {
+              const customRef = ref(
+                storage,
+                `/pets/${id}/${addV4(images[i], coverImage)}`
+              );
+              await uploadBytes(customRef, images[i].blob)
+                .then(() => {
+                  successChecker = true;
+                })
+                .catch((error) => {
+                  toastMessageError(error);
+                });
+            } else {
+              successChecker = true;
+            }
           }
           if (successChecker) {
-            toastMessageSuccess("New Post Successfully created");
+            toastMessageSuccess("Post Successfully updated");
             navigate("/");
           }
         };
-        uploadImages(petIdfromDb);
+        uploadImages(id);
       })
       .catch((error) => {
-        toastMessageError("Error occured while uploading images");
+        toastMessageError(error.Code);
       });
   };
   // useEffect(() => {
@@ -716,10 +741,12 @@ const UpdatePost = ({
                                             petData.coverImage
                                           )}
                                         >
-                                          {param.name.substring(
-                                            0,
-                                            param.name.indexOf("<Ñ:v4>")
-                                          )}
+                                          {param.age == "new"
+                                            ? param.name
+                                            : param.name.substring(
+                                                0,
+                                                param.name.indexOf("<Ñ:v4>")
+                                              )}
                                         </option>
                                       ))}
                                     </select>
@@ -755,11 +782,12 @@ const UpdatePost = ({
                                       alt={images.name}
                                     />
                                     <p className="text-xs">
-                                      {images.name.substring(
-                                        0,
-                                        images.name.indexOf("<Ñ:v4>")
-                                      )}
-                                      ...
+                                      {images.age == "new"
+                                        ? images.name
+                                        : images.name.substring(
+                                            0,
+                                            images.name.indexOf("<Ñ:v4>")
+                                          )}
                                     </p>
                                   </div>
                                 ))}

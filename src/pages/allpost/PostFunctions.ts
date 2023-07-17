@@ -7,7 +7,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 
 
 
-export const selectingFiles = async (event: React.ChangeEvent<HTMLInputElement>,setImageState:React.Dispatch<any>,imageState:any,toastMessageError: (param: string) => void) => {
+export const selectingFiles:any = async (event: React.ChangeEvent<HTMLInputElement>,setImageState:React.Dispatch<any>,imageState:any,toastMessageError: (param: string) => void) => {
     if (event.target.files !== undefined) {
       const files: FileList | null = event.target.files;
    
@@ -30,6 +30,7 @@ export const selectingFiles = async (event: React.ChangeEvent<HTMLInputElement>,
                   blob: imageBlob,
                   name: files![i].name,
                   url: URL.createObjectURL(files![i]),
+                  age: "new"
                 },
               ]);
             }else {
@@ -173,7 +174,9 @@ export const getAllInfoInADocument = async (targetDirectory:any,setState:React.D
 export const updatingData = async (targetDirectory:any,incomingData: any) => {
   await updateDoc(doc(db, targetDirectory), { ...incomingData }, { merge: true });
   console.log("The value has been written to the database");
+  
 };
+
 
 
 let yearVal:any;

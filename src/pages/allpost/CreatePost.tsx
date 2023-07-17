@@ -138,8 +138,10 @@ const CreatePost = ({
     })
       .then((petIdfromDb) => {
         const uploadImages = async (petIdfromDb: any) => {
-          if (images == undefined) return;
           let successChecker = false;
+          if (images == undefined) {
+            successChecker = true;
+          }
           for (let i = 0; i < images.length; i++) {
             const customRef = ref(
               storage,
