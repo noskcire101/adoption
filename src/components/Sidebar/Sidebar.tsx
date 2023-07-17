@@ -138,7 +138,7 @@ const Sidebar = ({
                 ) : (
                   <div
                     style={{ padding: "0px" }}
-                    className="w-12 text-center h-12 text-[30px] text-black bg-[#fff] rounded-full"
+                    className="w-12 text-center sm:h-12 text-[30px] text-black bg-[#fff] rounded-full"
                   >
                     {user?.email[0].toUpperCase()}
                   </div>

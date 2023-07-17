@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useAppSelector } from "../../storeReduxTools/storeHooks";
 import { Link, useNavigate } from "react-router-dom";
-import { addingData, deletingFiles, selectingFiles } from "./PostFunctions";
+import { addingDocument, deletingFiles, selectingFiles } from "./PostFunctions";
 import { ref, uploadBytes } from "firebase/storage";
 import { collection } from "firebase/firestore";
 import { db, storage } from "../../database/firebase";
@@ -19,13 +19,18 @@ import {
 interface Props {
   toastMessageSuccess: (param: string) => void;
   toastMessageError: (param: string) => void;
+  hideSearchfunction(): void;
 }
 
-const CreatePost = ({ toastMessageSuccess, toastMessageError }: Props) => {
+const CreatePost = ({
+  toastMessageSuccess,
+  toastMessageError,
+  hideSearchfunction,
+}: Props) => {
+  hideSearchfunction();
   const fileInputRef = useRef<any>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [images, setImages] = useState<any>([]);
-  const petsCollection = collection(db, "pets");
   const categories = images;
   const [cover, setCover] = useState(categories[0]?.name ?? 0);
   const navigate = useNavigate();
@@ -111,7 +116,8 @@ const CreatePost = ({ toastMessageSuccess, toastMessageError }: Props) => {
       vaccinated,
       reason,
     } = data;
-    await addingData(petsCollection, {
+    const petsDirectory = collection(db, "pets");
+    await addingDocument(petsDirectory, {
       coverImage,
       street,
       city,
@@ -341,7 +347,7 @@ const CreatePost = ({ toastMessageSuccess, toastMessageError }: Props) => {
                             <option>Select</option>
                             <option>Dog</option>
                             <option>Cat</option>
-                            <option>Rabit</option>
+                            <option>Rabbit</option>
                             <option>Guinea Pig</option>
                             <option>Bird</option>
                             <option>Others</option>
@@ -472,7 +478,7 @@ const CreatePost = ({ toastMessageSuccess, toastMessageError }: Props) => {
                             className="block text-blueGray-600 text-xs font-bold mb-2"
                             htmlFor="grid-password"
                           >
-                            Reason
+                            Why did you decide to put your pet up for adoption?
                           </label>
                           <textarea
                             className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"

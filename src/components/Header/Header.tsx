@@ -9,9 +9,16 @@ import { Link } from "react-router-dom";
 interface Props {
   toastMessageSuccess: (param: string) => void;
   toastMessageError: (param: string) => void;
+  hideSearch: boolean;
+  filterOnChange: (param: any, kind: string) => void;
 }
 
-const Header = ({ toastMessageSuccess, toastMessageError }: Props) => {
+const Header = ({
+  toastMessageSuccess,
+  toastMessageError,
+  hideSearch,
+  filterOnChange,
+}: Props) => {
   const { user } = useAppSelector((state) => state.auth);
   const [resetPasswordEmail, setResetPasswordEmail] = useState("");
 
@@ -41,7 +48,7 @@ const Header = ({ toastMessageSuccess, toastMessageError }: Props) => {
         setResetPasswordEmail={setResetPasswordEmail}
       />
       <nav className="z-50 sticky top-0 ... bg-[#002349] min-w-[345px] ">
-        <div className="max-w-[1630px] flex flex-wrap items-center  mx-auto  py-2.5 pl-[10px] pr-[70px] md:px-[75px] xl:px-[6%] 2xl:px-[5%]">
+        <div className="max-w-[1630px] flex flex-wrap items-center  mx-auto  py-1.5 pl-[10px] pr-[70px] md:px-[75px] xl:px-[6%] 2xl:px-[5%]">
           <Link to="/">
             <div className="cursor-pointer list-item md:inline-flex mr-1 min-[795px]:mr-[50px] items-center">
               <button className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 ">
@@ -58,7 +65,7 @@ const Header = ({ toastMessageSuccess, toastMessageError }: Props) => {
 
           <div
             className={
-              Boolean(!user)
+              Boolean(!user) || Boolean(hideSearch)
                 ? "hidden"
                 : "list-item md:inline-flex md:flex-row-reverse  items-center"
             }
@@ -67,8 +74,9 @@ const Header = ({ toastMessageSuccess, toastMessageError }: Props) => {
               <div className="relative w-full">
                 <input
                   type="search"
+                  onChange={(e) => filterOnChange(e.target.value, "main")}
                   id="search-dropdown"
-                  className="block p-1 sm:p-1.5 md:w-[250px] sm:w-[295px] w-[193px] z-20 text-[10px] sm:text-xs text-gray-900 bg-gray-50 rounded-r-lg rounded-l-lg md:rounded-l-none border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
+                  className="block p-1 md:py-2 md:w-[250px] sm:w-[295px] w-[193px] z-20 text-[8px] sm:text-xs text-gray-900 bg-gray-50 rounded-r-lg rounded-l-lg md:rounded-l-none border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
                   placeholder="Search..."
                 />
               </div>
@@ -76,33 +84,35 @@ const Header = ({ toastMessageSuccess, toastMessageError }: Props) => {
             <div className="flex pt-1 md:pt-0 items-center">
               <select
                 id="dropdown"
-                className=" px-1 py-1.5 text-[6px] sm:text-xs text-gray-900 bg-[#ddefff] rounded-l-lg hover:bg-gray-200"
+                onChange={(e) => filterOnChange(e.target.value, "type")}
+                className=" px-1 py-1 md:py-2 text-[6px] sm:text-xs text-gray-900 cursor-pointer bg-[#ddefff] rounded-l-lg hover:bg-[#bbdfff]"
               >
-                <option>All Types</option>
-                <option>Dogs</option>
-                <option>Cats</option>
-                <option>Rabbits</option>
-                <option>Guinea Pigs</option>
-                <option>Birds</option>
-                <option>Others</option>
+                <option value="all">All Types</option>
+                <option value="Dog">Dogs</option>
+                <option value="Cat">Cats</option>
+                <option value="Rabbit">Rabbits</option>
+                <option value="Guinea Pig">Guinea Pigs</option>
+                <option value="Bird">Birds</option>
+                <option value="Others">Others</option>
               </select>
               <select
                 id="dropdown2"
-                className=" px-1 py-1.5 text-[6px] sm:text-xs  text-gray-900 bg-[#ddefff] hover:bg-gray-200"
+                onChange={(e) => filterOnChange(e.target.value, "gender")}
+                className=" px-1 py-1 md:py-2 text-[6px] sm:text-xs  text-gray-900 cursor-pointer bg-[#ddefff] hover:bg-[#bbdfff]"
               >
-                <option>All Gender</option>
-                <option>Male</option>
-                <option>Female</option>
+                <option value="all">All Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
               </select>
               <select
                 id="dropdown4"
-                className=" px-1 py-1.5 text-[6px] sm:text-xs text-gray-900 rounded-r-lg md:rounded-r-none bg-[#ddefff] hover:bg-gray-200"
+                onChange={(e) => filterOnChange(e.target.value, "age")}
+                className=" px-1 py-1 md:py-2 text-[6px] sm:text-xs text-gray-900 cursor-pointer rounded-r-lg md:rounded-r-none bg-[#ddefff] hover:bg-[#bbdfff]"
               >
-                {" "}
-                <option>All Ages</option>
-                <option>Below 3 Months</option>
-                <option>3-12 Months</option>
-                <option>Above 1 Year</option>
+                <option value="all">All Ages</option>
+                <option value="below3">Below 3 Months</option>
+                <option value="between3to12">3-12 Months</option>
+                <option value="above12">Above 1 Year</option>
               </select>
             </div>
           </div>

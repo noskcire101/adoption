@@ -44,11 +44,16 @@ main {
   font-size: 25px;
   margin-left: 0px;
   transition: all 0.5s;
-  padding: 20px;
+  padding: 19px;
   background-color: #001730;
   position: absolute;
-  left: -64px;
+  left: -63px;
   cursor: pointer;
+  @media only screen and (max-width: 639px) {
+    padding: 16px;
+    left: -57px;
+    top: 0;
+  }
 }
 
 ul.dropDown {

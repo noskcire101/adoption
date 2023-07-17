@@ -5,7 +5,7 @@ import Sidebar from "./components/sidebar/Sidebar";
 import Header from "./components/header/Header";
 import Login from "./pages/authentication/Login";
 import SignUp from "./pages/authentication/Signup";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { login } from "./storeReduxTools/authSlice";
 import { auth } from "./database/firebase";
 import { unsubscribe } from "diagnostics_channel";
@@ -18,6 +18,7 @@ import AllPost from "./pages/allpost/AllPost";
 import NotFoundPage from "./pages/notFoundPage/notFoundPage";
 import CreatePost from "./pages/allpost/CreatePost";
 import PostDetails from "./pages/allpost/PostDetails";
+import UpdatePost from "./pages/allpost/UpdatePost";
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -47,6 +48,44 @@ const App = () => {
       position: toast.POSITION.TOP_RIGHT,
     });
   };
+  const [hideSearch, setHideSearch] = useState(false);
+  function hideSearchfunction() {
+    setHideSearch(true);
+  }
+  function showSearchfunction() {
+    setHideSearch(false);
+  }
+
+  const [filter, setfilter] = useState({
+    main: "all",
+    type: "all",
+    gender: "all",
+    age: "all",
+  });
+  const filterOnChange = (filterVal: any, kind: string) => {
+    switch (kind) {
+      case "main":
+        return setfilter({
+          ...filter,
+          main: filterVal,
+        });
+      case "type":
+        return setfilter({
+          ...filter,
+          type: filterVal,
+        });
+      case "gender":
+        return setfilter({
+          ...filter,
+          gender: filterVal,
+        });
+      case "age":
+        return setfilter({
+          ...filter,
+          age: filterVal,
+        });
+    }
+  };
 
   return (
     <>
@@ -55,6 +94,8 @@ const App = () => {
         toastMessageError={showToastMessageError}
       >
         <Header
+          filterOnChange={filterOnChange}
+          hideSearch={hideSearch}
           toastMessageSuccess={showToastMessageSuccess}
           toastMessageError={showToastMessageError}
         />
@@ -65,16 +106,32 @@ const App = () => {
               index
               element={
                 <AllPost
+                  filter={filter}
+                  showSearchfunction={showSearchfunction}
                   toastMessageSuccess={showToastMessageSuccess}
                   toastMessageError={showToastMessageError}
                 />
               }
             />
-            <Route path="/:id" element={<PostDetails />} />
+            <Route
+              path="/:id"
+              element={<PostDetails hideSearchfunction={hideSearchfunction} />}
+            />
             <Route
               path="/new"
               element={
                 <CreatePost
+                  hideSearchfunction={hideSearchfunction}
+                  toastMessageSuccess={showToastMessageSuccess}
+                  toastMessageError={showToastMessageError}
+                />
+              }
+            />
+            <Route
+              path="/update/:id"
+              element={
+                <UpdatePost
+                  hideSearchfunction={hideSearchfunction}
                   toastMessageSuccess={showToastMessageSuccess}
                   toastMessageError={showToastMessageError}
                 />

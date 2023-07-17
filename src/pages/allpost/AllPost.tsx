@@ -14,9 +14,22 @@ import MainContentTitle from "../../components/mainContentTitle/mainContentTitle
 interface Props {
   toastMessageSuccess: (param: string) => void;
   toastMessageError: (param: string) => void;
+  showSearchfunction(): void;
+  filter: {
+    main: string;
+    type: string;
+    gender: string;
+    age: string;
+  };
 }
 
-const AllPost = ({ toastMessageSuccess, toastMessageError }: Props) => {
+const AllPost = ({
+  toastMessageSuccess,
+  toastMessageError,
+  showSearchfunction,
+  filter,
+}: Props) => {
+  showSearchfunction();
   const { user } = useAppSelector((state) => state.auth);
   const [currentPage, setcurrentPage] = useState(1);
   const [itemLimitPerPage, setitemLimitPerPage] = useState(5);
@@ -35,16 +48,61 @@ const AllPost = ({ toastMessageSuccess, toastMessageError }: Props) => {
     indexOfFirstItemInCurrrentBatch,
     indexOfLastItemInCurrentBatch
   );
+  // let [listOfItem, setListOfItem] = useState<any>([]);
+
+  function searchItem(
+    array: any[],
+    setState: React.Dispatch<React.SetStateAction<any[]>>,
+    searchStringMain: string
+  ) {
+    let result: any;
+    let arrayVal = array;
+    if (searchStringMain !== "") {
+      result = arrayVal.filter((param: any) =>
+        param.pet.toLowerCase().includes(searchStringMain.toLowerCase())
+      );
+      setState(result);
+      console.log(result, "result");
+    } else {
+      setState(array);
+      console.log(array, "array");
+    }
+  }
 
   useEffect(() => {
-    getAllDocsInACollection("pets", setDataFromDB);
-  }, []);
+    getAllDocsInACollection(
+      "pets",
+      setDataFromDB,
+      filter.type,
+      filter.gender,
+      filter.age,
+      filter.main
+    );
+    console.log(filter.type, "-type");
+    console.log(filter.gender, "-gender");
+    console.log(filter.age, "-age");
+    console.log(filter.main, "-main");
+  }, [filter, currentPage]);
+
+  // useEffect(() => {
+  //   getAllDocsInACollection(
+  //     "pets",
+  //     setDataFromDB,
+  //     filter.type,
+  //     filter.gender,
+  //     filter.age
+  //   );
+  //   searchItem(dataFromDB, setDataFromDB, filter.main);
+  //   console.log(filter.type, "-type");
+  //   console.log(filter.gender, "-gender");
+  //   console.log(filter.age, "-age");
+  // }, [filter.main]);
 
   const [delayExecute, setdelayExecute] = useState(false);
   useEffect(() => {
     const timeout = setTimeout(() => {
       setdelayExecute(true);
-    }, 5000);
+    }, 10000);
     return () => clearTimeout(timeout);
   }, [delayExecute]);
 

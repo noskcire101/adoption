@@ -1,9 +1,9 @@
-import { DocumentReference, addDoc, getDoc, updateDoc, arrayUnion, getCountFromServer, arrayRemove } from "firebase/firestore";
+import { DocumentReference, addDoc, getDoc, updateDoc, arrayUnion, getCountFromServer, arrayRemove, query, where, or, and } from "firebase/firestore";
 import { petsFormFinal } from "../../yupModels/Form";
 import { dataURIToBlob, resizeFile } from "../../reusableFunctions/reusablefunctions";
 import { DocumentData, QuerySnapshot, collection, doc, getDocs, onSnapshot } from "firebase/firestore";
 import { db } from "../../database/firebase";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 
 
@@ -44,94 +44,195 @@ export const selectingFiles = async (event: React.ChangeEvent<HTMLInputElement>,
     }
   }
 }
+export const deletingFiles = async (index: any, setImageState:React.Dispatch<any>) =>{
+  setImageState((prevImages: any) =>
+    prevImages.filter((_: any, i: any) => i !== index)
+  );
+}
+export const addingDocument = async (targetDirectory:any, incomingData: petsFormFinal ) => {
+  const addedData = await addDoc(targetDirectory, { ...incomingData});
+  return addedData.id;
+}
 
-  export const addingData = async (dataCollection:any, incomingData: petsFormFinal ) => {
-    const addedData = await addDoc(dataCollection, { ...incomingData});
-    return addedData.id;
-  }
-
-  export const deletingFiles = async (index: any, setImageState:React.Dispatch<any>) =>{
-    setImageState((prevImages: any) =>
-      prevImages.filter((_: any, i: any) => i !== index)
-    );
-  }
+function subtractMonths(months: any) {
+  let d = new Date();
+  d.setMonth(d.getMonth() - months);
+  return d;
+}
+const threeMonths = subtractMonths(3);
+const twelveMonths = subtractMonths(12);
+const twentyyears = subtractMonths(240);
 
 
+  // useEffect(() => {
+  //   getAllDocsInACollection(
+  //     "pets",
+  //     setDataFromDB,
+  //     filter.type,
+  //     filter.gender,
+  //     filter.age
+  //   );
+  // }, []);
 
-
-
-
-export const getAllDocsInACollection = async (collectionName:any,setDataFromDB:Dispatch<SetStateAction<any[]>>,) =>{
-  const querySnapshot = await getDocs(collection(db, collectionName));
   
+let start:any;
+let end:any
+const convertDate = (date: Date) => {
+  let d = new Date(date);
+  const dmonth =
+    d.getMonth() < 10 ? "0" + (d.getMonth() + 1) : d.getMonth() + 1;
+  const ddate = d.getDate() < 10 ? "0" + d.getDate() : d.getDate();
+  const finaldate = `${d.getFullYear()}-${dmonth}-${ddate}`;
+  return finaldate;
+};
+
+export const getAllDocsInACollection = async (targetDirectory:any,setState:Dispatch<SetStateAction<any[]>>,type:string,gender:string,age:any,searchStringMain:any) =>{
+  let filterValues = query(collection(db, targetDirectory));
+
+  if(age=="below3"){
+    start = threeMonths;
+    end = new Date();
+    console.log(start,end)
+  }else if(age=="between3to12"){
+    start = twelveMonths ;
+    end =  threeMonths;
+    console.log(start,end)
+  }else if(age=="above12"){
+    start = twentyyears ;
+    end = twelveMonths;
+    console.log(start,end)
+  }
+
+  if(type !== "all" && gender !== "all" && age !== "all" ){
+   filterValues  = query(collection(db, targetDirectory), where('type', '==', type), where('gender', '==', gender), where('birthdate', '>=', start),where('birthdate', '<=', end));
+  }
+  else if(type == "all" && gender !== "all" && age !== "all" ){
+    filterValues  = query(collection(db, targetDirectory), where('gender', '==', gender), where('birthdate', '>=', start),where('birthdate', '<=', end));
+  }
+  else if(type !== "all" && gender == "all" && age !== "all" ){
+    filterValues  = query(collection(db, targetDirectory), where('type', '==', type), where('birthdate', '>=', start),where('birthdate', '<=', end));
+  }
+  else if(type !== "all" && gender !== "all" && age == "all" ){
+    filterValues  = query(collection(db, targetDirectory), where('type', '==', type), where('gender', '==', gender));
+  }
+  else if(type !== "all" && gender == "all" && age == "all" ){
+    filterValues  = query(collection(db, targetDirectory),where('type', '==', type));
+  }
+  else if(type == "all" && gender !== "all" && age == "all" ){
+    filterValues  = query(collection(db, targetDirectory),where('gender', '==', gender));
+  }
+  else if(type == "all" && gender == "all" && age !== "all" ){
+    filterValues  = query(collection(db, targetDirectory),where('birthdate', '>=', start),where('birthdate', '<=', end));
+  }
+
+  
+  const querySnapshot  = await getDocs(filterValues);
   const document:any =[];
-  if (querySnapshot) {
-      querySnapshot.forEach((doc) => {
+  let finalResult:any =[];
+  if (querySnapshot ) {
+    querySnapshot .forEach((doc) => {
         document.push({
           ...doc.data(),
           id: doc.id
         });
       });
-      setDataFromDB(document);
     }
     else{
       console.log("not connected")
     }
+    if (searchStringMain == "" || searchStringMain == "all") {
+      setState(document);
+      console.log(finalResult, "array");
+    } else {
+      finalResult = document.filter((param: any) =>
+        param.pet.toLowerCase().includes(searchStringMain.toLowerCase()) || param.breed.toLowerCase().includes(searchStringMain.toLowerCase())
+      );
+      setState(finalResult);
+      console.log(finalResult, "result");
+
+      
+    }
 }
 
 
-export function ageCalculator(date:Date) {  
 
-  const dob = new Date(date);  
-    
+
+export const getAllInfoInADocument = async (targetDirectory:any,setState:React.Dispatch<any>) => {
+  const querySnapshot  = await getDoc(doc(db,targetDirectory));
+  if (querySnapshot .exists()) {
+    const fetchedData = {
+      id: querySnapshot .id,
+      ...querySnapshot .data(),
+    };
+    setState(fetchedData);
+  } else {
+    console.log("No such document");
+  }
+};
+
+export const updatingData = async (targetDirectory:any,incomingData: any) => {
+  await updateDoc(doc(db, targetDirectory), { ...incomingData }, { merge: true });
+  console.log("The value has been written to the database");
+};
+
+
+let yearVal:any;
+let monthVal:any;
+let dateVal:any;
+
+function calculateDate(date:Date){
+  const dob = new Date(date);   
   //extract the year, month, and date from user date input  
   const dobdobYear = dob.getFullYear();  
   const dobdobMonth = dob.getMonth();  
   const dobdobDate = dob.getDate();  
-    
   //get the current date from the system  
   const now = new Date();  
   //extract the year, month, and date from current date  
   const currentYear = now.getFullYear();  
   const currentMonth = now.getMonth();  
   const currentDate = now.getDate();  
-    
   //declare a variable to collect the age in year, month, and days  
-
-  
   //get years  
-  let yearAge = currentYear - dobdobYear;  
-    
-  //get months  
-  if (currentMonth >= dobdobMonth)  
-    //get months when current month is greater  
-    var monthAge = currentMonth - dobdobMonth;  
-  else {  
-    yearAge--;  
-    var monthAge = 12 + currentMonth - dobdobMonth;  
-  }  
-
-  //get days  
-  if (currentDate >= dobdobDate)  
-    //get days when the current date is greater  
-    var dateAge = currentDate - dobdobDate;  
-  else {  
-    monthAge--;  
-    var dateAge = 31 + currentDate - dobdobDate;  
-
-    if (monthAge < 0) {  
-      monthAge = 11;  
+    let yearAge = currentYear - dobdobYear;  
+      
+    //get months  
+    if (currentMonth >= dobdobMonth)  
+      //get months when current month is greater  
+      var monthAge = currentMonth - dobdobMonth;  
+      
+    else {  
       yearAge--;  
+      var monthAge = 12 + currentMonth - dobdobMonth;  
     }  
-  }  
+    //get days  
+    if (currentDate >= dobdobDate)  
+      //get days when the current date is greater  
+      var dateAge = currentDate - dobdobDate;  
+    else {  
+      monthAge--;  
+      var dateAge = 31 + currentDate - dobdobDate;  
+
+      if (monthAge < 0) {  
+        monthAge = 11;  
+        yearAge--;  
+      }  
+    }  
+    monthVal = monthAge;
+    yearVal = yearAge
+    dateVal = dateAge
+}
+
+export function ageCalculator(date:Date) {  
+
+ calculateDate(date)
   //group the age in a single variable  
   const petAge = {
-  years: yearAge,  
-  months: monthAge,  
-  days: dateAge  
-}  
-      
-let ageString = "";  
+    years: Number(yearVal),  
+    months: Number(monthVal),  
+    days: Number(dateVal)  
+  }      
+  let ageString = "";  
   if ( (petAge.years > 0) && (petAge.months > 0) && (petAge.days > 0) )  
       ageString = petAge.years + ` year${petAge.years > 1 ? "s" : ""}, ` + petAge.months + ` month${petAge.months > 1 ? "s" : ""}, and ` + petAge.days + ` day${petAge.days > 1 ? "s" : ""} old.`;  
   else if ( (petAge.years == 0) && (petAge.months == 0) && (petAge.days > 0) )  
@@ -149,46 +250,34 @@ let ageString = "";
      ageString = petAge.months + ` month${petAge.months > 1 ? "s" : ""} old `;  
   //when current date is same as dob(date of birth)  
   else ageString = "1 day Old";   
-
   //display the calculated age  
   return ageString;   
-             
-
 }  
 
 export function titleCase(str:any) {
-  str = str.toLowerCase().split(' ');
+  if(str){
+    str = str.toLowerCase().split(' ');
   for (var i = 0; i < str.length; i++) {
     str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1); 
   }
   return str.join(' ');
+  }
+  else{
+    return "";
+  }
 }
 
 
-export const fetchingMatchedData = async (dataDirectory:any,setState:React.Dispatch<any>) => {
-  const docSnap = await getDoc(doc(db,dataDirectory));
-  if (docSnap.exists()) {
-    const fetchedData = {
-      id: docSnap.id,
-      ...docSnap.data(),
-    };
-    setState(fetchedData);
-  } else {
-    console.log("No such document");
-  }
-};
-
-export const updatingData = async (dataDirectory:any,incomingData: any) => {
-  await updateDoc(doc(db, dataDirectory), { ...incomingData }, { merge: true });
-  console.log("The value has been written to the database");
-};
-
-
 export function checkUserifLiked(array: any[], uid: string) {
-  const result = array.includes(uid);
-  if (result) {
-    return true;
-  } else {
+  if(uid && array){
+    const result = array.includes(uid);
+    if (result) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  else{
     return false;
   }
 }
@@ -212,22 +301,10 @@ export async function handleClickLiked(uid:any,itemId:any,liked:boolean,setLiked
       heart: arrayUnion(uid)
     });
   }
-  
 }
 
 
-export const fetchingSingleData = async (dataDirectory:any,setState:React.Dispatch<any>) => {
-  const docSnap = await getDoc(doc(db,dataDirectory));
-  if (docSnap.exists()) {
-    const fetchedData = {
-      id: docSnap.id,
-      ...docSnap.data(),
-    };
-    setState(fetchedData);
-  } else {
-    console.log("No such document");
-  }
-};
+
 
 
 

@@ -4,7 +4,7 @@ import { MdOutlinePets } from "react-icons/md";
 import {
   ageCalculator,
   checkUserifLiked,
-  fetchingMatchedData,
+  getAllInfoInADocument,
   handleClickLiked,
   titleCase,
 } from "./PostFunctions";
@@ -57,22 +57,22 @@ const PostCard = ({
   heart,
 }: Props) => {
   const userDataDirectory = `/users/${uid}`;
-  const [liked, setLiked] = useState(checkUserifLiked(heart, uid));
+  const { user } = useAppSelector((state) => state.auth);
+  const [liked, setLiked] = useState(checkUserifLiked(heart, user!.id));
   const [dataFromDb, setdataFromDb] = useState<any>({});
   const [likedCount, setLikedCount] = useState(heart.length);
   const [viewMoreShow, setViewMoreShow] = useState({ display: "none" });
   const [cover, setCover] = useState<any>([]);
 
-  const { user } = useAppSelector((state) => state.auth);
   useEffect(() => {
-    fetchingMatchedData(userDataDirectory, setdataFromDb);
+    getAllInfoInADocument(userDataDirectory, setdataFromDb);
     const getPostImgSrc = async () => {
       const imgRef = ref(storage, `pets/${id}/${coverImage}`);
       const url = await getDownloadURL(imgRef);
       setCover(url);
     };
     getPostImgSrc();
-  }, [likedCount]);
+  }, [likedCount, coverImage]);
 
   return (
     <>
@@ -94,7 +94,7 @@ const PostCard = ({
               <img
                 // src="https://picsum.photos/600/400/?random"
                 src={cover}
-                className="w-full h-[350px] object-cover m-auto max-w-fit"
+                className="w-full h-[300px] object-cover m-auto max-w-fit"
               />
               <div
                 style={viewMoreShow}
@@ -102,7 +102,7 @@ const PostCard = ({
               ></div>
               <p
                 style={viewMoreShow}
-                className="-translate-y-1/2 -translate-x-1/2 text-[#dddddd] hover:text-white absolute text-center m-0 top-1/2 left-1/2"
+                className="-translate-y-1/2 -translate-x-1/2 text-[#ececec] hover:text-white absolute text-center m-0 top-1/2 left-1/2"
               >
                 View Full Details
               </p>
@@ -116,7 +116,7 @@ const PostCard = ({
             <div
               onClick={() =>
                 handleClickLiked(
-                  uid,
+                  user!.id,
                   id,
                   liked,
                   setLiked,
@@ -134,7 +134,7 @@ const PostCard = ({
                   <GoHeart className="text-red-600" />
                 )}
               </p>
-              <p className="text-grey-darker text-[11px]">{likedCount}</p>
+              <p className="text-grey-darker text-[10px]">{likedCount}</p>
             </div>
           </header>
 
@@ -198,12 +198,21 @@ const PostCard = ({
               </div>
             </Link>
 
-            <button
-              type="button"
-              className="text-white min-w-[153px] bg-[#002349] hover:bg-[#001730]/90 w-full mt-3 min-[400px]:mt-0 min-[400px]:w-auto place-content-center font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
-            >
-              Request to Adopt
-            </button>
+            {user!.id && user!.id == uid ? (
+              <Link
+                to={`/update/${id}`}
+                className="text-black min-w-[153px] bg-[#ddefff] hover:bg-[#bbdfff]/90 w-full mt-3 min-[400px]:mt-0 min-[400px]:w-auto place-content-center font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
+              >
+                Edit My Post
+              </Link>
+            ) : (
+              <button
+                type="button"
+                className="text-white min-w-[153px] bg-[#002349] hover:bg-[#001730]/90 w-full mt-3 min-[400px]:mt-0 min-[400px]:w-auto place-content-center font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
+              >
+                Request to Adopt
+              </button>
+            )}
           </footer>
         </article>
       </li>
@@ -212,6 +221,3 @@ const PostCard = ({
 };
 
 export default PostCard;
-function fetchingData(blogDataDirectory: any, setBlog: any) {
-  throw new Error("Function not implemented.");
-}
