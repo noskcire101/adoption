@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { MdOutlinePets, MdAccountBox } from "react-icons/md";
 import { BsPostcardHeart, BsFillPersonVcardFill } from "react-icons/bs";
 import { BiLogOut } from "react-icons/bi";
 import { TfiAlignRight, TfiClose } from "react-icons/tfi";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import { TbMoodSearch } from "react-icons/tb";
-import { NavLink, Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ReactNode } from "react";
 import styles from "./Sidebar.module.css";
 import {
@@ -32,23 +32,27 @@ const Sidebar = ({
   toastMessageSuccess,
   toastMessageError,
 }: Props) => {
-  function blurHandler() {
-    setIsOpen(false);
-  }
-  const [isOpen, setIsOpen] = useState(false);
-  const toggle = () => setIsOpen(!isOpen);
-  const toggleOpen = () => setIsOpen(true);
-  const { user } = useAppSelector((state) => state.auth);
   const [openSub, setopenSub] = useState(false);
   const [resetPasswordEmail, setResetPasswordEmail] = useState("");
   const [resetPasswordContainerVisibily, setResetPasswordContainerVisibily] =
     useState(false);
   const dispatch = useAppDispatch();
-
+  const { user } = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
+
+  function toggle() {
+    setIsOpen(!isOpen);
+  }
+  function toggleOpen() {
+    setIsOpen(true);
+  }
+  function blurHandler() {
+    setIsOpen(false);
+  }
   const handleLogout = async () => {
-    await signOut(auth);
     dispatch(logout());
+    // await signOut(auth);
     toastMessageSuccess("You have successfully been logged out");
     navigate("/login");
   };
@@ -75,38 +79,38 @@ const Sidebar = ({
     setResetPasswordContainerVisibily(true);
   }
 
-  const menuItem = [
-    {
-      path: "/",
-      name: "Pets For Adoption",
-      icon: <MdOutlinePets />,
-    },
-    {
-      path: "/adopters",
-      name: "Search Adopters",
-      icon: <TbMoodSearch />,
-    },
-    {
-      path: "/messages",
-      name: "Request Received",
-      icon: <BsFillPersonVcardFill />,
-    },
-    {
-      path: "/createpost",
-      name: "Create Post",
-      icon: <BsPostcardHeart />,
-    },
+  // const menuItem = [
+  //   // {
+  //   //   path: "/",
+  //   //   name: "Pets For Adoption",
+  //   //   icon: <MdOutlinePets />,
+  //   // },
+  //   // {
+  //   //   path: "/adopters",
+  //   //   name: "Search Adopters",
+  //   //   icon: <TbMoodSearch />,
+  //   // },
+  //   // {
+  //   //   path: "/messages",
+  //   //   name: "Request Received",
+  //   //   icon: <BsFillPersonVcardFill />,
+  //   // },
+  //   // {
+  //   //   path: "/createpost",
+  //   //   name: "Create Post",
+  //   //   icon: <BsPostcardHeart />,
+  //   // },
 
-    // {
-    //   path: "/myaccount",
-    //   name: "My Account",
-    //   icon: <MdAccountBox />,
-    //   submenu: [
-    //     { subpath: "/item1", subname: "Update Information" },
-    //     { subpath: "/item2", subname: "Change Password" },
-    //   ],
-    // },
-  ];
+  //   // {
+  //   //   path: "/myaccount",
+  //   //   name: "My Account",
+  //   //   icon: <MdAccountBox />,
+  //   //   submenu: [
+  //   //     { subpath: "/item1", subname: "Update Information" },
+  //   //     { subpath: "/item2", subname: "Change Password" },
+  //   //   ],
+  //   // },
+  // ];
   return (
     <>
       <ResetPassword
@@ -145,7 +149,9 @@ const Sidebar = ({
                 )}{" "}
                 <div className="ml-[10px]">
                   <p className="text-xs">You are Login as:</p>
-                  <p className="text-sm">{user?.fullName}</p>
+                  <p className="text-sm">
+                    {user?.fullName ? user?.fullName : user?.email}
+                  </p>
                 </div>
               </div>
               <button
@@ -162,7 +168,7 @@ const Sidebar = ({
               </button>
             </div>
 
-            {menuItem.map((item, index) => (
+            {/* {menuItem.map((item, index) => (
               <>
                 <SidebarItems
                   path={item.path}
@@ -176,7 +182,7 @@ const Sidebar = ({
                   closeAllTabs={closeAllTabs}
                 />
               </>
-            ))}
+            ))} */}
 
             <div
               onClick={() => setopenSub(!openSub)}

@@ -52,7 +52,7 @@ const App = () => {
   function hideSearchfunction() {
     setHideSearch(true);
   }
-  function showSearchfunction() {
+  function showOrHideSearchfunction() {
     setHideSearch(false);
   }
 
@@ -100,46 +100,47 @@ const App = () => {
           toastMessageError={showToastMessageError}
         />
         <Routes>
-          {/* <Route element={<LoginRoutes />}> */}
-          <Route path="/">
-            <Route
-              index
-              element={
-                <AllPost
-                  filter={filter}
-                  showSearchfunction={showSearchfunction}
-                  toastMessageSuccess={showToastMessageSuccess}
-                  toastMessageError={showToastMessageError}
-                />
-              }
-            />
-            <Route
-              path="/:id"
-              element={<PostDetails hideSearchfunction={hideSearchfunction} />}
-            />
-            <Route
-              path="/new"
-              element={
-                <CreatePost
-                  hideSearchfunction={hideSearchfunction}
-                  toastMessageSuccess={showToastMessageSuccess}
-                  toastMessageError={showToastMessageError}
-                />
-              }
-            />
-            <Route
-              path="/update/:id"
-              element={
-                <UpdatePost
-                  hideSearchfunction={hideSearchfunction}
-                  toastMessageSuccess={showToastMessageSuccess}
-                  toastMessageError={showToastMessageError}
-                />
-              }
-            />
+          <Route element={<LoginRoutes />}>
+            <Route path="/">
+              <Route
+                index
+                element={
+                  <AllPost
+                    filter={filter}
+                    showOrHideSearchfunction={showOrHideSearchfunction}
+                    toastMessageSuccess={showToastMessageSuccess}
+                    toastMessageError={showToastMessageError}
+                  />
+                }
+              />
+              <Route
+                path="/:id"
+                element={
+                  <PostDetails hideSearchfunction={hideSearchfunction} />
+                }
+              />
+              <Route
+                path="/new"
+                element={
+                  <CreatePost
+                    hideSearchfunction={hideSearchfunction}
+                    toastMessageSuccess={showToastMessageSuccess}
+                    toastMessageError={showToastMessageError}
+                  />
+                }
+              />
+              <Route
+                path="/update/:id"
+                element={
+                  <UpdatePost
+                    hideSearchfunction={hideSearchfunction}
+                    toastMessageSuccess={showToastMessageSuccess}
+                    toastMessageError={showToastMessageError}
+                  />
+                }
+              />
+            </Route>
           </Route>
-
-          {/* </Route> */}
           <Route
             path="/login"
             element={

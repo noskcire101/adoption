@@ -1,17 +1,16 @@
 import { getDownloadURL, listAll, ref } from "firebase/storage";
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { storage } from "../../database/firebase";
 import PostDetailsImages from "./PostDetailsImages";
 import Pagination from "../../components/pagination/pagination";
 import {
   ageCalculator,
-  checkUserifLiked,
   getAllInfoInADocument,
-  handleClickLiked,
   titleCase,
 } from "./PostFunctions";
 import { useAppSelector } from "../../storeReduxTools/storeHooks";
+import Loader from "../../components/loader/loader";
 
 interface Props {
   hideSearchfunction(): void;
@@ -21,7 +20,7 @@ const PostDetails = ({ hideSearchfunction }: Props) => {
   hideSearchfunction();
   const { id } = useParams();
   const { user } = useAppSelector((state) => state.auth);
-
+  const [loader, setLoader] = useState(false);
   const [petData, setPetData] = useState<any>({});
   const [userData, setUserData] = useState<any>({});
   const [currentPage, setcurrentPage] = useState(1);
@@ -43,6 +42,7 @@ const PostDetails = ({ hideSearchfunction }: Props) => {
   );
 
   useEffect(() => {
+    setLoader(true);
     listAll(ref(storage, `/pets/${id}`)).then((response) => {
       response.items.forEach((item) => {
         getDownloadURL(item).then((url: any) => {
@@ -59,17 +59,32 @@ const PostDetails = ({ hideSearchfunction }: Props) => {
   useEffect(() => {
     const userDataDirectory = `/users/${petData.uid}`;
     getAllInfoInADocument(userDataDirectory, setUserData);
+    setLoader(false);
   }, [petData]);
 
   return (
     <>
+      <div className="z-50 drop-shadow-[1px_1px_var(--tw-shadow-color)] items-center justify-between sm:justify-center flex shadow-white bg-gradient-to-b from-white ...   p-5 lg:p-10 text-center sticky top-[60px] sm:top-[65px] ...">
+        <h2 className="text-[18px] sm:text-3xl text-[#002349] mr-2">
+          Pet's Information
+        </h2>
+        <div className="w-[148px]">
+          <Link
+            to="/"
+            className="text-white bg-[#002349] hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center "
+            type="button"
+          >
+            Back to Home
+          </Link>
+        </div>
+      </div>
       <div className="container mx-auto py-8">
         <div className="grid grid-cols-4 md:grid-cols-12 gap-6 px-4">
           <div className="col-span-full lg:col-span-8">
             <div className="bg-white shadow rounded-lg p-6">
               <div className="flex flex-col items-center my-5">
                 <h2 className="text-xl font-bold mb-4">
-                  Hi my name is {petData.pet && titleCase(petData.pet)}
+                  Pet's Name: {petData.pet && titleCase(petData.pet)}
                 </h2>
                 <div className="block h-auto bg-[#f8f8f8] relative w-full">
                   {currentItems.map((images: any, index: any) => (
@@ -101,13 +116,24 @@ const PostDetails = ({ hideSearchfunction }: Props) => {
                   }
                   displayLoadMore={false}
                 />
+                <h2 className="text-xl mt-2 font-bold mb-0">
+                  if you are interested, please contact:
+                </h2>
                 <div className="text-center my-5">
-                  <button
-                    type="button"
-                    className="text-white min-w-[153px] bg-[#002349] hover:bg-[#001730]/90 w-full mt-3 min-[400px]:mt-0 min-[400px]:w-auto place-content-center font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
+                  <a
+                    href={`tel:${petData.contact}`}
+                    className="text-white min-w-[153px] mx-1 bg-[#002349] hover:bg-[#001730]/90 w-full mt-3 min-[400px]:mt-0 min-[400px]:w-auto place-content-center font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
                   >
-                    Request to Adopt
-                  </button>
+                    Call via Phone
+                  </a>
+                  {petData.fbaccount && (
+                    <a
+                      href={`${petData.fbaccount}`}
+                      className="text-white min-w-[153px] mx-1 bg-[#002349] hover:bg-[#001730]/90 w-full mt-3 min-[400px]:mt-0 min-[400px]:w-auto place-content-center font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
+                    >
+                      Contact via FB
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
@@ -186,9 +212,12 @@ const PostDetails = ({ hideSearchfunction }: Props) => {
                   <p className="text-gray-600 text-sm mr-2 font-bold">
                     Contact:
                   </p>
-                  <p className="text-gray-600 text-sm mr-2">
+                  <a
+                    href={`tel:${petData.contact}`}
+                    className="text-sm mr-2 text-blue-700 hover:text-blue-900 hover:underline"
+                  >
                     {petData.contact}
-                  </p>
+                  </a>
                 </div>
               </div>
               {petData.fbaccount && (
@@ -247,18 +276,25 @@ const PostDetails = ({ hideSearchfunction }: Props) => {
                             </div>
                           ) : (
                             <img
-                              alt="Placeholder"
                               className="block h-9 rounded-full"
                               src={userData.photoUrl}
                             />
                           )}
                         </>
                       ) : (
-                        <div className="block p-4 bg-slate-500 rounded-full"></div>
+                        <div className="block text-center bg-slate-300 p-2.5 h-9 w-9 rounded-full">
+                          {userData.email
+                            ? userData.email[0].toUpperCase()
+                            : ""}
+                        </div>
                       )}
 
                       <p className="text-gray-500 text-[11px] min-[400px]:text-[8px] max-w-[100px] min-[1280px]:max-w-auto min-[1280px]:text-[9px] ml-2 inline-flex">
-                        {userData.fullname ? userData.fullname : "Deleted User"}
+                        {userData.fullname
+                          ? userData.fullname
+                          : userData.email
+                          ? userData.email
+                          : "Deleted User"}
                         <br></br>
                       </p>
                     </div>
@@ -280,6 +316,7 @@ const PostDetails = ({ hideSearchfunction }: Props) => {
           </div>
         </div>
       </div>
+      {loader && <Loader />}
     </>
   );
 };

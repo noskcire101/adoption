@@ -1,7 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useAppSelector } from "../../storeReduxTools/storeHooks";
 import { Link, useNavigate } from "react-router-dom";
-import { addingDocument, deletingFiles, selectingFiles } from "./PostFunctions";
+import {
+  addingDocument,
+  deletingFiles,
+  renderCorrectImageBasedOnName,
+  selectingFiles,
+} from "./PostFunctions";
 import { ref, uploadBytes } from "firebase/storage";
 import { collection } from "firebase/firestore";
 import { db, storage } from "../../database/firebase";
@@ -10,11 +15,8 @@ import { CiSquareRemove } from "react-icons/ci";
 import { petsForm, petsFormSchemaCreate } from "../../yupModels/Form";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Resizer from "react-image-file-resizer";
-import {
-  dataURIToBlob,
-  resizeFile,
-} from "../../reusableFunctions/reusablefunctions";
+import { dataURIToBlob, resizeFile } from "../../reusableFunctions/covert";
+import Loader from "../../components/loader/loader";
 
 interface Props {
   toastMessageSuccess: (param: string) => void;
@@ -35,12 +37,14 @@ const CreatePost = ({
   const [cover, setCover] = useState(categories[0]?.name ?? 0);
   const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.auth);
+  const [loader, setLoader] = useState(false);
 
+  console.log(cover, "cover");
   function selectFiles() {
     fileInputRef.current.click();
   }
   function onFileSelect(event: React.ChangeEvent<HTMLInputElement>) {
-    selectingFiles(event, setImages, images, toastMessageError);
+    selectingFiles(event, setImages, images, toastMessageError, setLoader);
   }
   function onDragOver(event: any) {
     event.preventDefault();
@@ -56,7 +60,8 @@ const CreatePost = ({
     event.preventDefault();
     setIsDragging(false);
     const files = event.dataTransfer.files;
-
+    setLoader(true);
+    let isDone = true;
     for (let i = 0; i < files.length; i++) {
       console.log(files[i].type.split("/")[0]);
       if (files[i].type.split("/")[0] !== "image") {
@@ -87,7 +92,9 @@ const CreatePost = ({
           }
         }
       }
+      isDone = false;
     }
+    setLoader(isDone);
   }
   function NewImageName(cover: any, images: any, coverImage: any) {
     if (cover == images) {
@@ -97,88 +104,106 @@ const CreatePost = ({
     }
   }
   const handleFormSubmit = async (data: petsForm) => {
-    const coverImage = cover + "<Ñ:v4>" + v4();
-    const uid = user?.id;
-    const heart: any = [];
-    const timestamp = new Date();
-    const {
-      street,
-      city,
-      state,
-      contact,
-      fbaccount,
-      pet,
-      type,
-      gender,
-      breed,
-      birthdate,
-      dewormed,
-      vaccinated,
-      reason,
-    } = data;
-    const petsDirectory = collection(db, "pets");
-    await addingDocument(petsDirectory, {
-      coverImage,
-      street,
-      city,
-      state,
-      contact,
-      fbaccount,
-      pet,
-      type,
-      gender,
-      breed,
-      birthdate,
-      dewormed,
-      vaccinated,
-      reason,
-      uid,
-      timestamp,
-      heart,
-    })
-      .then((petIdfromDb) => {
-        const uploadImages = async (petIdfromDb: any) => {
-          let successChecker = false;
-          if (images == undefined) {
-            successChecker = true;
-          }
-          for (let i = 0; i < images.length; i++) {
-            const customRef = ref(
-              storage,
-              `/pets/${petIdfromDb}/${NewImageName(
-                cover,
-                images[i].name,
-                coverImage
-              )}`
-            );
-            await uploadBytes(customRef, images[i].blob)
-              .then(() => {
-                successChecker = true;
-              })
-              .catch((error) => {
-                toastMessageError(error);
-              });
-          }
-          if (successChecker) {
-            toastMessageSuccess("New Post Successfully created");
-            navigate("/");
-          }
-        };
-        uploadImages(petIdfromDb);
+    if (cover == 0 || cover == undefined) {
+      toastMessageError(
+        "Please make sure to upload atleast one image of your pet"
+      );
+    } else {
+      setLoader(true);
+      const coverImage = cover + "<Ñ:v4>" + v4();
+      const uid = user?.id;
+      const heart: any = [];
+      const timestamp = new Date();
+      const {
+        street,
+        city,
+        state,
+        contact,
+        fbaccount,
+        pet,
+        type,
+        gender,
+        breed,
+        birthdate,
+        dewormed,
+        vaccinated,
+        reason,
+      } = data;
+      const petsDirectory = collection(db, "pets");
+      await addingDocument(petsDirectory, {
+        coverImage,
+        street,
+        city,
+        state,
+        contact,
+        fbaccount,
+        pet,
+        type,
+        gender,
+        breed,
+        birthdate,
+        dewormed,
+        vaccinated,
+        reason,
+        uid,
+        timestamp,
+        heart,
       })
-      .catch((error) => {
-        toastMessageError("Error occured while uploading images");
-      });
+        .then((petIdfromDb) => {
+          const uploadImages = async (petIdfromDb: any) => {
+            let successChecker = false;
+            if (images == undefined) {
+              successChecker = true;
+            }
+            for (let i = 0; i < images.length; i++) {
+              const customRef = ref(
+                storage,
+                `/pets/${petIdfromDb}/${NewImageName(
+                  cover,
+                  images[i].name,
+                  coverImage
+                )}`
+              );
+              await uploadBytes(customRef, images[i].blob)
+                .then(() => {
+                  successChecker = true;
+                })
+                .catch((error) => {
+                  toastMessageError(error);
+                });
+            }
+            if (successChecker) {
+              toastMessageSuccess("New post successfully created");
+              setLoader(false);
+              navigate("/");
+            }
+          };
+          uploadImages(petIdfromDb);
+        })
+        .catch((error) => {
+          toastMessageError("Error occured while uploading images");
+          setLoader(false);
+        });
+    }
   };
+
   useEffect(() => {
     setCover(categories[0]?.name);
-  }, [categories]);
-  function findArrayElementByTitle(array: any[], refImageName: string) {
-    const result = array.find(({ name }) => name === refImageName);
-    if (result) {
-      return result.url;
+  }, []);
+
+  function handleRemoveSelectedImage(index: any) {
+    if (images.length < 2) {
+      setCover(0);
+      deletingFiles(index, setImages);
     } else {
-      return categories[0]?.url;
+      deletingFiles(index, setImages);
+      if (index == 0) {
+        setCover(categories[1]?.name);
+        console.log(categories[1]?.name);
+      } else {
+        setCover(categories[0]?.name);
+        console.log(categories[0]?.name);
+      }
     }
   }
 
@@ -189,20 +214,28 @@ const CreatePost = ({
   } = useForm<petsForm>({
     resolver: yupResolver(petsFormSchemaCreate),
   });
+
   return (
     <>
+      <div className="z-50 drop-shadow-[1px_1px_var(--tw-shadow-color)] items-center justify-between sm:justify-center flex shadow-white bg-gradient-to-b from-white ...   p-5 lg:p-10 text-center sticky top-[60px] sm:top-[65px] ...">
+        <h2 className="text-[18px] sm:text-3xl text-[#002349] mr-2">
+          Create Post
+        </h2>
+        <div className="w-[148px]">
+          <Link
+            to="/"
+            className="text-white bg-[#002349] hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center "
+            type="button"
+          >
+            Back to Home
+          </Link>
+        </div>
+      </div>
       <div className="overflow-auto pb-[4vh] mx-[0%]">
         <div className="container mx-auto px-[0%] md:px-12">
           <section className=" py-1 bg-blueGray-50">
             <div className="w-full md:w-12/12 px-4 mx-auto mt-6">
               <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
-                <div className="rounded-t self-center bg-white mb-0 px-6 py-6">
-                  <div className="text-center flex ">
-                    <h6 className="text-blueGray-700 text-2xl font-bold">
-                      Create Post For Adoption
-                    </h6>
-                  </div>
-                </div>
                 <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
                   <form onSubmit={handleSubmit(handleFormSubmit)}>
                     <h6 className="text-blueGray-400 text-md mt-3 mb-6 font-bold">
@@ -610,7 +643,11 @@ const CreatePost = ({
                             <div className=" m-auto  contents w-full lg:w-6/12">
                               <img
                                 className="object-contain m-auto h-[150px] max-w-[37%] "
-                                src={findArrayElementByTitle(images, cover)}
+                                src={renderCorrectImageBasedOnName(
+                                  images,
+                                  cover,
+                                  categories
+                                )}
                               />
                             </div>
                           </div>
@@ -629,7 +666,7 @@ const CreatePost = ({
                                 <span
                                   className="delete"
                                   onClick={() =>
-                                    deletingFiles(index, setImages)
+                                    handleRemoveSelectedImage(index)
                                   }
                                 >
                                   <CiSquareRemove className="text-red-600 text-lg cursor-pointer" />
@@ -676,6 +713,7 @@ const CreatePost = ({
           </section>
         </div>
       </div>
+      {loader && <Loader />}
     </>
   );
 };

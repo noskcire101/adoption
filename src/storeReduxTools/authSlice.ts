@@ -1,6 +1,8 @@
 
 import { createSlice } from "@reduxjs/toolkit";
 import type {PayloadAction} from "@reduxjs/toolkit";
+import { signOut } from "firebase/auth";
+import { auth } from "../database/firebase";
 
 
 interface User{
@@ -26,6 +28,7 @@ reducers:{
     },
     logout: (state) => {
         state.user = null;
+         signOut(auth);
     }
 
 }

@@ -1,11 +1,4 @@
-import React, {
-  ChangeEvent,
-  FormEvent,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 import styles from "./Login.module.css";
 import { useForm } from "react-hook-form";
 import { AuthFormLogin, authFormSchemaLogin } from "../../yupModels/Form";
@@ -27,7 +20,8 @@ import {
 import { login } from "../../storeReduxTools/authSlice";
 import ResetPassword from "./ResetPassword";
 import { Link, useNavigate } from "react-router-dom";
-import { convertToTitleCase } from "../../reusableFunctions/reusablefunctions";
+import { convertToTitleCase } from "../../reusableFunctions/covert";
+import Loader from "../../components/loader/loader";
 
 interface Props {
   toastMessageSuccess: (param: string) => void;
@@ -40,6 +34,7 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
   const [resetPasswordEmail, setResetPasswordEmail] = useState("");
   const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
+  const [loader, setLoader] = useState(false);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -48,20 +43,23 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
 
   const handlePasswordReset = async () => {
     if (!resetPasswordEmail.length) return;
+    setLoader(true);
     try {
       await sendPasswordResetEmail(auth, resetPasswordEmail);
       toastMessageSuccess(
         "Reset password request sent. Please check your email."
       );
+      setLoader(false);
       setResetPasswordContainerVisibily(false);
     } catch (error: any) {
       toastMessageError(error.message);
+      setLoader(false);
     }
   };
 
   const signInWithGoogle = async () => {
     try {
-      setbuttonDisabling(true);
+      setLoader(true);
       const provider = new GoogleAuthProvider();
       signInWithPopup(auth, provider)
         .then((result) => {
@@ -85,6 +83,7 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
               })
             );
           }
+          setLoader(false);
           toastMessageSuccess("Sign In Succesfully");
         })
         .catch((err) => console.log(err.message));
@@ -92,12 +91,14 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
     } catch (error: any) {
       toastMessageError(error.message);
       setbuttonDisabling(false);
+      setLoader(false);
     }
   };
 
   const handleFormSubmit = async (data: AuthFormLogin) => {
     const { email, password } = data;
     setbuttonDisabling(true);
+    setLoader(true);
     try {
       const { user } = await signInWithEmailAndPassword(auth, email, password);
       setbuttonDisabling(false);
@@ -111,12 +112,14 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
           })
         );
       toastMessageSuccess("Login Success");
+      setLoader(false);
     } catch (error: any) {
       setbuttonDisabling(false);
       const errorCode = error.code;
       toastMessageError(
         convertToTitleCase(errorCode.replace("auth/", "").replace(/-/g, " "))
       );
+      setLoader(false);
     }
   };
 
@@ -128,6 +131,16 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
     resolver: yupResolver(authFormSchemaLogin),
   });
 
+  const [delayExecute, setdelayExecute] = useState(false);
+  useEffect(() => {
+    setLoader(true);
+    const timeout = setTimeout(() => {
+      setdelayExecute(true);
+      setLoader(false);
+    }, 5000);
+    return () => clearTimeout(timeout);
+  }, []);
+
   return (
     <>
       <ResetPassword
@@ -137,7 +150,10 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
         onClose={() => setResetPasswordContainerVisibily(false)}
         handlePasswordReset={handlePasswordReset}
       />
-      <div className="w-full max-w-md mt-10 m-auto">
+      <div
+        style={{ display: delayExecute ? "block" : "none" }}
+        className="w-full max-w-md mt-10 m-auto"
+      >
         <form
           className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
           onSubmit={handleSubmit(handleFormSubmit)}
@@ -281,6 +297,7 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
           </div>
         </form>
       </div>
+      {loader && <Loader />}
     </>
   );
 };

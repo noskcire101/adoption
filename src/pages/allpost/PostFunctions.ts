@@ -1,14 +1,44 @@
-import { DocumentReference, addDoc, getDoc, updateDoc, arrayUnion, getCountFromServer, arrayRemove, query, where, or, and } from "firebase/firestore";
+import { DocumentReference, addDoc, getDoc, updateDoc, arrayUnion, getCountFromServer, arrayRemove, query, where, or, and, deleteDoc } from "firebase/firestore";
 import { petsFormFinal } from "../../yupModels/Form";
-import { dataURIToBlob, resizeFile } from "../../reusableFunctions/reusablefunctions";
+import { dataURIToBlob, resizeFile } from "../../reusableFunctions/covert";
 import { DocumentData, QuerySnapshot, collection, doc, getDocs, onSnapshot } from "firebase/firestore";
-import { db } from "../../database/firebase";
+import { db, storage } from "../../database/firebase";
 import { Dispatch, SetStateAction, useState } from "react";
+import { deleteObject, getDownloadURL, listAll,  ref } from "firebase/storage";
 
 
 
-export const selectingFiles:any = async (event: React.ChangeEvent<HTMLInputElement>,setImageState:React.Dispatch<any>,imageState:any,toastMessageError: (param: string) => void) => {
+
+export const renderCorrectImageBasedOnName = (array: any[], refImageName: string,categories:any) =>{
+  const result = array.find(({ name }) => name === refImageName);
+  if (result) {
+    return result.url;
+  } else {
+    return categories[0]?.url;
+  }
+}
+
+export const deletingItemTotally = async (
+  dataDirectory:any,filesDirectory:any,backToHome:() => void
+) => {
+ 
+ await deleteDoc(doc(db, dataDirectory));
+ await listAll(ref(storage, filesDirectory)).then((response) => {
+   response.items.forEach((item) => {
+     getDownloadURL(item).then(() => {
+         deleteObject(ref(storage, `${filesDirectory}/${item.name}`));
+     });
+   });
+ });
+ backToHome()
+};
+
+
+export const selectingFiles:any = async (event: React.ChangeEvent<HTMLInputElement>,setImageState:React.Dispatch<any>,imageState:any,toastMessageError: (param: string) => void,setLoader:React.Dispatch<React.SetStateAction<boolean>>) => {
+  
     if (event.target.files !== undefined) {
+      setLoader(true)
+      let isDone = true;
       const files: FileList | null = event.target.files;
    
       if (files?.length === 0)return;
@@ -42,13 +72,16 @@ export const selectingFiles:any = async (event: React.ChangeEvent<HTMLInputEleme
             }
           }
       }
+      isDone = false
     }
+    setLoader(isDone)
   }
 }
 export const deletingFiles = async (index: any, setImageState:React.Dispatch<any>) =>{
   setImageState((prevImages: any) =>
     prevImages.filter((_: any, i: any) => i !== index)
   );
+  
 }
 export const addingDocument = async (targetDirectory:any, incomingData: petsFormFinal ) => {
   const addedData = await addDoc(targetDirectory, { ...incomingData});
@@ -87,7 +120,7 @@ const convertDate = (date: Date) => {
   return finaldate;
 };
 
-export const getAllDocsInACollection = async (targetDirectory:any,setState:Dispatch<SetStateAction<any[]>>,type:string,gender:string,age:any,searchStringMain:any) =>{
+export const getAllDocsInACollection = async (targetDirectory:any,setState:Dispatch<SetStateAction<any[]>>,type:string,gender:string,age:any,searchStringMain:any,setLoader:React.Dispatch<React.SetStateAction<boolean>>) =>{
   let filterValues = query(collection(db, targetDirectory));
 
   if(age=="below3"){
@@ -143,15 +176,13 @@ export const getAllDocsInACollection = async (targetDirectory:any,setState:Dispa
     }
     if (searchStringMain == "" || searchStringMain == "all") {
       setState(document);
-      console.log(finalResult, "array");
+      setLoader(false)
     } else {
       finalResult = document.filter((param: any) =>
         param.pet.toLowerCase().includes(searchStringMain.toLowerCase()) || param.breed.toLowerCase().includes(searchStringMain.toLowerCase())
       );
       setState(finalResult);
-      console.log(finalResult, "result");
-
-      
+      setLoader(false)
     }
 }
 
@@ -166,8 +197,10 @@ export const getAllInfoInADocument = async (targetDirectory:any,setState:React.D
       ...querySnapshot .data(),
     };
     setState(fetchedData);
+    
   } else {
     console.log("No such document");
+   
   }
 };
 

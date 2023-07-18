@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import { formatDate } from "../reusableFunctions/reusablefunctions";
+import { formatDate } from "../reusableFunctions/covert";
 
 
 export const authFormSchemaLogin = yup.object().shape({
@@ -82,11 +82,11 @@ export const petsFormSchemaCreate = yup.object().shape({
   pet:yup
   .string()
   .min(3,"Pet's Name should be a minimum lenght of 3")
-  .max(12,"Pet's Name should have a maximum length of 12")
+  .max(12,"Pet's Name should only have a maximum length of 12")
   .required("Pet's name required"),
   type:yup
   .string()
-  .matches(/Cat|Dog|Rabit|Guinea Pig|Bird|Others/g , "Please Select")
+  .matches(/Cat|Dog|Rabbit|Guinea Pig|Bird|Others/g , "Please Select")
   .required("Please select type"),
   gender:yup
   .string()

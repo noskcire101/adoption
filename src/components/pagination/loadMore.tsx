@@ -52,7 +52,7 @@ const LoadMore = ({
 
 export default LoadMore;
 
-// This can be use to disable button when unecessary expond appear just incase
+// This can be used to disable button when bug from "expond more" functionality appear(just incase)
 //   className={
 //     dataFromDB.length >= currentPage * (itemLimitPerPage + 5)
 //       ? "bg-[#002349] hover:bg-blue-700 border cursor-pointer border-[#002349] hover:border-blue-700 text-white font-bold py-2 px-4 mr-2 rounded"

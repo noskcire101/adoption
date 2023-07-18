@@ -16,7 +16,8 @@ import {
 } from "../../storeReduxTools/storeHooks";
 import { login } from "../../storeReduxTools/authSlice";
 import { Link, useNavigate } from "react-router-dom";
-import { convertToTitleCase } from "../../reusableFunctions/reusablefunctions";
+import { convertToTitleCase } from "../../reusableFunctions/covert";
+import Loader from "../../components/loader/loader";
 
 interface Props {
   toastMessageSuccess: (param: string) => void;
@@ -24,7 +25,7 @@ interface Props {
 }
 const Signup = ({ toastMessageSuccess, toastMessageError }: Props) => {
   const [buttonDisabling, setbuttonDisabling] = useState(false);
-
+  const [loader, setLoader] = useState(false);
   const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
@@ -35,6 +36,7 @@ const Signup = ({ toastMessageSuccess, toastMessageError }: Props) => {
 
   const signInWithGoogle = async () => {
     try {
+      setLoader(true);
       const provider = new GoogleAuthProvider();
       signInWithPopup(auth, provider)
         .then((result) => {
@@ -58,6 +60,7 @@ const Signup = ({ toastMessageSuccess, toastMessageError }: Props) => {
                 photoUrl: user.photoURL || null,
               })
             );
+            setLoader(false);
             toastMessageSuccess("Sign Up Succesfully");
           }
         })
@@ -65,13 +68,14 @@ const Signup = ({ toastMessageSuccess, toastMessageError }: Props) => {
       // await setDoc(doc(db, "users", user.uid), { email });
     } catch (error: any) {
       toastMessageError(error.message);
+      setLoader(false);
     }
   };
 
   const handleFormSubmit = async (data: AuthFormSignUp) => {
     const { fullName, email, password } = data;
     setbuttonDisabling(true);
-
+    setLoader(true);
     try {
       const { user } = await createUserWithEmailAndPassword(
         auth,
@@ -93,9 +97,11 @@ const Signup = ({ toastMessageSuccess, toastMessageError }: Props) => {
             photoUrl: user.photoURL || null,
           })
         );
+      setLoader(false);
       toastMessageSuccess("Account Succesfully Created");
     } catch (error: any) {
       setbuttonDisabling(false);
+      setLoader(false);
       const errorCode = error.code;
       toastMessageError(
         convertToTitleCase(errorCode.replace("auth/", "").replace(/-/g, " "))
@@ -285,6 +291,7 @@ const Signup = ({ toastMessageSuccess, toastMessageError }: Props) => {
           </div>
         </form>
       </div>
+      {loader && <Loader />}
     </>
   );
 };

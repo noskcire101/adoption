@@ -1,10 +1,11 @@
 import { useState } from "react";
 import styles from "./Header.module.css";
 import { useAppSelector } from "../../storeReduxTools/storeHooks";
-import { sendPasswordResetEmail, signOut } from "firebase/auth";
+import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../../database/firebase";
 import ResetPassword from "../../pages/authentication/ResetPassword";
 import { Link } from "react-router-dom";
+import Loader from "../loader/loader";
 
 interface Props {
   toastMessageSuccess: (param: string) => void;
@@ -19,22 +20,26 @@ const Header = ({
   hideSearch,
   filterOnChange,
 }: Props) => {
+  const [loader, setLoader] = useState(false);
   const { user } = useAppSelector((state) => state.auth);
   const [resetPasswordEmail, setResetPasswordEmail] = useState("");
-
   const [resetPasswordContainerVisibily, setResetPasswordContainerVisibily] =
     useState(false);
 
   const handlePasswordReset = async () => {
     if (!resetPasswordEmail.length) return;
     try {
-      await sendPasswordResetEmail(auth, resetPasswordEmail);
-      toastMessageSuccess(
-        "Change password request sent. Please check your email."
-      );
-      setResetPasswordContainerVisibily(false);
+      setLoader(true);
+      await sendPasswordResetEmail(auth, resetPasswordEmail).then(() => {
+        toastMessageSuccess(
+          "Change password request sent. Please check your email."
+        );
+        setResetPasswordContainerVisibily(false);
+        setLoader(false);
+      });
     } catch (error: any) {
       toastMessageError(error.message);
+      setLoader(false);
     }
   };
 
@@ -118,6 +123,7 @@ const Header = ({
           </div>
         </div>
       </nav>
+      {loader && <Loader />}
     </>
   );
 };

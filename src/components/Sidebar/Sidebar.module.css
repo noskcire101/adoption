@@ -14,7 +14,7 @@
   background: #002349;
   display: block;
   position: fixed;
-  z-index: 9999;
+  z-index: 60;
 }
 main {
   width: 100%;

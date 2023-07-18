@@ -6,6 +6,7 @@ import {
   deletingFiles,
   getAllInfoInADocument,
   selectingFiles,
+  renderCorrectImageBasedOnName,
 } from "./PostFunctions";
 import {
   deleteObject,
@@ -21,11 +22,9 @@ import { CiSquareRemove } from "react-icons/ci";
 import { petsForm, petsFormSchemaCreate } from "../../yupModels/Form";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Resizer from "react-image-file-resizer";
-import {
-  dataURIToBlob,
-  resizeFile,
-} from "../../reusableFunctions/reusablefunctions";
+import { dataURIToBlob, resizeFile } from "../../reusableFunctions/covert";
+import DeleteSpecificItem from "./DeleteSpecificItem";
+import Loader from "../../components/loader/loader";
 
 interface Props {
   toastMessageSuccess: (param: string) => void;
@@ -43,13 +42,14 @@ const UpdatePost = ({
   const [isDragging, setIsDragging] = useState(false);
   const [images, setImages] = useState<any>([]);
 
-  const categories = images;
+  let categories = images;
   const [cover, setCover] = useState(categories[0]?.name ?? 0);
   const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.auth);
   const { id } = useParams();
   const [petData, setPetData] = useState<any>({});
   const [bdate, setBDate] = useState<string>();
+  const [loader, setLoader] = useState(false);
 
   const convertDate = (date: any) => {
     let d = new Date(date.toDate());
@@ -72,9 +72,9 @@ const UpdatePost = ({
   }
 
   useEffect(() => {
+    setLoader(true);
     const petsDataDirectory = `/pets/${id}`;
     getAllInfoInADocument(petsDataDirectory, setPetData);
-
     listAll(ref(storage, petsDataDirectory)).then((response) => {
       response.items.forEach((item) => {
         getDownloadURL(item).then((url: any) => {
@@ -94,12 +94,14 @@ const UpdatePost = ({
     }
     if (petData.coverImage) setCover(petData.coverImage);
     if (petData.birthdate) setBDate(convertDate(petData.birthdate));
+    setLoader(false);
   }, [petData]);
+
   function selectFiles() {
     fileInputRef.current.click();
   }
   function onFileSelect(event: React.ChangeEvent<HTMLInputElement>) {
-    selectingFiles(event, setImages, images, toastMessageError);
+    selectingFiles(event, setImages, images, toastMessageError, setLoader);
   }
   function onDragOver(event: any) {
     event.preventDefault();
@@ -115,7 +117,8 @@ const UpdatePost = ({
     event.preventDefault();
     setIsDragging(false);
     const files = event.dataTransfer.files;
-
+    setLoader(true);
+    let isDone = true;
     for (let i = 0; i < files.length; i++) {
       console.log(files[i].type.split("/")[0]);
       if (files[i].type.split("/")[0] !== "image") {
@@ -147,7 +150,9 @@ const UpdatePost = ({
           }
         }
       }
+      isDone = false;
     }
+    setLoader(isDone);
   }
   function addV4(images: any, declairedCoverImage: any) {
     if (images.age === "new") {
@@ -165,97 +170,110 @@ const UpdatePost = ({
     }
   }
   const handleFormSubmit = async (data: petsForm) => {
-    const coverImage = cover.includes("<Ñ:v4>")
-      ? cover
-      : cover + "<Ñ:v4>" + v4();
-    const timestamp = new Date();
-    const {
-      street,
-      city,
-      state,
-      contact,
-      fbaccount,
-      pet,
-      type,
-      gender,
-      breed,
-      birthdate,
-      dewormed,
-      vaccinated,
-      reason,
-    } = data;
-    const petsDirectory = `/pets/${id}`;
-    await updatingData(petsDirectory, {
-      coverImage,
-      street,
-      city,
-      state,
-      contact,
-      fbaccount,
-      pet,
-      type,
-      gender,
-      breed,
-      birthdate,
-      dewormed,
-      vaccinated,
-      reason,
-      timestamp,
-    })
-      .then(() => {
-        const uploadImages = async (id: any) => {
-          let successChecker = false;
-          if (images == undefined) {
-            successChecker = true;
-          }
-          listAll(ref(storage, `/pets/${id}`)).then((response) => {
-            response.items.forEach((item) => {
-              getDownloadURL(item).then((url: any) => {
-                if (!images.some((e: any) => e.name === item.name)) {
-                  deleteObject(ref(storage, `/pets/${id}/${item.name}`));
-                }
-              });
-            });
-          });
-
-          for (let i = 0; i < images.length; i++) {
-            if (images[i].age === "new") {
-              const customRef = ref(
-                storage,
-                `/pets/${id}/${addV4(images[i], coverImage)}`
-              );
-              await uploadBytes(customRef, images[i].blob)
-                .then(() => {
-                  successChecker = true;
-                })
-                .catch((error) => {
-                  toastMessageError(error);
-                });
-            } else {
+    if (cover == 0 || cover == undefined) {
+      toastMessageError(
+        "Please make sure to upload atleast one image of your pet"
+      );
+    } else {
+      setLoader(true);
+      const coverImage = cover.includes("<Ñ:v4>")
+        ? cover
+        : cover + "<Ñ:v4>" + v4();
+      const timestamp = new Date();
+      const {
+        street,
+        city,
+        state,
+        contact,
+        fbaccount,
+        pet,
+        type,
+        gender,
+        breed,
+        birthdate,
+        dewormed,
+        vaccinated,
+        reason,
+      } = data;
+      const petsDirectory = `/pets/${id}`;
+      await updatingData(petsDirectory, {
+        coverImage,
+        street,
+        city,
+        state,
+        contact,
+        fbaccount,
+        pet,
+        type,
+        gender,
+        breed,
+        birthdate,
+        dewormed,
+        vaccinated,
+        reason,
+        timestamp,
+      })
+        .then(() => {
+          const uploadImages = async (id: any) => {
+            let successChecker = false;
+            if (images == undefined) {
               successChecker = true;
             }
-          }
-          if (successChecker) {
-            toastMessageSuccess("Post Successfully updated");
-            navigate("/");
-          }
-        };
-        uploadImages(id);
-      })
-      .catch((error) => {
-        toastMessageError(error.Code);
-      });
-  };
-  // useEffect(() => {
-  //   setCover(categories[0]?.name);
-  // }, [images]);
+            listAll(ref(storage, `/pets/${id}`)).then((response) => {
+              response.items.forEach((item) => {
+                getDownloadURL(item).then((url: any) => {
+                  if (!images.some((e: any) => e.name === item.name)) {
+                    deleteObject(ref(storage, `/pets/${id}/${item.name}`));
+                  }
+                });
+              });
+            });
 
-  function findArrayElementByName(arrayImages: any[], coverImage: string) {
-    const result = arrayImages.find(({ name }) => name === coverImage);
-    if (result) {
-      return result.url;
+            for (let i = 0; i < images.length; i++) {
+              if (images[i].age === "new") {
+                const customRef = ref(
+                  storage,
+                  `/pets/${id}/${addV4(images[i], coverImage)}`
+                );
+                await uploadBytes(customRef, images[i].blob)
+                  .then(() => {
+                    successChecker = true;
+                  })
+                  .catch((error) => {
+                    toastMessageError(error);
+                    setLoader(false);
+                  });
+              } else {
+                successChecker = true;
+              }
+            }
+            if (successChecker) {
+              setLoader(false);
+              toastMessageSuccess("Post Successfully updated");
+              navigate("/");
+            }
+          };
+          uploadImages(id);
+        })
+        .catch((error) => {
+          toastMessageError(error.Code);
+        });
+    }
+  };
+
+  function handleRemoveSelectedImage(index: any) {
+    if (images.length < 2) {
+      setCover(0);
+      deletingFiles(index, setImages);
     } else {
-      return categories[0]?.url;
+      deletingFiles(index, setImages);
+      if (index == 0) {
+        setCover(categories[1]?.name);
+        console.log(categories[1]?.name);
+      } else {
+        setCover(categories[0]?.name);
+        console.log(categories[0]?.name);
+      }
     }
   }
 
@@ -266,21 +284,34 @@ const UpdatePost = ({
   } = useForm<petsForm>({
     resolver: yupResolver(petsFormSchemaCreate),
   });
+  const [deleteContainerVisibily, setDeleteContainerVisibily] = useState(false);
 
   return (
     <>
+      <DeleteSpecificItem
+        id={petData.id}
+        isOpen={deleteContainerVisibily}
+        onClose={() => setDeleteContainerVisibily(false)}
+      />
+      <div className="z-50 drop-shadow-[1px_1px_var(--tw-shadow-color)] items-center justify-between sm:justify-center flex shadow-white bg-gradient-to-b from-white ...   p-5 lg:p-10 text-center sticky top-[60px] sm:top-[65px] ...">
+        <h2 className="text-[18px] sm:text-3xl text-[#002349] mr-2">
+          Update Post
+        </h2>
+        <div className="w-[148px]">
+          <Link
+            to="/"
+            className="text-white bg-[#002349] hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center "
+            type="button"
+          >
+            Back to Home
+          </Link>
+        </div>
+      </div>
       <div className="overflow-auto pb-[4vh] mx-[0%]">
         <div className="container mx-auto px-[0%] md:px-12">
           <section className=" py-1 bg-blueGray-50">
             <div className="w-full md:w-12/12 px-4 mx-auto mt-6">
               <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
-                <div className="rounded-t self-center bg-white mb-0 px-6 py-6">
-                  <div className="text-center flex ">
-                    <h6 className="text-blueGray-700 text-2xl font-bold">
-                      Update Post For Adoption
-                    </h6>
-                  </div>
-                </div>
                 <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
                   <form onSubmit={handleSubmit(handleFormSubmit)}>
                     {petData.uid && user!.id && petData.uid === user!.id ? (
@@ -738,7 +769,7 @@ const UpdatePost = ({
                                           value={param.name}
                                           selected={selectCoverImageOnFirstLoad(
                                             param.name,
-                                            petData.coverImage
+                                            cover
                                           )}
                                         >
                                           {param.age == "new"
@@ -755,7 +786,11 @@ const UpdatePost = ({
                                 <div className=" m-auto  contents w-full lg:w-6/12">
                                   <img
                                     className="object-contain m-auto h-[150px] max-w-[37%] "
-                                    src={findArrayElementByName(images, cover)}
+                                    src={renderCorrectImageBasedOnName(
+                                      images,
+                                      cover,
+                                      categories
+                                    )}
                                   />
                                 </div>
                               </div>
@@ -771,7 +806,7 @@ const UpdatePost = ({
                                     <span
                                       className="delete"
                                       onClick={() =>
-                                        deletingFiles(index, setImages)
+                                        handleRemoveSelectedImage(index)
                                       }
                                     >
                                       <CiSquareRemove className="text-red-600 text-lg cursor-pointer" />
@@ -809,11 +844,12 @@ const UpdatePost = ({
                           </div>
                           <div className="w-full lg:w-6/12 px-4 self-center ">
                             <div className="w-full relative mb-3">
-                              <Link to="/">
-                                <div className="shadow-md cursor-pointer text-center w-full lg:w-[150px] text-white font-bold bg-[#ff1919] hover:bg-[#cf1313] py-2 px-4 rounded">
-                                  Cancel
-                                </div>
-                              </Link>
+                              <div
+                                onClick={() => setDeleteContainerVisibily(true)}
+                                className="shadow-md cursor-pointer text-center w-full lg:w-[150px] text-white font-bold bg-[#ff1919] hover:bg-[#cf1313] py-2 px-4 rounded"
+                              >
+                                Delete
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -828,6 +864,7 @@ const UpdatePost = ({
           </section>
         </div>
       </div>
+      {loader && <Loader />}
     </>
   );
 };

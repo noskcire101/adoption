@@ -56,14 +56,14 @@ const ResetPassword: FC<ResetPasswordProps> = ({
             </div>
             <button
               onClick={handlePasswordReset}
-              className="w-full text-white bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+              className="w-full text-white bg-[#002349] hover:bg-blue-900  font-medium rounded-lg text-sm px-5 py-2.5  text-center  "
             >
               Click to send a request to your email
             </button>
             <button
               onClick={onClose}
               style={{ marginTop: 10 }}
-              className="w-full text-white bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5  text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 mt-1"
+              className="w-full text-white bg-[#ff1919] hover:bg-[#cf1313] font-medium rounded-lg text-sm px-5 py-2.5 text-center mt-1"
             >
               Cancel
             </button>

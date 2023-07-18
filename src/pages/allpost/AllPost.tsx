@@ -1,20 +1,19 @@
-import React, { Fragment, ReactNode, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./AllPost.module.css";
-
 import Pagination from "../../components/pagination/pagination";
-
 import { getAllDocsInACollection } from "./PostFunctions";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { petsFormFinal } from "../../yupModels/Form";
 import PostCard from "./PostCard";
 import { useAppSelector } from "../../storeReduxTools/storeHooks";
 import NeedsLoginMessage from "../../components/needsLoginMessage/NeedsLoginMessage";
 import MainContentTitle from "../../components/mainContentTitle/mainContentTitle";
+import Loader from "../../components/loader/loader";
 
 interface Props {
   toastMessageSuccess: (param: string) => void;
   toastMessageError: (param: string) => void;
-  showSearchfunction(): void;
+  showOrHideSearchfunction(): void;
   filter: {
     main: string;
     type: string;
@@ -26,10 +25,10 @@ interface Props {
 const AllPost = ({
   toastMessageSuccess,
   toastMessageError,
-  showSearchfunction,
+  showOrHideSearchfunction,
   filter,
 }: Props) => {
-  showSearchfunction();
+  showOrHideSearchfunction();
   const { user } = useAppSelector((state) => state.auth);
   const [currentPage, setcurrentPage] = useState(1);
   const [itemLimitPerPage, setitemLimitPerPage] = useState(5);
@@ -48,26 +47,7 @@ const AllPost = ({
     indexOfFirstItemInCurrrentBatch,
     indexOfLastItemInCurrentBatch
   );
-  // let [listOfItem, setListOfItem] = useState<any>([]);
-
-  function searchItem(
-    array: any[],
-    setState: React.Dispatch<React.SetStateAction<any[]>>,
-    searchStringMain: string
-  ) {
-    let result: any;
-    let arrayVal = array;
-    if (searchStringMain !== "") {
-      result = arrayVal.filter((param: any) =>
-        param.pet.toLowerCase().includes(searchStringMain.toLowerCase())
-      );
-      setState(result);
-      console.log(result, "result");
-    } else {
-      setState(array);
-      console.log(array, "array");
-    }
-  }
+  const [loader, setLoader] = useState(true);
 
   useEffect(() => {
     getAllDocsInACollection(
@@ -76,27 +56,10 @@ const AllPost = ({
       filter.type,
       filter.gender,
       filter.age,
-      filter.main
+      filter.main,
+      setLoader
     );
-    console.log(filter.type, "-type");
-    console.log(filter.gender, "-gender");
-    console.log(filter.age, "-age");
-    console.log(filter.main, "-main");
   }, [filter, currentPage]);
-
-  // useEffect(() => {
-  //   getAllDocsInACollection(
-  //     "pets",
-  //     setDataFromDB,
-  //     filter.type,
-  //     filter.gender,
-  //     filter.age
-  //   );
-  //   searchItem(dataFromDB, setDataFromDB, filter.main);
-  //   console.log(filter.type, "-type");
-  //   console.log(filter.gender, "-gender");
-  //   console.log(filter.age, "-age");
-  // }, [filter.main]);
 
   const [delayExecute, setdelayExecute] = useState(false);
   useEffect(() => {
@@ -109,7 +72,7 @@ const AllPost = ({
   return (
     <>
       <MainContentTitle />
-      {delayExecute && !user && <NeedsLoginMessage />}
+      {delayExecute && !Boolean(user) && <NeedsLoginMessage />}
 
       <div
         style={{ display: user ? "block" : "none" }}
@@ -162,6 +125,7 @@ const AllPost = ({
           displayLoadMore={true}
         />
       )}
+      {loader && <Loader />}
     </>
   );
 };
