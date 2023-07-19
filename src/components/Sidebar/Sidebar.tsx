@@ -35,7 +35,7 @@ const Sidebar = ({ toastMessageSuccess, toastMessageError }: Props) => {
   function closeAllTabs(
     setState: React.Dispatch<React.SetStateAction<boolean>>
   ) {
-    return setState(false);
+    setState(false);
   }
   function toggle() {
     setIsOpen(!isOpen);
