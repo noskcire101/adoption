@@ -61,7 +61,7 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
     try {
       setLoader(true);
       const provider = new GoogleAuthProvider();
-      signInWithPopup(auth, provider)
+      await signInWithPopup(auth, provider)
         .then((result) => {
           const user = result.user;
           setDoc(
