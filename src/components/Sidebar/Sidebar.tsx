@@ -37,6 +37,7 @@ const Sidebar = ({
   const { user } = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+
   function closeAllTabs(
     setState: React.Dispatch<React.SetStateAction<boolean>>
   ) {
