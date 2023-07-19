@@ -19,11 +19,16 @@ import { sendPasswordResetEmail, signOut } from "firebase/auth";
 import { logout } from "../../storeReduxTools/authSlice";
 
 interface Props {
+  children: ReactNode;
   toastMessageSuccess: (param: string) => void;
   toastMessageError: (param: string) => void;
 }
 
-const Sidebar = ({ toastMessageSuccess, toastMessageError }: Props) => {
+const Sidebar = ({
+  children,
+  toastMessageSuccess,
+  toastMessageError,
+}: Props) => {
   const [openSub, setopenSub] = useState(false);
   const [resetPasswordEmail, setResetPasswordEmail] = useState("");
   const [resetPasswordContainerVisibily, setResetPasswordContainerVisibily] =
@@ -35,7 +40,7 @@ const Sidebar = ({ toastMessageSuccess, toastMessageError }: Props) => {
   function closeAllTabs(
     setState: React.Dispatch<React.SetStateAction<boolean>>
   ) {
-    setState(false);
+    return setState(false);
   }
   function toggle() {
     setIsOpen(!isOpen);
@@ -226,6 +231,8 @@ const Sidebar = ({ toastMessageSuccess, toastMessageError }: Props) => {
             </div>
           </div>
         </span>
+
+        <main onClick={handleClick}>{children}</main>
       </div>
     </>
   );
