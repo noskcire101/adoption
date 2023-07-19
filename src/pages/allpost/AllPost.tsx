@@ -61,18 +61,18 @@ const AllPost = ({
     );
   }, [filter, currentPage]);
 
-  const [delayExecute, setdelayExecute] = useState(false);
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setdelayExecute(true);
-    }, 10000);
-    return () => clearTimeout(timeout);
-  }, [delayExecute]);
+  // const [delayExecute, setdelayExecute] = useState(false);
+  // useEffect(() => {
+  //   const timeout = setTimeout(() => {
+  //     setdelayExecute(true);
+  //   }, 10000);
+  //   return () => clearTimeout(timeout);
+  // }, [delayExecute]);
 
   return (
     <>
       <MainContentTitle />
-      {delayExecute && !Boolean(user) && <NeedsLoginMessage />}
+      {/* {delayExecute && !Boolean(user) && <NeedsLoginMessage />} */}
 
       <div
         style={{ display: user ? "block" : "none" }}
