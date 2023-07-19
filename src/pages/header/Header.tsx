@@ -3,9 +3,9 @@ import styles from "./Header.module.css";
 import { useAppSelector } from "../../storeReduxTools/storeHooks";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../../database/firebase";
-import ResetPassword from "../../pages/authentication/ResetPassword";
+import ResetPassword from "../authentication/ResetPassword";
 import { Link } from "react-router-dom";
-import Loader from "../loader/loader";
+import Loader from "../../components/loader/loader";
 
 interface Props {
   toastMessageSuccess: (param: string) => void;

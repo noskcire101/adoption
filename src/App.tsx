@@ -1,7 +1,7 @@
 import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
 import Sidebar from "./pages/sidebar/Sidebar";
-import Header from "./components/header/Header";
+import Header from "./pages/header/Header";
 import Login from "./pages/authentication/Login";
 import SignUp from "./pages/authentication/Signup";
 import { useEffect, useState } from "react";
@@ -99,47 +99,45 @@ const App = () => {
           toastMessageError={showToastMessageError}
         />
         <Routes>
-          <Route element={<LoginRoutes />}>
-            <Route path="/">
-              <Route
-                index
-                element={
-                  <AllPost
-                    filter={filter}
-                    showOrHideSearchfunction={showOrHideSearchfunction}
-                    toastMessageSuccess={showToastMessageSuccess}
-                    toastMessageError={showToastMessageError}
-                  />
-                }
-              />
-              <Route
-                path="/:id"
-                element={
-                  <PostDetails hideSearchfunction={hideSearchfunction} />
-                }
-              />
-              <Route
-                path="/new"
-                element={
-                  <CreatePost
-                    hideSearchfunction={hideSearchfunction}
-                    toastMessageSuccess={showToastMessageSuccess}
-                    toastMessageError={showToastMessageError}
-                  />
-                }
-              />
-              <Route
-                path="/update/:id"
-                element={
-                  <UpdatePost
-                    hideSearchfunction={hideSearchfunction}
-                    toastMessageSuccess={showToastMessageSuccess}
-                    toastMessageError={showToastMessageError}
-                  />
-                }
-              />
-            </Route>
+          {/* <Route element={<LoginRoutes />}> */}
+          <Route path="/">
+            <Route
+              index
+              element={
+                <AllPost
+                  filter={filter}
+                  showOrHideSearchfunction={showOrHideSearchfunction}
+                  toastMessageSuccess={showToastMessageSuccess}
+                  toastMessageError={showToastMessageError}
+                />
+              }
+            />
+            <Route
+              path="/:id"
+              element={<PostDetails hideSearchfunction={hideSearchfunction} />}
+            />
+            <Route
+              path="/new"
+              element={
+                <CreatePost
+                  hideSearchfunction={hideSearchfunction}
+                  toastMessageSuccess={showToastMessageSuccess}
+                  toastMessageError={showToastMessageError}
+                />
+              }
+            />
+            <Route
+              path="/update/:id"
+              element={
+                <UpdatePost
+                  hideSearchfunction={hideSearchfunction}
+                  toastMessageSuccess={showToastMessageSuccess}
+                  toastMessageError={showToastMessageError}
+                />
+              }
+            />
           </Route>
+          {/* </Route> */}
           <Route
             path="/login"
             element={
