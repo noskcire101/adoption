@@ -82,6 +82,7 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
                 photoUrl: user.photoURL || null,
               })
             );
+            navigate("/");
           }
           setLoader(false);
           toastMessageSuccess("Sign In Succesfully");
@@ -113,6 +114,7 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
         );
       toastMessageSuccess("Login Success");
       setLoader(false);
+      navigate("/");
     } catch (error: any) {
       setbuttonDisabling(false);
       const errorCode = error.code;
