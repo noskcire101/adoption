@@ -78,7 +78,7 @@ const PostDetails = ({ hideSearchfunction }: Props) => {
           </Link>
         </div>
       </div>
-      <div className="container mx-auto py-8">
+      <div className="container mx-auto pb-8 pt-0">
         <div className="grid grid-cols-4 md:grid-cols-12 gap-6 px-4">
           <div className="col-span-full lg:col-span-8">
             <div className="bg-white shadow rounded-lg p-6">
