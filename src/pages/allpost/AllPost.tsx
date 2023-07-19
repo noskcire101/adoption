@@ -9,6 +9,9 @@ import { useAppSelector } from "../../storeReduxTools/storeHooks";
 import NeedsLoginMessage from "../../components/needsLoginMessage/NeedsLoginMessage";
 import MainContentTitle from "../../components/mainContentTitle/mainContentTitle";
 import Loader from "../../components/loader/loader";
+import { useAppDispatch } from "../../storeReduxTools/storeHooks";
+import { auth } from "../../database/firebase";
+import { login } from "../../storeReduxTools/authSlice";
 
 interface Props {
   toastMessageSuccess: (param: string) => void;
@@ -48,6 +51,25 @@ const AllPost = ({
     indexOfLastItemInCurrentBatch
   );
   const [loader, setLoader] = useState(true);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user && user.email) {
+        dispatch(
+          login({
+            id: user.uid,
+            fullName: user.displayName || null,
+            email: user.email,
+            photoUrl: user?.photoURL || null,
+          })
+        );
+      } else {
+        navigate("/login");
+      }
+    });
+    return () => unsubscribe();
+  }, [dispatch]);
 
   useEffect(() => {
     getAllDocsInACollection(
@@ -65,7 +87,7 @@ const AllPost = ({
   useEffect(() => {
     const timeout = setTimeout(() => {
       setdelayExecute(true);
-    }, 10000);
+    }, 5000);
     return () => clearTimeout(timeout);
   }, [delayExecute]);
 
@@ -75,7 +97,7 @@ const AllPost = ({
       {delayExecute && !Boolean(user) && <NeedsLoginMessage />}
 
       <div
-        style={{ display: user ? "block" : "none" }}
+        style={{ display: user && user ? "block" : "none" }}
         className="overflow-auto pb-[4vh] mx-[0%]"
       >
         <div className="container mx-auto px-[5%] md:px-12">
@@ -108,7 +130,7 @@ const AllPost = ({
           </ul>
         </div>
       </div>
-      {user && (
+      {dataFromDB && (
         <Pagination
           setitemLimitPerPage={setitemLimitPerPage}
           itemLimitPerPage={itemLimitPerPage}

@@ -131,16 +131,6 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
     resolver: yupResolver(authFormSchemaLogin),
   });
 
-  const [delayExecute, setdelayExecute] = useState(false);
-  useEffect(() => {
-    setLoader(true);
-    const timeout = setTimeout(() => {
-      setdelayExecute(true);
-      setLoader(false);
-    }, 5000);
-    return () => clearTimeout(timeout);
-  }, []);
-
   return (
     <>
       <ResetPassword
@@ -151,7 +141,7 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
         handlePasswordReset={handlePasswordReset}
       />
       <div
-        style={{ display: delayExecute ? "block" : "none" }}
+        style={{ display: "block" }}
         className="w-full max-w-md mt-10 m-auto"
       >
         <form

@@ -1,7 +1,7 @@
 import { getDownloadURL, listAll, ref } from "firebase/storage";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { storage } from "../../database/firebase";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { auth, storage } from "../../database/firebase";
 import PostDetailsImages from "./PostDetailsImages";
 import Pagination from "../../components/pagination/pagination";
 import {
@@ -9,8 +9,12 @@ import {
   getAllInfoInADocument,
   titleCase,
 } from "./PostFunctions";
-import { useAppSelector } from "../../storeReduxTools/storeHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../storeReduxTools/storeHooks";
 import Loader from "../../components/loader/loader";
+import { login } from "../../storeReduxTools/authSlice";
 
 interface Props {
   hideSearchfunction(): void;
@@ -40,6 +44,25 @@ const PostDetails = ({ hideSearchfunction }: Props) => {
     indexOfFirstItemInCurrrentBatch,
     indexOfLastItemInCurrentBatch
   );
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user && user.email) {
+        dispatch(
+          login({
+            id: user.uid,
+            fullName: user.displayName || null,
+            email: user.email,
+            photoUrl: user?.photoURL || null,
+          })
+        );
+      } else {
+        navigate("/login");
+      }
+    });
+    return () => unsubscribe();
+  }, [dispatch]);
 
   useEffect(() => {
     setLoader(true);

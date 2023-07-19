@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useAppSelector } from "../../storeReduxTools/storeHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../storeReduxTools/storeHooks";
 import { Link, useNavigate } from "react-router-dom";
 import {
   addingDocument,
@@ -9,7 +12,7 @@ import {
 } from "./PostFunctions";
 import { ref, uploadBytes } from "firebase/storage";
 import { collection } from "firebase/firestore";
-import { db, storage } from "../../database/firebase";
+import { auth, db, storage } from "../../database/firebase";
 import { v4 } from "uuid";
 import { CiSquareRemove } from "react-icons/ci";
 import { petsForm, petsFormSchemaCreate } from "../../yupModels/Form";
@@ -17,6 +20,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { dataURIToBlob, resizeFile } from "../../reusableFunctions/covert";
 import Loader from "../../components/loader/loader";
+import { login } from "../../storeReduxTools/authSlice";
 
 interface Props {
   toastMessageSuccess: (param: string) => void;
@@ -38,6 +42,25 @@ const CreatePost = ({
   const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.auth);
   const [loader, setLoader] = useState(false);
+
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user && user.email) {
+        dispatch(
+          login({
+            id: user.uid,
+            fullName: user.displayName || null,
+            email: user.email,
+            photoUrl: user?.photoURL || null,
+          })
+        );
+      } else {
+        navigate("/login");
+      }
+    });
+    return () => unsubscribe();
+  }, [dispatch]);
 
   console.log(cover, "cover");
   function selectFiles() {

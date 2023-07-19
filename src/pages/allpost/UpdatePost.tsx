@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useAppSelector } from "../../storeReduxTools/storeHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../storeReduxTools/storeHooks";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   updatingData,
@@ -16,7 +19,7 @@ import {
   uploadBytes,
 } from "firebase/storage";
 import { Timestamp, collection } from "firebase/firestore";
-import { db, storage } from "../../database/firebase";
+import { auth, db, storage } from "../../database/firebase";
 import { v4 } from "uuid";
 import { CiSquareRemove } from "react-icons/ci";
 import { petsForm, petsFormSchemaCreate } from "../../yupModels/Form";
@@ -25,6 +28,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { dataURIToBlob, resizeFile } from "../../reusableFunctions/covert";
 import DeleteSpecificItem from "./DeleteSpecificItem";
 import Loader from "../../components/loader/loader";
+import { login } from "../../storeReduxTools/authSlice";
 
 interface Props {
   toastMessageSuccess: (param: string) => void;
@@ -50,6 +54,25 @@ const UpdatePost = ({
   const [petData, setPetData] = useState<any>({});
   const [bdate, setBDate] = useState<string>();
   const [loader, setLoader] = useState(false);
+
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user && user.email) {
+        dispatch(
+          login({
+            id: user.uid,
+            fullName: user.displayName || null,
+            email: user.email,
+            photoUrl: user?.photoURL || null,
+          })
+        );
+      } else {
+        navigate("/login");
+      }
+    });
+    return () => unsubscribe();
+  }, [dispatch]);
 
   const convertDate = (date: any) => {
     let d = new Date(date.toDate());
@@ -303,7 +326,7 @@ const UpdatePost = ({
             className="text-white bg-[#002349] hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center "
             type="button"
           >
-            Back to Hom
+            Back to Home
           </Link>
         </div>
       </div>
