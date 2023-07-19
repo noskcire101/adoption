@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/erickson-demo/static/css/main.81c03d60.css",
+    "main.js": "/erickson-demo/static/js/main.c35ab5bb.js",
+    "static/js/787.7abfd805.chunk.js": "/erickson-demo/static/js/787.7abfd805.chunk.js",
+    "index.html": "/erickson-demo/index.html",
+    "main.81c03d60.css.map": "/erickson-demo/static/css/main.81c03d60.css.map",
+    "main.c35ab5bb.js.map": "/erickson-demo/static/js/main.c35ab5bb.js.map",
+    "787.7abfd805.chunk.js.map": "/erickson-demo/static/js/787.7abfd805.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.81c03d60.css",
+    "static/js/main.c35ab5bb.js"
+  ]
+}
