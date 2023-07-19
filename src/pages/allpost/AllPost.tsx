@@ -58,7 +58,7 @@ const AllPost = ({
       filter.age,
       filter.main,
       setLoader
-    );
+    ).catch((error) => console.error(error));
   }, [filter, currentPage]);
 
   const [delayExecute, setdelayExecute] = useState(false);
