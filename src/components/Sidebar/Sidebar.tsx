@@ -23,9 +23,6 @@ interface Props {
   toastMessageSuccess: (param: string) => void;
   toastMessageError: (param: string) => void;
 }
-function closeAllTabs(setState: React.Dispatch<React.SetStateAction<boolean>>) {
-  return setState(false);
-}
 
 const Sidebar = ({
   children,
@@ -40,7 +37,11 @@ const Sidebar = ({
   const { user } = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-
+  function closeAllTabs(
+    setState: React.Dispatch<React.SetStateAction<boolean>>
+  ) {
+    return setState(false);
+  }
   function toggle() {
     setIsOpen(!isOpen);
   }
