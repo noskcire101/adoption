@@ -106,6 +106,7 @@ const CreatePost = ({
                 url: URL.createObjectURL(files[i]),
               },
             ]);
+            setCover(categories[0]?.name);
           } else {
             toastMessageError(
               `${
@@ -209,10 +210,6 @@ const CreatePost = ({
         });
     }
   };
-
-  useEffect(() => {
-    setCover(categories[0]?.name);
-  }, []);
 
   function handleRemoveSelectedImage(index: any) {
     if (images.length < 2) {
