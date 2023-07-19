@@ -227,7 +227,7 @@ const CreatePost = ({
             className="text-white bg-[#002349] hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center "
             type="button"
           >
-            Back to Home
+            Back to Hom
           </Link>
         </div>
       </div>
