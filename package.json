@@ -1,7 +1,7 @@
 {
   "name": "firebase-auth",
   "version": "0.1.0",
-  "homepage":"/",
+  "homepage":".",
   "private": true,
   "dependencies": {
     "@hookform/resolvers": "^3.1.1",
@@ -31,8 +31,6 @@
     "yup": "^1.2.0"
   },
   "scripts": {
-    "predeploy": "npm run build",
-
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
