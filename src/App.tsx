@@ -1,6 +1,6 @@
 import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
-import Sidebar from "./components/sidebar/Sidebar";
+import Sidebar from "./pages/sidebar/Sidebar";
 import Header from "./components/header/Header";
 import Login from "./pages/authentication/Login";
 import SignUp from "./pages/authentication/Signup";

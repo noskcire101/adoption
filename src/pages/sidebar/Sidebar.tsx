@@ -13,7 +13,7 @@ import {
   useAppSelector,
 } from "../../storeReduxTools/storeHooks";
 import SidebarItems from "./SidebarItems";
-import ResetPassword from "../../pages/authentication/ResetPassword";
+import ResetPassword from "../authentication/ResetPassword";
 import { auth } from "../../database/firebase";
 import { sendPasswordResetEmail, signOut } from "firebase/auth";
 import { logout } from "../../storeReduxTools/authSlice";
