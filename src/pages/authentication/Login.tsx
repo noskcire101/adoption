@@ -63,7 +63,7 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
       const provider = new GoogleAuthProvider();
       const { user } = await signInWithPopup(auth, provider);
       if (user && user.email) {
-        setDoc(
+        await setDoc(
           doc(db, "users", user.uid),
           {
             fullname: user.displayName,

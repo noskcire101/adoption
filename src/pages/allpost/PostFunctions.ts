@@ -34,13 +34,14 @@ export const deletingItemTotally = async (
 };
 
 
-export const selectingFiles:any = async (event: React.ChangeEvent<HTMLInputElement>,setImageState:React.Dispatch<any>,imageState:any,toastMessageError: (param: string) => void,setLoader:React.Dispatch<React.SetStateAction<boolean>>) => {
+export const selectingFiles:any = async (event: React.ChangeEvent<HTMLInputElement>,setImageState:React.Dispatch<any>,imageState:any,toastMessageError: (param: string) => void,setLoader:React.Dispatch<React.SetStateAction<boolean>>,setCover:React.Dispatch<any>) => {
   
     if (event.target.files !== undefined) {
       setLoader(true)
       let isDone = true;
       const files: FileList | null = event.target.files;
-   
+      let countingExistingImages = imageState.length;
+      let pickingOnlyTheFirstIndexOnFirtLoad = 0;
       if (files?.length === 0)return;
       for (let i = 0; i < files!.length; i++) {
         if (files![i].type.split("/")[0] !== "image") {
@@ -51,7 +52,9 @@ export const selectingFiles:any = async (event: React.ChangeEvent<HTMLInputEleme
           );
         } else {
             if (!imageState.some((event: any) => event.name === files![i].name)) {
-              if (imageState.length <= 5) {
+              countingExistingImages++;
+          pickingOnlyTheFirstIndexOnFirtLoad++;
+          if (countingExistingImages <= 6) {
                 const resizedImage: any = await resizeFile(files![i]);
                 const imageBlob: any = dataURIToBlob(resizedImage);
               setImageState((prevImages: any) => [
@@ -63,6 +66,10 @@ export const selectingFiles:any = async (event: React.ChangeEvent<HTMLInputEleme
                   age: "new"
                 },
               ]);
+              if (pickingOnlyTheFirstIndexOnFirtLoad == 1 && imageState.length == 0) {
+                setCover(files![i].name);
+                console.log(files![i].name);
+              }
             }else {
               toastMessageError(
                 `${

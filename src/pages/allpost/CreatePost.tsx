@@ -62,12 +62,18 @@ const CreatePost = ({
     return () => unsubscribe();
   }, [dispatch]);
 
-  console.log(cover, "cover");
   function selectFiles() {
     fileInputRef.current.click();
   }
   function onFileSelect(event: React.ChangeEvent<HTMLInputElement>) {
-    selectingFiles(event, setImages, images, toastMessageError, setLoader);
+    selectingFiles(
+      event,
+      setImages,
+      images,
+      toastMessageError,
+      setLoader,
+      setCover
+    );
   }
   function onDragOver(event: any) {
     event.preventDefault();
@@ -85,8 +91,9 @@ const CreatePost = ({
     const files = event.dataTransfer.files;
     setLoader(true);
     let isDone = true;
+    let countingExistingImages = images.length;
+    let pickingOnlyTheFirstIndexOnFirtLoad = 0;
     for (let i = 0; i < files.length; i++) {
-      console.log(files[i].type.split("/")[0]);
       if (files[i].type.split("/")[0] !== "image") {
         toastMessageError(
           `${
@@ -95,7 +102,9 @@ const CreatePost = ({
         );
       } else {
         if (!images.some((e: any) => e.name === files[i].name)) {
-          if (images.length <= 5) {
+          countingExistingImages++;
+          pickingOnlyTheFirstIndexOnFirtLoad++;
+          if (countingExistingImages <= 6) {
             const resizedImage: any = await resizeFile(files[i]);
             const imageBlob: any = dataURIToBlob(resizedImage);
             setImages((prevImages: any) => [
@@ -106,7 +115,10 @@ const CreatePost = ({
                 url: URL.createObjectURL(files[i]),
               },
             ]);
-            setCover(categories[0]?.name);
+            if (pickingOnlyTheFirstIndexOnFirtLoad == 1 && images.length == 0) {
+              setCover(files![i].name);
+              console.log(files![i].name);
+            }
           } else {
             toastMessageError(
               `${
