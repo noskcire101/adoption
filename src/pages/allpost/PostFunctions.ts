@@ -272,7 +272,7 @@ export function ageCalculator(date:Date) {
   if ( (petAge.years > 0) && (petAge.months > 0) && (petAge.days > 0) )  
       ageString = petAge.years + ` year${petAge.years > 1 ? "s" : ""}, ` + petAge.months + ` month${petAge.months > 1 ? "s" : ""}, and ` + petAge.days + ` day${petAge.days > 1 ? "s" : ""} old.`;  
   else if ( (petAge.years == 0) && (petAge.months == 0) && (petAge.days > 0) )  
-     ageString = "Only " + petAge.days + ` day${petAge.days > 1 ? "s" : ""} old.`;  
+     ageString = petAge.days + ` day${petAge.days > 1 ? "s" : ""} old.`;  
   //when current month and date is same as birth date and month  
   else if ( (petAge.years > 0) && (petAge.months == 0) && (petAge.days == 0) )  
      ageString = petAge.years +  ` year${petAge.years > 1 ? "s" : ""} old.`;  

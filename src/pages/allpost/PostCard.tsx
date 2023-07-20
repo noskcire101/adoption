@@ -78,7 +78,7 @@ const PostCard = ({
     <>
       <li
         key={index}
-        className="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3"
+        className="my-1 mb-10 px-1 w-full lg:my-4 lg:px-4 lg:w-1/2 xl:w-1/3"
       >
         <article className="overflow-hidden rounded-lg shadow-lg">
           <Link
@@ -157,7 +157,7 @@ const PostCard = ({
           </header>
 
           <div className="flex items-center justify-between leading-tight pr-2 pl-2 md:pr-4 md:pl-4 pt-0 pb-1  ">
-            <p className="text-gray-500 text-xs max-w-[77%] break-words pr-[25px]">
+            <p className="text-gray-500 text-xs max-w-[60%] break-words pr-[25px]">
               Born: {birthdate}
             </p>
             <p className="text-gray-500 text-xs ">
@@ -165,20 +165,20 @@ const PostCard = ({
             </p>
           </div>
           <div className="flex items-center justify-between leading-tight pr-2 pl-2 md:pr-4 md:pl-4 pt-0 pb-1  ">
-            <p className="text-gray-500 text-xs max-w-[77%] break-words pr-[25px]">
+            <p className="text-gray-500 text-xs max-w-[60%] break-words pr-[25px]">
               From: {titleCase(city)}, {titleCase(state)}
             </p>
             <p className="text-gray-500 text-xs ">Gender: {gender}</p>
           </div>
 
           <div className="flex items-center justify-between leading-tight pr-2 pl-2 md:pr-4 md:pl-4 pt-0 pb-1 ">
-            <p className="text-gray-500 text-xs max-w-[77%] break-words pr-[25px]">
+            <p className="text-gray-500 text-xs max-w-[60%] break-words pr-[25px]">
               Breed: {titleCase(breed)}
             </p>
             <p className="text-gray-500 text-xs">Vaccinated: {vaccinated}</p>
           </div>
           <div className="flex items-center justify-between leading-tight pr-2 pl-2 md:pr-4 md:pl-4 pt-0 pb-3 ">
-            <p className="text-gray-500 text-xs max-w-[77%] break-words pr-[25px]">
+            <p className="text-gray-500 text-xs max-w-[60%] break-words pr-[25px]">
               Type: {type}
             </p>
             <p className="text-gray-500 text-xs">Dewormed: {dewormed}</p>
@@ -229,12 +229,12 @@ const PostCard = ({
                 Edit My Post
               </Link>
             ) : (
-              <button
-                type="button"
+              <Link
+                to={`/${id}`}
                 className="text-white min-w-[153px] bg-[#002349] hover:bg-[#001730]/90 w-full mt-3 min-[400px]:mt-0 min-[400px]:w-auto place-content-center font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
               >
-                View Full Details
-              </button>
+                View Details
+              </Link>
             )}
           </footer>
         </article>
