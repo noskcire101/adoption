@@ -124,11 +124,11 @@ const Signup = ({ toastMessageSuccess, toastMessageError }: Props) => {
           className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
           onSubmit={handleSubmit(handleFormSubmit)}
         >
-          <h3 className="text-[37px] text-center py-7 font-bold dark:text-white">
+          <h3 className="text-[37px] text-center py-7 font-bold text-black">
             Sign Up
           </h3>
           <div className="mb-6">
-            <label className="block mb-2 text-sm font-medium text-gray-900 text-black">
+            <label className="block mb-2 text-sm font-medium text-gray-900">
               Fullname
             </label>
             <input
