@@ -25,7 +25,7 @@ interface Props {
   };
 }
 
-const AllPost = ({
+const MyPost = ({
   toastMessageSuccess,
   toastMessageError,
   showOrHideSearchfunction,
@@ -80,7 +80,7 @@ const AllPost = ({
       filter.age,
       filter.main,
       setLoader,
-      false,
+      true,
       user?.id ?? 0
     ).catch((error) => console.error(error));
   }, [filter, currentPage]);
@@ -145,4 +145,4 @@ const AllPost = ({
     </>
   );
 };
-export default AllPost;
+export default MyPost;

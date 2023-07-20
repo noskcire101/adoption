@@ -18,6 +18,7 @@ import NotFoundPage from "./pages/notFoundPage/notFoundPage";
 import CreatePost from "./pages/allpost/CreatePost";
 import PostDetails from "./pages/allpost/PostDetails";
 import UpdatePost from "./pages/allpost/UpdatePost";
+import MyPost from "./pages/allpost/MyPost";
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -105,6 +106,17 @@ const App = () => {
               index
               element={
                 <AllPost
+                  filter={filter}
+                  showOrHideSearchfunction={showOrHideSearchfunction}
+                  toastMessageSuccess={showToastMessageSuccess}
+                  toastMessageError={showToastMessageError}
+                />
+              }
+            />
+            <Route
+              path="/mypost"
+              element={
+                <MyPost
                   filter={filter}
                   showOrHideSearchfunction={showOrHideSearchfunction}
                   toastMessageSuccess={showToastMessageSuccess}

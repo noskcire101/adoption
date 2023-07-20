@@ -117,7 +117,8 @@ const convertDate = (date: Date) => {
   return finaldate;
 };
 
-export const getAllDocsInACollection = async (targetDirectory:any,setState:Dispatch<SetStateAction<any[]>>,type:string,gender:string,age:any,searchStringMain:any,setLoader:React.Dispatch<React.SetStateAction<boolean>>) =>{
+export const getAllDocsInACollection = async (targetDirectory:any,setState:Dispatch<SetStateAction<any[]>>,type:string,gender:string,age:any,searchStringMain:any,setLoader:React.Dispatch<React.SetStateAction<boolean>>,MyPostPage:boolean,userId:any) =>{
+
   let filterValues = query(collection(db, targetDirectory));
 
   if(age=="below3"){
@@ -159,6 +160,7 @@ export const getAllDocsInACollection = async (targetDirectory:any,setState:Dispa
   
   const querySnapshot  = await getDocs(filterValues);
   const document:any =[];
+  let InitialResult:any =[];
   let finalResult:any =[];
   if (querySnapshot ) {
     querySnapshot .forEach((doc) => {
@@ -173,15 +175,37 @@ export const getAllDocsInACollection = async (targetDirectory:any,setState:Dispa
     }
     if (searchStringMain == "" || searchStringMain == "all") {
       const sortedByDate = document.sort((a:any, b:any) => b.timestamp.valueOf() - a.timestamp.valueOf());
-      setState(sortedByDate);
-      setLoader(false)
+
+      if(MyPostPage== true){
+        finalResult = sortedByDate.filter((param: any) =>
+        param.uid.includes(userId)
+        );
+        setState(finalResult);
+        setLoader(false)
+      }
+      else{
+        setState(sortedByDate);
+        setLoader(false)
+      }
+
+      
     } else {
       const sortedByDate = document.sort((a:any, b:any) => b.timestamp.valueOf() - a.timestamp.valueOf());
-      finalResult = sortedByDate.filter((param: any) =>
+      InitialResult = sortedByDate.filter((param: any) =>
         param.pet.toLowerCase().includes(searchStringMain.toLowerCase()) || param.breed.toLowerCase().includes(searchStringMain.toLowerCase())
       );
-      setState(finalResult);
-      setLoader(false)
+
+      if(MyPostPage== true){
+        finalResult = InitialResult.filter((param: any) =>
+        param.uid.includes(userId)
+        );
+        setState(finalResult);
+        setLoader(false)
+      }
+      else{
+        setState(InitialResult);
+        setLoader(false)
+      }
     }
 }
 
