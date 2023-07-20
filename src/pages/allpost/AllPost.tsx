@@ -34,7 +34,7 @@ const AllPost = ({
   showOrHideSearchfunction();
   const { user } = useAppSelector((state) => state.auth);
   const [currentPage, setcurrentPage] = useState(1);
-  const [itemLimitPerPage, setitemLimitPerPage] = useState(5);
+  const [itemLimitPerPage, setitemLimitPerPage] = useState(6);
   const [pageNumberLimit, setpageNumberLimit] = useState(5);
   const [lastPageNumberInCurrentBatch, setLastPageNumberInCurrentBatch] =
     useState(5);
