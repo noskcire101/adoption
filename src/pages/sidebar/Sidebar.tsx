@@ -210,9 +210,9 @@ const Sidebar = ({
               style={{ display: openSub ? "block" : "none" }}
               className={styles.dropDown}
             >
-              <li onClick={handleClick} className="text-sm">
+              {/* <li onClick={handleClick} className="text-sm">
                 Update Information
-              </li>
+              </li> */}
               <li onClick={handleClickChangePassword} className="text-sm">
                 Change Password
               </li>
