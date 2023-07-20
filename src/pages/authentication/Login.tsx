@@ -147,16 +147,16 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
           className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
           onSubmit={handleSubmit(handleFormSubmit)}
         >
-          <h3 className="text-[37px] text-center py-7 font-bold dark:text-white">
+          <h3 className="text-[37px] text-center py-7 font-bold text-black">
             Sign In
           </h3>
           <div className="mb-6">
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label className="block mb-2 text-sm font-medium text-gray-900 ">
               Email
             </label>
             <input
               type="email"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               placeholder="example@email.com"
               {...register("email")}
             />
@@ -169,12 +169,12 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
             )}
           </div>
           <div className="mb-6">
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label className="block mb-2 text-sm font-medium text-gray-900 ">
               Password
             </label>
             <input
               type="password"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  "
               placeholder="••••••"
               {...register("password")}
             />
@@ -188,7 +188,7 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
             )}
           </div>
           <div className="flex items-start mb-3">
-            <label className="mt-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+            <label className="mt-3 text-sm font-medium text-gray-900 ">
               Don't have an account yet?{" "}
               <Link to="/signup">
                 <span className="font-bold  text-sm text-blue-500 hover:text-blue-800 hover:underline cursor-pointer">
