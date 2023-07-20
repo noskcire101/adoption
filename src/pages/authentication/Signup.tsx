@@ -146,7 +146,7 @@ const Signup = ({ toastMessageSuccess, toastMessageError }: Props) => {
             )}
           </div>
           <div className="mb-6">
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label className="block mb-2 text-sm font-medium text-gray-900">
               Email
             </label>
             <input
