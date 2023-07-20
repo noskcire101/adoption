@@ -23,7 +23,7 @@ const ResetPassword: FC<ResetPasswordProps> = ({
 
   return (
     <section
-      className="bg-gray-50/90 dark:bg-gray-900 fixed top-0 left-0 right-0 bottom-0 z-10 flex justify-center"
+      className="bg-gray-50/90  fixed top-0 left-0 right-0 bottom-0 z-10 flex justify-center"
       style={
         isOpen
           ? { transform: "translateY(0)" }
@@ -31,22 +31,22 @@ const ResetPassword: FC<ResetPasswordProps> = ({
       }
     >
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <div className="w-full p-6 bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700 sm:p-8">
-          <h2 className="mb-1 text-xl font-bold leading-tight tracking-tight text-center text-gray-900 md:text-2xl dark:text-white">
+        <div className="w-full p-6 bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md  sm:p-8">
+          <h2 className="mb-1 text-xl font-bold leading-tight tracking-tight text-center text-gray-900 md:text-2xl ">
             {Boolean(user) ? "Changing your password?" : "Password Reset"}
           </h2>
           <div className="mt-4 space-y-4 lg:mt-5 md:space-y-5">
             <div>
               {Boolean(!user) ? (
                 <>
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  <label className="block mb-2 text-sm font-medium text-gray-900 ">
                     Your Email
                   </label>
                   <input
                     type="email"
                     value={resetPasswordEmail}
                     onChange={(e) => setResetPasswordEmail(e.target.value)}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
                     placeholder="example@email.com"
                   />
                 </>
