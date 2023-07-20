@@ -81,7 +81,7 @@ const Header = ({
                   type="search"
                   onChange={(e) => filterOnChange(e.target.value, "main")}
                   id="search-dropdown"
-                  className="block p-1 md:py-2 md:w-[250px] sm:w-[295px] w-[193px] z-20 text-[8px] sm:text-xs text-gray-900 bg-gray-50 rounded-r-lg rounded-l-lg md:rounded-l-none border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
+                  className="block p-1 md:py-2 md:w-[250px] sm:w-[295px] w-[193px] z-20 text-[8px] sm:text-xs text-gray-900 bg-gray-50 rounded-r-lg rounded-l-lg md:rounded-l-none border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 "
                   placeholder="Search..."
                 />
               </div>
@@ -90,7 +90,7 @@ const Header = ({
               <select
                 id="dropdown"
                 onChange={(e) => filterOnChange(e.target.value, "type")}
-                className=" px-1 py-1 md:py-2 text-[6px] sm:text-xs text-gray-900 cursor-pointer bg-[#ddefff] rounded-l-lg hover:bg-[#bbdfff]"
+                className=" px-1 py-1 md:py-2 text-[7px] sm:text-xs text-gray-900 cursor-pointer bg-[#ddefff] rounded-l-lg hover:bg-[#bbdfff]"
               >
                 <option value="all">All Types</option>
                 <option value="Dog">Dogs</option>
@@ -103,7 +103,7 @@ const Header = ({
               <select
                 id="dropdown2"
                 onChange={(e) => filterOnChange(e.target.value, "gender")}
-                className=" px-1 py-1 md:py-2 text-[6px] sm:text-xs  text-gray-900 cursor-pointer bg-[#ddefff] hover:bg-[#bbdfff]"
+                className=" px-1 py-1 md:py-2 text-[7px] sm:text-xs  text-gray-900 cursor-pointer bg-[#ddefff] hover:bg-[#bbdfff]"
               >
                 <option value="all">All Gender</option>
                 <option value="Male">Male</option>
@@ -112,7 +112,7 @@ const Header = ({
               <select
                 id="dropdown4"
                 onChange={(e) => filterOnChange(e.target.value, "age")}
-                className=" px-1 py-1 md:py-2 text-[6px] sm:text-xs text-gray-900 cursor-pointer rounded-r-lg md:rounded-r-none bg-[#ddefff] hover:bg-[#bbdfff]"
+                className=" px-1 py-1 md:py-2 text-[7px] sm:text-xs text-gray-900 cursor-pointer rounded-r-lg md:rounded-r-none bg-[#ddefff] hover:bg-[#bbdfff]"
               >
                 <option value="all">All Ages</option>
                 <option value="below3">Below 3 Months</option>
