@@ -61,35 +61,29 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
     try {
       setLoader(true);
       const provider = new GoogleAuthProvider();
-      if (provider) {
-        await signInWithPopup(auth, provider)
-          .then((result) => {
-            const user = result.user;
-            setDoc(
-              doc(db, "users", user.uid),
-              {
-                fullname: user.displayName,
-                email: user.email,
-                photoUrl: user.photoURL || null,
-              },
-              { merge: true }
-            );
-            if (user && user.email) {
-              dispatch(
-                login({
-                  id: user.uid,
-                  fullName: user.displayName,
-                  email: user.email,
-                  photoUrl: user.photoURL || null,
-                })
-              );
-              navigate("/");
-            }
-            setLoader(false);
-            toastMessageSuccess("Sign In Succesfully");
+      const { user } = await signInWithPopup(auth, provider);
+      if (user && user.email) {
+        setDoc(
+          doc(db, "users", user.uid),
+          {
+            fullname: user.displayName,
+            email: user.email,
+            photoUrl: user.photoURL || null,
+          },
+          { merge: true }
+        );
+        dispatch(
+          login({
+            id: user.uid,
+            fullName: user.displayName,
+            email: user.email,
+            photoUrl: user.photoURL || null,
           })
-          .catch((err) => console.log(err.message));
+        );
+        navigate("/");
+        toastMessageSuccess("Sign In Succesfully");
       }
+      setLoader(false);
 
       // await setDoc(doc(db, "users", user.uid), { email });
     } catch (error: any) {

@@ -83,18 +83,9 @@ const AllPost = ({
     ).catch((error) => console.error(error));
   }, [filter, currentPage]);
 
-  const [delayExecute, setdelayExecute] = useState(false);
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setdelayExecute(true);
-    }, 5000);
-    return () => clearTimeout(timeout);
-  }, [delayExecute]);
-
   return (
     <>
       <MainContentTitle />
-      {delayExecute && !Boolean(user) && <NeedsLoginMessage />}
 
       <div
         style={{ display: user && user ? "block" : "none" }}
