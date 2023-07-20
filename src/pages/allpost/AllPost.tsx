@@ -88,7 +88,7 @@ const AllPost = ({
   console.log(minToday);
   return (
     <>
-      <MainContentTitle />
+      <MainContentTitle ifHasData={dataFromDB.length} />
 
       <div
         style={{ display: user && user ? "block" : "none" }}

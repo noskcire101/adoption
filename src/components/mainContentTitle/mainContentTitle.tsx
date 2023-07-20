@@ -2,7 +2,11 @@ import { useState } from "react";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-const MainContentTitle = () => {
+interface Props {
+  ifHasData: number;
+}
+
+const MainContentTitle = ({ ifHasData }: Props) => {
   const [showtogglePostOption, setShowTogglePostOption] = useState(false);
 
   function handleMouseOut() {
@@ -45,14 +49,17 @@ const MainContentTitle = () => {
                   Create New Post
                 </Link>
               </li>
-              <li>
-                <Link
-                  to="/mypost"
-                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  View My Post
-                </Link>
-              </li>
+              {ifHasData > 0 && (
+                <li>
+                  <Link
+                    to="/mypost"
+                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    View My Post
+                  </Link>
+                </li>
+              )}
+
               <li>
                 <Link
                   to="/"
