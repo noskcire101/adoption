@@ -84,11 +84,12 @@ const AllPost = ({
       user?.id ?? 0
     ).catch((error) => console.error(error));
   }, [filter, currentPage]);
-  const minToday = new Date().getTime();
-  console.log(minToday);
+  const MyPostHideOrNot = dataFromDB.filter((param: any) =>
+    param.uid.includes(user?.id)
+  );
   return (
     <>
-      <MainContentTitle ifHasData={dataFromDB.length} />
+      <MainContentTitle ifHasData={MyPostHideOrNot.length} />
 
       <div
         style={{ display: user && user ? "block" : "none" }}
