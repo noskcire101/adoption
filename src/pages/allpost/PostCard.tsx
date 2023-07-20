@@ -233,7 +233,7 @@ const PostCard = ({
                 type="button"
                 className="text-white min-w-[153px] bg-[#002349] hover:bg-[#001730]/90 w-full mt-3 min-[400px]:mt-0 min-[400px]:w-auto place-content-center font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
               >
-                Request to Adopt
+                View Full Details
               </button>
             )}
           </footer>

@@ -82,7 +82,8 @@ const AllPost = ({
       setLoader
     ).catch((error) => console.error(error));
   }, [filter, currentPage]);
-
+  const minToday = new Date().getTime();
+  console.log(minToday);
   return (
     <>
       <MainContentTitle />

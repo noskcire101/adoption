@@ -1,4 +1,4 @@
-import { DocumentReference, addDoc, getDoc, updateDoc, arrayUnion, getCountFromServer, arrayRemove, query, where, or, and, deleteDoc } from "firebase/firestore";
+import { DocumentReference, addDoc, getDoc, updateDoc, arrayUnion, getCountFromServer, arrayRemove, query, where, or, and, deleteDoc, orderBy} from "firebase/firestore";
 import { petsFormFinal } from "../../yupModels/Form";
 import { dataURIToBlob, resizeFile } from "../../reusableFunctions/covert";
 import { DocumentData, QuerySnapshot, collection, doc, getDocs, onSnapshot } from "firebase/firestore";
@@ -105,16 +105,6 @@ const twelveMonths = subtractMonths(12);
 const twentyyears = subtractMonths(240);
 
 
-  // useEffect(() => {
-  //   getAllDocsInACollection(
-  //     "pets",
-  //     setDataFromDB,
-  //     filter.type,
-  //     filter.gender,
-  //     filter.age
-  //   );
-  // }, []);
-
   
 let start:any;
 let end:any
@@ -182,10 +172,12 @@ export const getAllDocsInACollection = async (targetDirectory:any,setState:Dispa
       console.log("not connected")
     }
     if (searchStringMain == "" || searchStringMain == "all") {
-      setState(document);
+      const sortedByDate = document.sort((a:any, b:any) => b.timestamp.valueOf() - a.timestamp.valueOf());
+      setState(sortedByDate);
       setLoader(false)
     } else {
-      finalResult = document.filter((param: any) =>
+      const sortedByDate = document.sort((a:any, b:any) => b.timestamp.valueOf() - a.timestamp.valueOf());
+      finalResult = sortedByDate.filter((param: any) =>
         param.pet.toLowerCase().includes(searchStringMain.toLowerCase()) || param.breed.toLowerCase().includes(searchStringMain.toLowerCase())
       );
       setState(finalResult);
@@ -203,6 +195,7 @@ export const getAllInfoInADocument = async (targetDirectory:any,setState:React.D
       id: querySnapshot .id,
       ...querySnapshot .data(),
     };
+    
     setState(fetchedData);
     
   } else {
