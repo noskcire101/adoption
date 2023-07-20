@@ -61,33 +61,36 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
     try {
       setLoader(true);
       const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider)
-        .then((result) => {
-          const user = result.user;
-          setDoc(
-            doc(db, "users", user.uid),
-            {
-              fullname: user.displayName,
-              email: user.email,
-              photoUrl: user.photoURL || null,
-            },
-            { merge: true }
-          );
-          if (user && user.email) {
-            dispatch(
-              login({
-                id: user.uid,
-                fullName: user.displayName,
+      if (provider) {
+        await signInWithPopup(auth, provider)
+          .then((result) => {
+            const user = result.user;
+            setDoc(
+              doc(db, "users", user.uid),
+              {
+                fullname: user.displayName,
                 email: user.email,
                 photoUrl: user.photoURL || null,
-              })
+              },
+              { merge: true }
             );
-            navigate("/");
-          }
-          setLoader(false);
-          toastMessageSuccess("Sign In Succesfully");
-        })
-        .catch((err) => console.log(err.message));
+            if (user && user.email) {
+              dispatch(
+                login({
+                  id: user.uid,
+                  fullName: user.displayName,
+                  email: user.email,
+                  photoUrl: user.photoURL || null,
+                })
+              );
+              navigate("/");
+            }
+            setLoader(false);
+            toastMessageSuccess("Sign In Succesfully");
+          })
+          .catch((err) => console.log(err.message));
+      }
+
       // await setDoc(doc(db, "users", user.uid), { email });
     } catch (error: any) {
       toastMessageError(error.message);
