@@ -81,7 +81,7 @@ const Header = ({
                   type="search"
                   onChange={(e) => filterOnChange(e.target.value, "main")}
                   id="search-dropdown"
-                  className="block p-1.5 mt-1 sm:mt-0 w-[96vw]  min-[420px]:w-[300px] z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg rounded-l-lg md:rounded-l-none border-l-gray-50 border-l-2 border border-gray-300"
+                  className="block p-1.5 mt-1 sm:mt-0 w-[96vw]  min-[420px]:w-[300px] md:w-[250px] min-[850px]:w-[250px] z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg rounded-l-lg md:rounded-l-none border-l-gray-50 border-l-2 border border-gray-300"
                   placeholder="Search..."
                 />
               </div>
