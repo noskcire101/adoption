@@ -50,6 +50,7 @@ const MyPost = ({
     indexOfFirstItemInCurrrentBatch,
     indexOfLastItemInCurrentBatch
   );
+
   const [loader, setLoader] = useState(true);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
