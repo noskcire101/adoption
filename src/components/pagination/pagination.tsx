@@ -49,9 +49,10 @@ const Pagination = ({
   return (
     <>
       {" "}
+      <br></br>
       <div className="overflow-auto pb-[2vh] text-center px-[5%] pl-[4%] mx-[0%]">
-        <nav aria-label="Pagination" className="border-t-2">
-          <p className="text-gray-500 text-xs pb-[1vh] pt-[2vh]">
+        <nav aria-label="Pagination">
+          <p className="text-gray-500 text-xs pb-[1vh]">
             Page {currentPage} of{" "}
             {Math.ceil(dataFromDB.length / itemLimitPerPage)}
           </p>

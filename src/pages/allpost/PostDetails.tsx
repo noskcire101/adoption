@@ -24,7 +24,7 @@ const PostDetails = ({ hideSearchfunction }: Props) => {
   hideSearchfunction();
   const { id } = useParams();
   const { user } = useAppSelector((state) => state.auth);
-  const [loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState(true);
   const [petData, setPetData] = useState<any>({});
   const [userData, setUserData] = useState<any>({});
   const [currentPage, setcurrentPage] = useState(1);
@@ -65,7 +65,6 @@ const PostDetails = ({ hideSearchfunction }: Props) => {
   }, [dispatch]);
 
   useEffect(() => {
-    setLoader(true);
     listAll(ref(storage, `/pets/${id}`)).then((response) => {
       response.items.forEach((item) => {
         getDownloadURL(item).then((url: any) => {
@@ -87,7 +86,7 @@ const PostDetails = ({ hideSearchfunction }: Props) => {
 
   return (
     <>
-      <div className="z-50 drop-shadow-[1px_1px_var(--tw-shadow-color)] items-center justify-between max-w-[1680px] m-auto flex shadow-white bg-gradient-to-b from-white ... text-center sticky py-5 px-5 md:px-[130px] top-[60px] sm:top-[65px] ...">
+      <div className="z-50 drop-shadow-[1px_1px_var(--tw-shadow-color)] items-center justify-between max-w-[1680px] m-auto flex shadow-white bg-gradient-to-b from-white ... text-center sticky py-5 px-5 md:px-[130px] top-[66px] sm:top-[65px] ...">
         <h2 className="text-lg sm:text-3xl text-[#002349] font-bold mr-2">
           Pet's Information
         </h2>
@@ -104,7 +103,7 @@ const PostDetails = ({ hideSearchfunction }: Props) => {
       <div className="container mx-auto pb-8 pt-0">
         <div className="grid grid-cols-4 md:grid-cols-12 gap-6 px-4">
           <div className="col-span-full lg:col-span-8">
-            <div className="bg-white shadow rounded-lg p-6">
+            <div className="bg-white shadow rounded-lg p-5 py-2">
               <div className="flex flex-col items-center my-5">
                 <h2 className="text-lg font-bold mb-4">
                   Pet's Name: {petData.pet && titleCase(petData.pet)}
@@ -121,6 +120,7 @@ const PostDetails = ({ hideSearchfunction }: Props) => {
                     />
                   ))}
                 </div>
+
                 <Pagination
                   setitemLimitPerPage={setitemLimitPerPage}
                   itemLimitPerPage={itemLimitPerPage}
@@ -163,7 +163,7 @@ const PostDetails = ({ hideSearchfunction }: Props) => {
             </div>
           </div>
           <div className="col-span-full lg:col-span-4">
-            <div className="bg-white shadow rounded-lg p-6">
+            <div className="bg-white shadow rounded-lg p-6 py-2">
               <h2 className="text-xl font-bold mt-6 mb-4">Pet Details</h2>
               <div className="pt-2 pb-3 border-b border-gray-100">
                 <div className="flex justify-between">

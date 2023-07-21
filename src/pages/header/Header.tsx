@@ -81,7 +81,7 @@ const Header = ({
                   type="search"
                   onChange={(e) => filterOnChange(e.target.value, "main")}
                   id="search-dropdown"
-                  className="block p-1.5 mt-1 sm:mt-0 w-[96vw]  min-[420px]:w-[300px] md:w-[250px] min-[850px]:w-[250px] z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg rounded-l-lg md:rounded-l-none border-l-gray-50 border-l-2 border border-gray-300"
+                  className="block p-1.5 sm:mt-0 w-[93vw]  min-[420px]:w-[300px] md:w-[250px] min-[850px]:w-[250px] z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg rounded-l-lg md:rounded-l-none border-l-gray-50 border-l-2 border border-gray-300"
                   placeholder="Search..."
                 />
               </div>
@@ -90,7 +90,7 @@ const Header = ({
               <select
                 id="dropdown"
                 onChange={(e) => filterOnChange(e.target.value, "type")}
-                className="px-1 py-1 md:py-2 text-xs w-[32vw] min-[420px]:max-w-[100px] text-gray-900 cursor-pointer bg-[#ddefff] rounded-l-lg hover:bg-[#bbdfff]"
+                className="px-1 py-1 md:py-2 text-xs w-[31vw] min-[420px]:max-w-[100px] text-gray-900 cursor-pointer bg-[#ddefff] rounded-l-lg hover:bg-[#bbdfff]"
               >
                 <option value="all" className="text-[11px]">
                   All Types
@@ -117,7 +117,7 @@ const Header = ({
               <select
                 id="dropdown2"
                 onChange={(e) => filterOnChange(e.target.value, "gender")}
-                className="px-1 py-1 md:py-2 text-xs w-[32vw] min-[420px]:max-w-[100px]  text-gray-900 cursor-pointer bg-[#ddefff] hover:bg-[#bbdfff]"
+                className="px-1 py-1 md:py-2 text-xs w-[31vw] min-[420px]:max-w-[100px]  text-gray-900 cursor-pointer bg-[#ddefff] hover:bg-[#bbdfff]"
               >
                 <option value="all" className="text-[11px]">
                   All Gender
@@ -132,7 +132,7 @@ const Header = ({
               <select
                 id="dropdown4"
                 onChange={(e) => filterOnChange(e.target.value, "age")}
-                className="px-1 py-1 md:py-2 text-xs w-[32vw] min-[420px]:max-w-[100px] text-gray-900 cursor-pointer rounded-r-lg md:rounded-r-none bg-[#ddefff] hover:bg-[#bbdfff]"
+                className="px-1 py-1 md:py-2 text-xs w-[31vw] min-[420px]:max-w-[100px] text-gray-900 cursor-pointer rounded-r-lg md:rounded-r-none bg-[#ddefff] hover:bg-[#bbdfff]"
               >
                 <option value="all" className="text-[11px]">
                   All Ages

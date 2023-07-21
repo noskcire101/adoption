@@ -83,10 +83,7 @@ const PostCard = ({
 
   return (
     <>
-      <li
-        key={index}
-        className="my-1 mb-10 px-1 w-full lg:my-4 lg:px-4 lg:w-1/2 xl:w-1/3"
-      >
+      <li key={index} className=" mb-8  px-1 w-full lg:px-4 lg:w-1/2 xl:w-1/3">
         <article className="overflow-hidden rounded-lg shadow-lg">
           <Link
             onMouseEnter={(e) => {

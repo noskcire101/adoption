@@ -249,7 +249,7 @@ const CreatePost = ({
 
   return (
     <>
-      <div className="z-50 drop-shadow-[1px_1px_var(--tw-shadow-color)] items-center max-w-[1680px] m-auto justify-between flex shadow-white bg-gradient-to-b from-white ...  text-center sticky py-5 px-5 md:px-[130px] top-[60px] sm:top-[65px] ...">
+      <div className="z-50 drop-shadow-[1px_1px_var(--tw-shadow-color)] items-center max-w-[1680px] m-auto justify-between flex shadow-white bg-gradient-to-b from-white ...  text-center sticky py-5 px-5 md:px-[130px] top-[66px] sm:top-[65px] ...">
         <h2 className="text-lg sm:text-3xl text-[#002349] font-bold mr-2">
           Create Post
         </h2>
@@ -263,10 +263,10 @@ const CreatePost = ({
           </Link>
         </div>
       </div>
-      <div className="overflow-auto pb-[4vh] mx-[0%]">
+      <div className="overflow-auto mx-[0%]">
         <div className="container mx-auto px-[0%] md:px-12">
           <section className=" py-1 bg-blueGray-50">
-            <div className="w-full md:w-12/12 px-4 mx-auto mt-6">
+            <div className="w-full md:w-12/12 px-4 mx-auto">
               <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
                 <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
                   <form onSubmit={handleSubmit(handleFormSubmit)}>

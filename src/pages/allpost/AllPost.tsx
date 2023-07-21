@@ -95,7 +95,7 @@ const AllPost = ({
 
       <div
         style={{ display: user && user ? "block" : "none" }}
-        className="overflow-auto pb-[4vh] mx-[0%]"
+        className="overflow-auto mx-[0%]"
       >
         <div className="container mx-auto px-[5%] md:px-12">
           <ul className="flex flex-wrap -mx-1 lg:-mx-4">
