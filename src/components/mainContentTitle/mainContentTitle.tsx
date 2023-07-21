@@ -4,9 +4,10 @@ import { Link } from "react-router-dom";
 
 interface Props {
   ifHasData: number;
+  title: string;
 }
 
-const MainContentTitle = ({ ifHasData }: Props) => {
+const MainContentTitle = ({ ifHasData, title }: Props) => {
   const [showtogglePostOption, setShowTogglePostOption] = useState(false);
 
   function handleMouseOut() {
@@ -20,7 +21,7 @@ const MainContentTitle = ({ ifHasData }: Props) => {
     <>
       <div className="z-50 drop-shadow-[1px_1px_var(--tw-shadow-color)] items-center justify-between sm:justify-center flex shadow-white bg-gradient-to-b from-white ...   p-5 lg:p-10 text-center sticky top-[132px] min-[438px]:top-[77px] md:top-[65px] ...">
         <h2 className="text-[18px] sm:text-3xl text-[#002349] mr-2 font-bold">
-          List For Adoption
+          {title}
         </h2>
         <div className="w-[148px]">
           <button
@@ -49,7 +50,7 @@ const MainContentTitle = ({ ifHasData }: Props) => {
                   Create New Post
                 </Link>
               </li>
-              {ifHasData > 0 && (
+              {ifHasData > 0 && title != "My Post" && (
                 <li>
                   <Link
                     to="/mypost"
@@ -59,15 +60,16 @@ const MainContentTitle = ({ ifHasData }: Props) => {
                   </Link>
                 </li>
               )}
-
-              <li>
-                <Link
-                  to="/"
-                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  All Post
-                </Link>
-              </li>
+              {title != "List For Adoption" && (
+                <li>
+                  <Link
+                    to="/"
+                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    View All Post
+                  </Link>
+                </li>
+              )}
             </ul>
           </div>
         </div>

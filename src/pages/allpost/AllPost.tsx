@@ -88,10 +88,10 @@ const AllPost = ({
   const MyPostHideOrNot = dataFromDB.filter((param: any) =>
     param.uid.includes(user?.id)
   );
-
+  const PageTitle = "List For Adoption";
   return (
     <>
-      <MainContentTitle ifHasData={MyPostHideOrNot.length} />
+      <MainContentTitle ifHasData={MyPostHideOrNot.length} title={PageTitle} />
 
       <div
         style={{ display: user && user ? "block" : "none" }}

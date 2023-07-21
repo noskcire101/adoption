@@ -87,9 +87,10 @@ const MyPost = ({
   const MyPostHideOrNot = dataFromDB.filter((param: any) =>
     param.uid.includes(user?.id)
   );
+  const PageTitle = "My Post";
   return (
     <>
-      <MainContentTitle ifHasData={MyPostHideOrNot.length} />
+      <MainContentTitle ifHasData={MyPostHideOrNot.length} title={PageTitle} />
 
       <div
         style={{ display: user && user ? "block" : "none" }}
