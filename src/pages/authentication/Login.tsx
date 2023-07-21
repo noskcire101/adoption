@@ -139,10 +139,7 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
         onClose={() => setResetPasswordContainerVisibily(false)}
         handlePasswordReset={handlePasswordReset}
       />
-      <div
-        style={{ display: "block" }}
-        className="w-full max-w-md mt-10 m-auto"
-      >
+      <div style={{ display: "block" }} className="w-full max-w-md mt-5 m-auto">
         <form
           className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
           onSubmit={handleSubmit(handleFormSubmit)}
