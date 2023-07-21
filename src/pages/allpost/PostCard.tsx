@@ -86,7 +86,6 @@ const PostCard = ({
     };
     getPostImgSrc();
   }, [coverImage]);
-
   return (
     <>
       <li key={index} className=" mb-8  px-1 w-full lg:px-4 lg:w-1/2 xl:w-1/3">
