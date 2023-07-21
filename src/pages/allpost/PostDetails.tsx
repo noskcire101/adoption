@@ -106,7 +106,7 @@ const PostDetails = ({ hideSearchfunction }: Props) => {
           <div className="col-span-full lg:col-span-8">
             <div className="bg-white shadow rounded-lg p-6">
               <div className="flex flex-col items-center my-5">
-                <h2 className="text-xl font-bold mb-4">
+                <h2 className="text-lg font-bold mb-4">
                   Pet's Name: {petData.pet && titleCase(petData.pet)}
                 </h2>
                 <div className="block h-auto bg-[#f8f8f8] relative w-full">
