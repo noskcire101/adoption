@@ -70,7 +70,7 @@ const Header = ({
 
           <div
             className={
-              Boolean(!user) || Boolean(hideSearch)
+              Boolean(hideSearch)
                 ? "hidden"
                 : "inline-block md:inline-flex md:flex-row-reverse  items-center"
             }

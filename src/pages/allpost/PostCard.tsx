@@ -34,6 +34,8 @@ interface Props {
   uid: any;
   heart: any[];
   userId: any;
+  guest: boolean;
+  toastM: (param: string) => void;
 }
 
 const PostCard = ({
@@ -57,9 +59,13 @@ const PostCard = ({
   uid,
   heart,
   userId,
+  guest,
+  toastM,
 }: Props) => {
   console.log(heart, "postcard");
+
   const { user } = useAppSelector((state) => state.auth);
+
   const [liked, setLiked] = useState(
     userId && heart ? checkUserifLiked(heart, userId) : false
   );
@@ -85,79 +91,151 @@ const PostCard = ({
     <>
       <li key={index} className=" mb-8  px-1 w-full lg:px-4 lg:w-1/2 xl:w-1/3">
         <article className="overflow-hidden rounded-lg shadow-lg">
-          <Link
-            onMouseEnter={(e) => {
-              setViewMoreShow({ display: "block" });
-            }}
-            onMouseLeave={(e) => {
-              setViewMoreShow({ display: "none" });
-            }}
-            to={`/${id}`}
-          >
-            <div className="block h-auto bg-[#f8f8f8] relative w-full">
-              {cover ? (
-                <img
-                  src={cover}
-                  className="w-full h-[300px] object-cover m-auto max-w-fit"
-                />
-              ) : (
-                <svg
-                  className="w-8 h-[300px] m-auto text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-                  viewBox="0 0 100 101"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                    fill="currentColor"
-                  />
-                  <path
-                    d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                    fill="currentFill"
-                  />
-                </svg>
-              )}
-
-              <div
-                style={viewMoreShow}
-                className="-translate-y-1/2 -translate-x-1/2  w-full h-full bg-opacity-50 bg-black absolute text-center m-0 top-1/2 left-1/2"
-              ></div>
-              <p
-                style={viewMoreShow}
-                className="-translate-y-1/2 -translate-x-1/2 text-[#ececec] hover:text-white absolute text-center m-0 top-1/2 left-1/2"
+          {!guest ? (
+            <>
+              <Link
+                onMouseEnter={(e) => {
+                  setViewMoreShow({ display: "block" });
+                }}
+                onMouseLeave={(e) => {
+                  setViewMoreShow({ display: "none" });
+                }}
+                to={`/${id}`}
               >
-                View Full Details
-              </p>
-            </div>
-          </Link>
+                <div className="block h-auto bg-[#f8f8f8] relative w-full">
+                  {cover ? (
+                    <img
+                      src={cover}
+                      className="w-full h-[300px] object-cover m-auto max-w-fit"
+                    />
+                  ) : (
+                    <svg
+                      className="w-8 h-[300px] m-auto text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                      viewBox="0 0 100 101"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                        fill="currentColor"
+                      />
+                      <path
+                        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                        fill="currentFill"
+                      />
+                    </svg>
+                  )}
+
+                  <div
+                    style={viewMoreShow}
+                    className="-translate-y-1/2 -translate-x-1/2  w-full h-full bg-opacity-50 bg-black absolute text-center m-0 top-1/2 left-1/2"
+                  ></div>
+                  <p
+                    style={viewMoreShow}
+                    className="-translate-y-1/2 -translate-x-1/2 text-[#ececec] hover:text-white absolute text-center m-0 top-1/2 left-1/2"
+                  >
+                    View Full Details
+                  </p>
+                </div>
+              </Link>
+            </>
+          ) : (
+            <>
+              <span
+                className="cursor-pointer"
+                onMouseEnter={(e) => {
+                  setViewMoreShow({ display: "block" });
+                }}
+                onMouseLeave={(e) => {
+                  setViewMoreShow({ display: "none" });
+                }}
+                onClick={() => toastM("Please Login or Signup first")}
+              >
+                <div className="block h-auto bg-[#f8f8f8] relative w-full">
+                  {cover ? (
+                    <img
+                      src={cover}
+                      className="w-full h-[300px] object-cover m-auto max-w-fit"
+                    />
+                  ) : (
+                    <svg
+                      className="w-8 h-[300px] m-auto text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                      viewBox="0 0 100 101"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                        fill="currentColor"
+                      />
+                      <path
+                        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                        fill="currentFill"
+                      />
+                    </svg>
+                  )}
+
+                  <div
+                    style={viewMoreShow}
+                    className="-translate-y-1/2 -translate-x-1/2  w-full h-full bg-opacity-50 bg-black absolute text-center m-0 top-1/2 left-1/2"
+                  ></div>
+                  <p
+                    style={viewMoreShow}
+                    className="-translate-y-1/2 -translate-x-1/2 text-[#ececec] hover:text-white absolute text-center m-0 top-1/2 left-1/2"
+                  >
+                    View Full Details
+                  </p>
+                </div>
+              </span>
+            </>
+          )}
 
           <header className="flex items-center justify-between leading-tight p-2 mt-1 md:py-3 md:px-4">
             <h1 className="text-lg max-w-[90%] break-words  pr-[25px]">
               <div className=" text-black">Name: {titleCase(pet)}</div>
             </h1>
-            <div
-              onClick={() =>
-                handleClickLiked(
-                  userId,
-                  id,
-                  liked,
-                  setLiked,
-                  likedCount,
-                  setLikedCount
-                )
-              }
-              className="text-center cursor-pointer"
-            >
-              <p className="text-[25px]">
-                {" "}
-                {liked ? (
-                  <GoHeartFill className="text-red-600" />
-                ) : (
-                  <GoHeart className="text-red-600" />
-                )}
-              </p>
-              <p className="text-grey-darker text-[10px]">{likedCount}</p>
-            </div>
+            {guest ? (
+              <div
+                onClick={() => toastM("Please Login or Signup first")}
+                className="text-center cursor-pointer"
+              >
+                <p className="text-[25px]">
+                  {" "}
+                  {liked ? (
+                    <GoHeartFill className="text-red-600" />
+                  ) : (
+                    <GoHeart className="text-red-600" />
+                  )}
+                </p>
+                <p className="text-grey-darker text-[10px]">{likedCount}</p>
+              </div>
+            ) : (
+              <>
+                <div
+                  onClick={() =>
+                    handleClickLiked(
+                      userId,
+                      id,
+                      liked,
+                      setLiked,
+                      likedCount,
+                      setLikedCount
+                    )
+                  }
+                  className="text-center cursor-pointer"
+                >
+                  <p className="text-[25px]">
+                    {" "}
+                    {liked ? (
+                      <GoHeartFill className="text-red-600" />
+                    ) : (
+                      <GoHeart className="text-red-600" />
+                    )}
+                  </p>
+                  <p className="text-grey-darker text-[10px]">{likedCount}</p>
+                </div>
+              </>
+            )}
           </header>
 
           <div className="flex items-center justify-between leading-tight pr-2 pl-2 md:pr-4 md:pl-4 pt-0 pb-1  ">
@@ -225,20 +303,27 @@ const PostCard = ({
               </div>
             </Link>
 
-            {user!.id && user!.id == uid ? (
+            {!guest && user!.id && user!.id == uid ? (
               <Link
                 to={`/update/${id}`}
                 className="text-black min-w-[153px] bg-[#ddefff] hover:bg-[#bbdfff]/90 w-full mt-3 min-[400px]:mt-0 min-[400px]:w-auto place-content-center font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
               >
                 Edit My Post
               </Link>
-            ) : (
+            ) : !guest ? (
               <Link
                 to={`/${id}`}
                 className="text-white min-w-[153px] bg-[#002349] hover:bg-[#001730]/90 w-full mt-3 min-[400px]:mt-0 min-[400px]:w-auto place-content-center font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
               >
                 View Details
               </Link>
+            ) : (
+              <button
+                onClick={() => toastM("Please Login or Signup first")}
+                className="text-white min-w-[153px] bg-[#002349] hover:bg-[#001730]/90 w-full mt-3 min-[400px]:mt-0 min-[400px]:w-auto place-content-center font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
+              >
+                View Details
+              </button>
             )}
           </footer>
         </article>

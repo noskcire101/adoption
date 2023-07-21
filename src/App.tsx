@@ -19,6 +19,7 @@ import CreatePost from "./pages/allpost/CreatePost";
 import PostDetails from "./pages/allpost/PostDetails";
 import UpdatePost from "./pages/allpost/UpdatePost";
 import MyPost from "./pages/allpost/MyPost";
+import Guest from "./pages/allpost/Guest";
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -125,6 +126,17 @@ const App = () => {
               }
             />
             <Route
+              path="/guest"
+              element={
+                <Guest
+                  filter={filter}
+                  showOrHideSearchfunction={showOrHideSearchfunction}
+                  toastMessageSuccess={showToastMessageSuccess}
+                  toastMessageError={showToastMessageError}
+                />
+              }
+            />
+            <Route
               path="/:id"
               element={<PostDetails hideSearchfunction={hideSearchfunction} />}
             />
@@ -154,6 +166,7 @@ const App = () => {
             path="/login"
             element={
               <Login
+                hideSearchfunction={hideSearchfunction}
                 toastMessageSuccess={showToastMessageSuccess}
                 toastMessageError={showToastMessageError}
               />
@@ -163,6 +176,7 @@ const App = () => {
             path="/signup"
             element={
               <SignUp
+                hideSearchfunction={hideSearchfunction}
                 toastMessageSuccess={showToastMessageSuccess}
                 toastMessageError={showToastMessageError}
               />

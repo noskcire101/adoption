@@ -26,8 +26,14 @@ import Loader from "../../components/loader/loader";
 interface Props {
   toastMessageSuccess: (param: string) => void;
   toastMessageError: (param: string) => void;
+  hideSearchfunction(): void;
 }
-const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
+const Login = ({
+  toastMessageSuccess,
+  toastMessageError,
+  hideSearchfunction,
+}: Props) => {
+  hideSearchfunction();
   const [buttonDisabling, setbuttonDisabling] = useState(false);
   const [resetPasswordContainerVisibily, setResetPasswordContainerVisibily] =
     useState(false);
@@ -289,3 +295,6 @@ const Login = ({ toastMessageSuccess, toastMessageError }: Props) => {
 };
 
 export default Login;
+function hideSearchfunction() {
+  throw new Error("Function not implemented.");
+}

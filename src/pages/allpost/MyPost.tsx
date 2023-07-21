@@ -90,7 +90,11 @@ const MyPost = ({
   const PageTitle = "My Post";
   return (
     <>
-      <MainContentTitle ifHasData={MyPostHideOrNot.length} title={PageTitle} />
+      <MainContentTitle
+        ifHasData={MyPostHideOrNot.length}
+        title={PageTitle}
+        guest={false}
+      />
 
       <div
         style={{ display: user && user ? "block" : "none" }}
@@ -121,6 +125,8 @@ const MyPost = ({
                   uid={data.uid}
                   heart={data.heart}
                   userId={user?.id}
+                  toastM={toastMessageError}
+                  guest={false}
                 />
               );
             })}

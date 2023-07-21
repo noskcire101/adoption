@@ -119,7 +119,7 @@ const convertDate = (date: Date) => {
 
 export const getAllDocsInACollection = async (targetDirectory:any,setState:Dispatch<SetStateAction<any[]>>,type:string,gender:string,age:any,searchStringMain:any,setLoader:React.Dispatch<React.SetStateAction<boolean>>,MyPostPage:boolean,userId:any) =>{
 
-  let filterValues = query(collection(db, targetDirectory));
+  let filteredValues = query(collection(db, targetDirectory));
 
   if(age=="below3"){
     start = threeMonths;
@@ -136,29 +136,29 @@ export const getAllDocsInACollection = async (targetDirectory:any,setState:Dispa
   }
 
   if(type !== "all" && gender !== "all" && age !== "all" ){
-   filterValues  = query(collection(db, targetDirectory), where('type', '==', type), where('gender', '==', gender), where('birthdate', '>=', start),where('birthdate', '<=', end));
+    filteredValues  = query(collection(db, targetDirectory), where('type', '==', type), where('gender', '==', gender), where('birthdate', '>=', start),where('birthdate', '<=', end));
   }
   else if(type == "all" && gender !== "all" && age !== "all" ){
-    filterValues  = query(collection(db, targetDirectory), where('gender', '==', gender), where('birthdate', '>=', start),where('birthdate', '<=', end));
+    filteredValues  = query(collection(db, targetDirectory), where('gender', '==', gender), where('birthdate', '>=', start),where('birthdate', '<=', end));
   }
   else if(type !== "all" && gender == "all" && age !== "all" ){
-    filterValues  = query(collection(db, targetDirectory), where('type', '==', type), where('birthdate', '>=', start),where('birthdate', '<=', end));
+    filteredValues  = query(collection(db, targetDirectory), where('type', '==', type), where('birthdate', '>=', start),where('birthdate', '<=', end));
   }
   else if(type !== "all" && gender !== "all" && age == "all" ){
-    filterValues  = query(collection(db, targetDirectory), where('type', '==', type), where('gender', '==', gender));
+    filteredValues  = query(collection(db, targetDirectory), where('type', '==', type), where('gender', '==', gender));
   }
   else if(type !== "all" && gender == "all" && age == "all" ){
-    filterValues  = query(collection(db, targetDirectory),where('type', '==', type));
+    filteredValues  = query(collection(db, targetDirectory),where('type', '==', type));
   }
   else if(type == "all" && gender !== "all" && age == "all" ){
-    filterValues  = query(collection(db, targetDirectory),where('gender', '==', gender));
+    filteredValues  = query(collection(db, targetDirectory),where('gender', '==', gender));
   }
   else if(type == "all" && gender == "all" && age !== "all" ){
-    filterValues  = query(collection(db, targetDirectory),where('birthdate', '>=', start),where('birthdate', '<=', end));
+    filteredValues  = query(collection(db, targetDirectory),where('birthdate', '>=', start),where('birthdate', '<=', end));
   }
 
   
-  const querySnapshot  = await getDocs(filterValues);
+  const querySnapshot  = await getDocs(filteredValues);
   const document:any =[];
   let InitialResult:any =[];
   let finalResult:any =[];

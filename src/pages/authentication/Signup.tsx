@@ -22,8 +22,14 @@ import Loader from "../../components/loader/loader";
 interface Props {
   toastMessageSuccess: (param: string) => void;
   toastMessageError: (param: string) => void;
+  hideSearchfunction(): void;
 }
-const Signup = ({ toastMessageSuccess, toastMessageError }: Props) => {
+const Signup = ({
+  toastMessageSuccess,
+  toastMessageError,
+  hideSearchfunction,
+}: Props) => {
+  hideSearchfunction();
   const [buttonDisabling, setbuttonDisabling] = useState(false);
   const [loader, setLoader] = useState(false);
   const { user } = useAppSelector((state) => state.auth);

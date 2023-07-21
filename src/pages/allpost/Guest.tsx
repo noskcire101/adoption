@@ -25,14 +25,13 @@ interface Props {
   };
 }
 
-const AllPost = ({
+const Guest = ({
   toastMessageSuccess,
   toastMessageError,
   showOrHideSearchfunction,
   filter,
 }: Props) => {
   showOrHideSearchfunction();
-  const { user } = useAppSelector((state) => state.auth);
   const [currentPage, setcurrentPage] = useState(1);
   const [itemLimitPerPage, setitemLimitPerPage] = useState(6);
   const [pageNumberLimit, setpageNumberLimit] = useState(5);
@@ -52,24 +51,6 @@ const AllPost = ({
   );
   const [loader, setLoader] = useState(true);
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      if (user && user.email) {
-        dispatch(
-          login({
-            id: user.uid,
-            fullName: user.displayName || null,
-            email: user.email,
-            photoUrl: user?.photoURL || null,
-          })
-        );
-      } else {
-        navigate("/guest");
-      }
-    });
-    return () => unsubscribe();
-  }, [dispatch]);
 
   useEffect(() => {
     getAllDocsInACollection(
@@ -81,26 +62,16 @@ const AllPost = ({
       filter.main,
       setLoader,
       false,
-      user?.id ?? 0
+      0
     ).catch((error) => console.error(error));
   }, [filter, currentPage]);
 
-  const MyPostHideOrNot = dataFromDB.filter((param: any) =>
-    param.uid.includes(user?.id)
-  );
   const PageTitle = "List For Adoption";
   return (
     <>
-      <MainContentTitle
-        ifHasData={MyPostHideOrNot.length}
-        title={PageTitle}
-        guest={false}
-      />
+      <MainContentTitle ifHasData={0} title={PageTitle} guest={true} />
 
-      <div
-        style={{ display: user && user ? "block" : "none" }}
-        className="overflow-auto mx-[0%]"
-      >
+      <div style={{ display: "block" }} className="overflow-auto mx-[0%]">
         <div className="container mx-auto px-[5%] md:px-12">
           <ul className="flex flex-wrap -mx-1 lg:-mx-4">
             {currentItems?.map((data, index) => {
@@ -125,9 +96,9 @@ const AllPost = ({
                   timestamp={data.timestamp.toDate().toDateString()}
                   uid={data.uid}
                   heart={data.heart}
-                  userId={user?.id}
                   toastM={toastMessageError}
-                  guest={false}
+                  userId={"xx-noID-xx"}
+                  guest={true}
                 />
               );
             })}
@@ -155,4 +126,4 @@ const AllPost = ({
     </>
   );
 };
-export default AllPost;
+export default Guest;
