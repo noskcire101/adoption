@@ -149,7 +149,11 @@ const PostCard = ({
                 onMouseLeave={(e) => {
                   setViewMoreShow({ display: "none" });
                 }}
-                onClick={() => toastM("Please Login or Signup first")}
+                onClick={() =>
+                  toastM(
+                    "To use other features, please make sure to Signin or Signup first"
+                  )
+                }
               >
                 <div className="block h-auto bg-[#f8f8f8] relative w-full">
                   {cover ? (
@@ -196,7 +200,11 @@ const PostCard = ({
             </h1>
             {guest ? (
               <div
-                onClick={() => toastM("Please Login or Signup first")}
+                onClick={() =>
+                  toastM(
+                    "To use other features, please make sure to Signin or Signup first"
+                  )
+                }
                 className="text-center cursor-pointer"
               >
                 <p className="text-[25px]">
@@ -319,7 +327,11 @@ const PostCard = ({
               </Link>
             ) : (
               <button
-                onClick={() => toastM("Please Login or Signup first")}
+                onClick={() =>
+                  toastM(
+                    "To use other features, please make sure to Signin or Signup first"
+                  )
+                }
                 className="text-white min-w-[153px] bg-[#002349] hover:bg-[#001730]/90 w-full mt-3 min-[400px]:mt-0 min-[400px]:w-auto place-content-center font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
               >
                 View Details
