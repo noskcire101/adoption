@@ -141,7 +141,7 @@ const MyPost = ({
           }
           lastPageNumberInCurrentBatch={lastPageNumberInCurrentBatch}
           setLastPageNumberInCurrentBatch={setLastPageNumberInCurrentBatch}
-          displayLoadMore={true}
+          displayLoadMore={false}
         />
       )}
       {loader && <Loader />}

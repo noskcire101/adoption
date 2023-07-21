@@ -19,8 +19,8 @@ const MainContentTitle = ({ ifHasData, title }: Props) => {
 
   return (
     <>
-      <div className="z-50 drop-shadow-[1px_1px_var(--tw-shadow-color)] items-center justify-between sm:justify-center flex shadow-white bg-gradient-to-b from-white ...   p-5 lg:p-10 text-center sticky top-[132px] min-[438px]:top-[77px] md:top-[65px] ...">
-        <h2 className="text-[18px] sm:text-3xl text-[#002349] mr-2 font-bold">
+      <div className="z-50 drop-shadow-[1px_1px_var(--tw-shadow-color)] items-center mx-auto max-w-[1680px] justify-between flex shadow-white bg-gradient-to-b from-white ...  py-5 px-5 md:px-[130px] text-center sticky top-[138px] min-[438px]:top-[77px] md:top-[65px] ...">
+        <h2 className="text-lg sm:text-3xl text-[#002349] mr-2 font-bold">
           {title}
         </h2>
         <div className="w-[148px]">
