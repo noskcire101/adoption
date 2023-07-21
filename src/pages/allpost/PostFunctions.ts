@@ -328,9 +328,9 @@ export function titleCase(str:any) {
 }
 
 
-export function checkUserifLiked(array: any[], uid: string) {
-  if(uid && array){
-    const result = array.includes(uid);
+export function checkUserifLiked(heart: any[], userId: string) {
+  if(userId && heart){
+    const result = heart.includes(userId);
     if (result) {
       return true;
     } else {
@@ -342,7 +342,10 @@ export function checkUserifLiked(array: any[], uid: string) {
   }
 }
 
-export async function handleClickLiked(uid:any,itemId:any,liked:boolean,setLiked:React.Dispatch<React.SetStateAction<boolean>>,likedcount:number,setLikedCount:React.Dispatch<React.SetStateAction<number>>) {
+export async function handleClickLiked(userId:any,itemId:any,liked:boolean,setLiked:React.Dispatch<React.SetStateAction<boolean>>,likedcount:number,setLikedCount:React.Dispatch<React.SetStateAction<number>>) {
+  
+
+
   setLiked(!liked);
   if (liked == true) {
     setLikedCount(likedcount - 1);
@@ -353,12 +356,12 @@ export async function handleClickLiked(uid:any,itemId:any,liked:boolean,setLiked
   const petsDataDirectory = doc(db, "pets", itemId);
   if(liked){
     await updateDoc(petsDataDirectory, {
-      heart: arrayRemove(uid)
+      heart: arrayRemove(userId)
     });
   }
   else{
     await updateDoc(petsDataDirectory, {
-      heart: arrayUnion(uid)
+      heart: arrayUnion(userId)
     });
   }
 }

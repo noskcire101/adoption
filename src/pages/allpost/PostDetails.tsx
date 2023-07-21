@@ -117,6 +117,7 @@ const PostDetails = ({ hideSearchfunction }: Props) => {
                       imageName={images.name}
                       heart={petData.heart}
                       itemId={id}
+                      userId={user?.id}
                     />
                   ))}
                 </div>

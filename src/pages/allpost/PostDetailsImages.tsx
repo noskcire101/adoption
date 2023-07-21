@@ -8,6 +8,7 @@ interface Props {
   imageName: any;
   heart: any[];
   itemId: any;
+  userId: any;
 }
 
 const PostDetailsImages = ({
@@ -16,12 +17,13 @@ const PostDetailsImages = ({
   imageName,
   heart,
   itemId,
+  userId,
 }: Props) => {
   console.log(imageUrl, "img");
   const { user } = useAppSelector((state) => state.auth);
 
   const [liked, setLiked] = useState(
-    user?.id && heart ? checkUserifLiked(heart, user!.id) : false
+    user?.id && heart ? checkUserifLiked(heart, userId) : false
   );
   const [likedCount, setLikedCount] = useState(heart ? heart.length : 0);
   return (
@@ -53,7 +55,7 @@ const PostDetailsImages = ({
       <div
         onClick={() =>
           handleClickLiked(
-            user!.id,
+            userId,
             itemId,
             liked,
             setLiked,

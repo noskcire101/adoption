@@ -84,9 +84,11 @@ const AllPost = ({
       user?.id ?? 0
     ).catch((error) => console.error(error));
   }, [filter, currentPage]);
+
   const MyPostHideOrNot = dataFromDB.filter((param: any) =>
     param.uid.includes(user?.id)
   );
+
   return (
     <>
       <MainContentTitle ifHasData={MyPostHideOrNot.length} />
@@ -119,6 +121,7 @@ const AllPost = ({
                   timestamp={data.timestamp.toDate().toDateString()}
                   uid={data.uid}
                   heart={data.heart}
+                  userId={user?.id}
                 />
               );
             })}

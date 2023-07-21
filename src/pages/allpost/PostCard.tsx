@@ -33,6 +33,7 @@ interface Props {
   timestamp: any;
   uid: any;
   heart: any[];
+  userId: any;
 }
 
 const PostCard = ({
@@ -55,16 +56,22 @@ const PostCard = ({
   timestamp,
   uid,
   heart,
+  userId,
 }: Props) => {
-  const userDataDirectory = `/users/${uid}`;
+  console.log(heart, "postcard");
   const { user } = useAppSelector((state) => state.auth);
-  const [liked, setLiked] = useState(checkUserifLiked(heart, user!.id));
+  const [liked, setLiked] = useState(
+    userId && heart ? checkUserifLiked(heart, userId) : false
+  );
   const [dataFromDb, setdataFromDb] = useState<any>({});
   const [likedCount, setLikedCount] = useState(heart.length);
   const [viewMoreShow, setViewMoreShow] = useState({ display: "none" });
   const [cover, setCover] = useState<any>(null);
-
+  console.log(likedCount);
   useEffect(() => {
+    setLikedCount(heart.length);
+    setLiked(userId && heart ? checkUserifLiked(heart, userId) : false);
+    const userDataDirectory = `/users/${uid}`;
     getAllInfoInADocument(userDataDirectory, setdataFromDb);
     const getPostImgSrc = async () => {
       const imgRef = ref(storage, `pets/${id}/${coverImage}`);
@@ -72,7 +79,7 @@ const PostCard = ({
       setCover(url);
     };
     getPostImgSrc();
-  }, [likedCount, coverImage]);
+  }, [coverImage]);
 
   return (
     <>
@@ -134,7 +141,7 @@ const PostCard = ({
             <div
               onClick={() =>
                 handleClickLiked(
-                  user!.id,
+                  userId,
                   id,
                   liked,
                   setLiked,
