@@ -55,14 +55,14 @@ const Header = ({
       <nav className="z-50 sticky top-0 ... bg-[#002349] min-w-[345px] ">
         <div className="max-w-[1630px] flex flex-wrap items-center  mx-auto  py-1.5 pl-[10px] pr-[70px] md:px-[75px] xl:px-[6%] 2xl:px-[5%]">
           <Link to="/">
-            <div className="cursor-pointer list-item md:inline-flex mr-1 min-[795px]:mr-[50px] items-center">
-              <button className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 ">
+            <div className="cursor-pointer inline-flex mr-[10px] items-center">
+              <button className="flex text-sm bg-gray-800 rounded-full md:mr-0 ">
                 <img
                   className="w-12 h-12 rounded-full"
                   src="https://firebasestorage.googleapis.com/v0/b/webproject-6f2f2.appspot.com/o/mylogo%2Fmylogowhite.png?alt=media&token=ed33baad-63c3-48ae-873d-220b5860dd43"
                 />
               </button>
-              <p className="text-white text-lg ml-3 hidden font-bold lg:block ">
+              <p className="text-white text-lg ml-3 mr-4 block min-[420px]:hidden font-bold lg:block ">
                 Pet Adoption
               </p>
             </div>
@@ -72,7 +72,7 @@ const Header = ({
             className={
               Boolean(!user) || Boolean(hideSearch)
                 ? "hidden"
-                : "list-item md:inline-flex md:flex-row-reverse  items-center"
+                : "inline-block md:inline-flex md:flex-row-reverse  items-center"
             }
           >
             <div className="flex">
@@ -81,43 +81,71 @@ const Header = ({
                   type="search"
                   onChange={(e) => filterOnChange(e.target.value, "main")}
                   id="search-dropdown"
-                  className="block p-1 md:py-2 md:w-[250px] sm:w-[295px] w-[193px] z-20 text-[8px] sm:text-xs text-gray-900 bg-gray-50 rounded-r-lg rounded-l-lg md:rounded-l-none border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 "
+                  className="block p-1.5 mt-1 sm:mt-0 w-[96vw]  min-[420px]:w-[300px] z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg rounded-l-lg md:rounded-l-none border-l-gray-50 border-l-2 border border-gray-300"
                   placeholder="Search..."
                 />
               </div>
             </div>
-            <div className="flex pt-1 md:pt-0 items-center">
+            <div className="flex pt-1 mb-1 sm:mb-0 md:pt-0 items-center">
               <select
                 id="dropdown"
                 onChange={(e) => filterOnChange(e.target.value, "type")}
-                className=" px-1 py-1 md:py-2 text-[7px] sm:text-xs text-gray-900 cursor-pointer bg-[#ddefff] rounded-l-lg hover:bg-[#bbdfff]"
+                className="px-1 py-1 md:py-2 text-xs w-[32vw] min-[420px]:max-w-[100px] text-gray-900 cursor-pointer bg-[#ddefff] rounded-l-lg hover:bg-[#bbdfff]"
               >
-                <option value="all">All Types</option>
-                <option value="Dog">Dogs</option>
-                <option value="Cat">Cats</option>
-                <option value="Rabbit">Rabbits</option>
-                <option value="Guinea Pig">Guinea Pigs</option>
-                <option value="Bird">Birds</option>
-                <option value="Others">Others</option>
+                <option value="all" className="text-[11px]">
+                  All Types
+                </option>
+                <option value="Dog" className="text-[11px]">
+                  Dogs
+                </option>
+                <option value="Cat" className="text-[11px]">
+                  Cats
+                </option>
+                <option value="Rabbit" className="text-[11px]">
+                  Rabbits
+                </option>
+                <option value="Guinea Pig" className="text-[11px]">
+                  Guinea Pigs
+                </option>
+                <option value="Bird" className="text-[11px]">
+                  Birds
+                </option>
+                <option value="Others" className="text-[11px]">
+                  Others
+                </option>
               </select>
               <select
                 id="dropdown2"
                 onChange={(e) => filterOnChange(e.target.value, "gender")}
-                className=" px-1 py-1 md:py-2 text-[7px] sm:text-xs  text-gray-900 cursor-pointer bg-[#ddefff] hover:bg-[#bbdfff]"
+                className="px-1 py-1 md:py-2 text-xs w-[32vw] min-[420px]:max-w-[100px]  text-gray-900 cursor-pointer bg-[#ddefff] hover:bg-[#bbdfff]"
               >
-                <option value="all">All Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
+                <option value="all" className="text-[11px]">
+                  All Gender
+                </option>
+                <option value="Male" className="text-[11px]">
+                  Male
+                </option>
+                <option value="Female" className="text-[11px]">
+                  Female
+                </option>
               </select>
               <select
                 id="dropdown4"
                 onChange={(e) => filterOnChange(e.target.value, "age")}
-                className=" px-1 py-1 md:py-2 text-[7px] sm:text-xs text-gray-900 cursor-pointer rounded-r-lg md:rounded-r-none bg-[#ddefff] hover:bg-[#bbdfff]"
+                className="px-1 py-1 md:py-2 text-xs w-[32vw] min-[420px]:max-w-[100px] text-gray-900 cursor-pointer rounded-r-lg md:rounded-r-none bg-[#ddefff] hover:bg-[#bbdfff]"
               >
-                <option value="all">All Ages</option>
-                <option value="below3">Below 3 Months</option>
-                <option value="between3to12">3-12 Months</option>
-                <option value="above12">Above 1 Year</option>
+                <option value="all" className="text-[11px]">
+                  All Ages
+                </option>
+                <option value="below3" className="text-[11px]">
+                  Below 3 Months
+                </option>
+                <option value="between3to12" className="text-[11px]">
+                  3-12 Months
+                </option>
+                <option value="above12" className="text-[11px]">
+                  Above 1 Year
+                </option>
               </select>
             </div>
           </div>
