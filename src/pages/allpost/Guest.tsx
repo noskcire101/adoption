@@ -71,7 +71,7 @@ const Guest = ({
     ).catch((error) => console.error(error));
   }, [filter, currentPage]);
 
-  const PageTitle = "";
+  const PageTitle = "List For Adoption";
   return (
     <>
       <MainContentTitle ifHasData={0} title={PageTitle} guest={true} />
