@@ -39,7 +39,7 @@ const MainContentTitle = ({ ifHasData, title }: Props) => {
           </button>
           <div
             style={{ display: showtogglePostOption ? "block" : "none" }}
-            className="z-10 hidden bg-white divide-y absolute divide-gray-100 rounded-lg shadow w-[146px] dark:bg-gray-700"
+            className="z-10 hidden bg-white divide-y absolute divide-gray-100 rounded-lg shadow w-[137px] dark:bg-gray-700"
           >
             <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
               <li>
