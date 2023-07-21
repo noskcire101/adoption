@@ -331,7 +331,7 @@ const UpdatePost = ({
         isOpen={deleteContainerVisibily}
         onClose={() => setDeleteContainerVisibily(false)}
       />
-      <div className="z-50 drop-shadow-[1px_1px_var(--tw-shadow-color)] items-center justify-between sm:justify-center flex shadow-white bg-gradient-to-b from-white ...   p-5 lg:p-10 text-center sticky py-5 px-5 md:px-[130px] top-[60px] sm:top-[65px] ...">
+      <div className="z-50 drop-shadow-[1px_1px_var(--tw-shadow-color)] items-center justify-between max-w-[1680px] m-auto flex shadow-white bg-gradient-to-b from-white ...   p-5  text-center sticky py-5 px-5 md:px-[130px] top-[60px] sm:top-[65px] ...">
         <h2 className="text-lg sm:text-3xl text-[#002349] mr-2 font-bold">
           Update Post
         </h2>

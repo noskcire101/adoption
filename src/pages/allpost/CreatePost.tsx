@@ -249,7 +249,7 @@ const CreatePost = ({
 
   return (
     <>
-      <div className="z-50 drop-shadow-[1px_1px_var(--tw-shadow-color)] items-center max-w-[1680px] justify-between flex shadow-white bg-gradient-to-b from-white ...   p-5 lg:p-10 text-center sticky py-5 px-5 md:px-[130px] top-[60px] sm:top-[65px] ...">
+      <div className="z-50 drop-shadow-[1px_1px_var(--tw-shadow-color)] items-center max-w-[1680px] m-auto justify-between flex shadow-white bg-gradient-to-b from-white ...  text-center sticky py-5 px-5 md:px-[130px] top-[60px] sm:top-[65px] ...">
         <h2 className="text-lg sm:text-3xl text-[#002349] font-bold mr-2">
           Create Post
         </h2>
