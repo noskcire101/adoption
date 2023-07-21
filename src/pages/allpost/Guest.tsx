@@ -51,6 +51,11 @@ const Guest = ({
   );
   const [loader, setLoader] = useState(true);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.auth);
+  useEffect(() => {
+    Boolean(user) && navigate("/");
+  }, [user]);
 
   useEffect(() => {
     getAllDocsInACollection(
@@ -66,7 +71,7 @@ const Guest = ({
     ).catch((error) => console.error(error));
   }, [filter, currentPage]);
 
-  const PageTitle = "Please Login or Signup First";
+  const PageTitle = "";
   return (
     <>
       <MainContentTitle ifHasData={0} title={PageTitle} guest={true} />
