@@ -249,11 +249,11 @@ const CreatePost = ({
 
   return (
     <>
-      <div className="z-50 drop-shadow-[1px_1px_var(--tw-shadow-color)] items-center max-w-[1680px] m-auto justify-between flex shadow-white bg-gradient-to-b from-white ...  text-center sticky py-5 px-5 md:px-[130px] top-[66px] sm:top-[65px] ...">
+      <div className="z-50 drop-shadow-[1px_1px_var(--tw-shadow-color)] items-center max-w-[1680px] m-auto justify-between flex shadow-white bg-gradient-to-b from-white ...  text-center sticky py-5 px-4 md:px-[130px] top-[66px] sm:top-[65px] ...">
         <h2 className="text-lg sm:text-3xl text-[#002349] font-bold mr-2">
           Create Post
         </h2>
-        <div className="w-[148px]">
+        <div>
           <Link
             to="/"
             className="text-white bg-[#002349] hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center "
