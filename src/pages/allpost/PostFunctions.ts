@@ -294,22 +294,22 @@ export function ageCalculator(date:Date) {
   }      
   let ageString = "";  
   if ( (petAge.years > 0) && (petAge.months > 0) && (petAge.days > 0) )  
-      ageString = petAge.years + ` year${petAge.years > 1 ? "s" : ""}, ` + petAge.months + ` month${petAge.months > 1 ? "s" : ""}, and ` + petAge.days + ` day${petAge.days > 1 ? "s" : ""} old.`;  
+      ageString = petAge.years + ` year${petAge.years > 1 ? "s" : ""}, ` + petAge.months + ` month${petAge.months > 1 ? "s" : ""}, and ` + petAge.days + ` day${petAge.days > 1 ? "s" : ""}`;  
   else if ( (petAge.years == 0) && (petAge.months == 0) && (petAge.days > 0) )  
-     ageString = petAge.days + ` day${petAge.days > 1 ? "s" : ""} old.`;  
+     ageString = petAge.days + ` day${petAge.days > 1 ? "s" : ""}`;  
   //when current month and date is same as birth date and month  
   else if ( (petAge.years > 0) && (petAge.months == 0) && (petAge.days == 0) )  
-     ageString = petAge.years +  ` year${petAge.years > 1 ? "s" : ""} old.`;  
+     ageString = petAge.years +  ` year${petAge.years > 1 ? "s" : ""}`;  
   else if ( (petAge.years > 0) && (petAge.months > 0) && (petAge.days == 0) )  
-     ageString = petAge.years + ` year${petAge.years > 1 ? "s" : ""} and ` + petAge.months + ` month${petAge.months > 1 ? "s" : ""} old.`;  
+     ageString = petAge.years + ` year${petAge.years > 1 ? "s" : ""} & ` + petAge.months + ` month${petAge.months > 1 ? "s" : ""}`;  
   else if ( (petAge.years == 0) && (petAge.months > 0) && (petAge.days > 0) )  
-     ageString = petAge.months + ` month${petAge.months > 1 ? "s" : ""} and ` + petAge.days + ` day${petAge.days > 1 ? "s" : ""} old.`;  
+     ageString = petAge.months + ` month${petAge.months > 1 ? "s" : ""} & ` + petAge.days + ` day${petAge.days > 1 ? "s" : ""}`;  
   else if ( (petAge.years > 0) && (petAge.months == 0) && (petAge.days > 0) )  
-     ageString = petAge.years + ` year${petAge.years > 1 ? "s" : ""} and ` + petAge.days + ` day${petAge.days > 1 ? "s" : ""} old.`;  
+     ageString = petAge.years + ` year${petAge.years > 1 ? "s" : ""} & ` + petAge.days + ` day${petAge.days > 1 ? "s" : ""}`;  
   else if ( (petAge.years == 0) && (petAge.months > 0) && (petAge.days == 0) )  
-     ageString = petAge.months + ` month${petAge.months > 1 ? "s" : ""} old `;  
+     ageString = petAge.months + ` month${petAge.months > 1 ? "s" : ""}`;  
   //when current date is same as dob(date of birth)  
-  else ageString = "1 day Old";   
+  else ageString = "1 day";   
   //display the calculated age  
   return ageString;   
 }  
