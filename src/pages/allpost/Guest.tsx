@@ -53,6 +53,7 @@ const Guest = ({
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
+
   useEffect(() => {
     Boolean(user) && navigate("/");
   }, [user]);
@@ -69,16 +70,7 @@ const Guest = ({
       false,
       0
     ).catch((error) => console.error(error));
-    poponfirstload(loader);
   }, [filter, currentPage]);
-
-  function poponfirstload(goSignal: boolean) {
-    if (goSignal) {
-      toastMessageError(
-        "You are currently sign in as Guest. Please sign in or register first to get the full user experience."
-      );
-    }
-  }
 
   const PageTitle = "List For Adoption";
   return (
