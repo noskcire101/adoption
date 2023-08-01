@@ -1,5 +1,5 @@
 import { Dispatch, FC, SetStateAction } from "react";
-import { useAppSelector } from "../../storeReduxTools/storeHooks";
+import { useSelector, useDispatch } from "react-redux";
 
 interface ResetPasswordProps {
   isOpen: boolean;
@@ -16,7 +16,7 @@ const ResetPassword: FC<ResetPasswordProps> = ({
   resetPasswordEmail,
   setResetPasswordEmail,
 }: ResetPasswordProps) => {
-  const { user } = useAppSelector((state) => state.auth);
+  const { user } = useSelector((state: any) => state.authUser.user);
   if (user !== null) {
     Boolean(user) && setResetPasswordEmail(user.email);
   }

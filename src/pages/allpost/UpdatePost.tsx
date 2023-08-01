@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  useAppDispatch,
-  useAppSelector,
-} from "../../storeReduxTools/storeHooks";
+import { useSelector, useDispatch } from "react-redux";
+import { login } from "../../storeReduxTools/authSlice";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   updatingData,
@@ -28,7 +26,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { dataURIToBlob, resizeFile } from "../../reusableFunctions/covert";
 import DeleteSpecificItem from "./DeleteSpecificItem";
 import Loader from "../../components/loader/loader";
-import { login } from "../../storeReduxTools/authSlice";
 
 interface Props {
   toastMessageSuccess: (param: string) => void;
@@ -49,13 +46,13 @@ const UpdatePost = ({
   let categories = images;
   const [cover, setCover] = useState(categories[0]?.name ?? 0);
   const navigate = useNavigate();
-  const { user } = useAppSelector((state) => state.auth);
+  const { user } = useSelector((state: any) => state.authUser.user);
+  const dispatch = useDispatch();
   const { id } = useParams();
   const [petData, setPetData] = useState<any>({});
   const [bdate, setBDate] = useState<string>();
   const [loader, setLoader] = useState(false);
 
-  const dispatch = useAppDispatch();
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user && user.email) {

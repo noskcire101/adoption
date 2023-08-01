@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { checkUserifLiked, handleClickLiked } from "./PostFunctions";
-import { useAppSelector } from "../../storeReduxTools/storeHooks";
+import { useSelector } from "react-redux";
 import { GoHeart, GoHeartFill } from "react-icons/go";
 interface Props {
   index: any;
@@ -19,9 +19,7 @@ const PostDetailsImages = ({
   itemId,
   userId,
 }: Props) => {
-  console.log(imageUrl, "img");
-  const { user } = useAppSelector((state) => state.auth);
-
+  const { user } = useSelector((state: any) => state.authUser.user);
   const [liked, setLiked] = useState(
     user?.id && heart ? checkUserifLiked(heart, userId) : false
   );

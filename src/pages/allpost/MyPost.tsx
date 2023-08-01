@@ -5,13 +5,12 @@ import { getAllDocsInACollection } from "./PostFunctions";
 import { Link, useNavigate } from "react-router-dom";
 import { petsFormFinal } from "../../yupModels/Form";
 import PostCard from "./PostCard";
-import { useAppSelector } from "../../storeReduxTools/storeHooks";
 import NeedsLoginMessage from "../../components/needsLoginMessage/NeedsLoginMessage";
 import MainContentTitle from "../../components/mainContentTitle/mainContentTitle";
 import Loader from "../../components/loader/loader";
-import { useAppDispatch } from "../../storeReduxTools/storeHooks";
 import { auth } from "../../database/firebase";
 import { login } from "../../storeReduxTools/authSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 interface Props {
   toastMessageSuccess: (param: string) => void;
@@ -32,7 +31,8 @@ const MyPost = ({
   filter,
 }: Props) => {
   showOrHideSearchfunction();
-  const { user } = useAppSelector((state) => state.auth);
+  const { user } = useSelector((state: any) => state.authUser.user);
+  const dispatch = useDispatch();
   const [currentPage, setcurrentPage] = useState(1);
   const [itemLimitPerPage, setitemLimitPerPage] = useState(6);
   const [pageNumberLimit, setpageNumberLimit] = useState(5);
@@ -53,7 +53,7 @@ const MyPost = ({
 
   const [loader, setLoader] = useState(true);
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user && user.email) {

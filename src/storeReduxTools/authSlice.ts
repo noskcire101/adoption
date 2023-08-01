@@ -20,18 +20,28 @@ const initialState : AuthState ={
 }
 
 export const authSlice = createSlice({
-name: "auth",
+name: "authUser",
 initialState,
-reducers:{
-    login:(state,action:PayloadAction<User>) =>{
-        state.user = action.payload;
-    },
-    logout: (state) => {
-        state.user = null;
-         signOut(auth);
-    }
+    reducers:{
+        login:{
+            reducer(state,action){
+            state.user = action.payload
+            },
+            prepare(id:any,fullName?:any,email:any,photoUrl?:any){
+                return{
+                    payload:{
+                        id,fullName,email,photoUrl
+                    }
+                }
+            }
+            
+        },
+        logout: (state) => {
+            state.user = null;
+            signOut(auth);
+        },
 
-}
+    }
 
 })
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styles from "./Header.module.css";
-import { useAppSelector } from "../../storeReduxTools/storeHooks";
+import { useSelector, useDispatch } from "react-redux";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../../database/firebase";
 import ResetPassword from "../authentication/ResetPassword";
@@ -21,7 +21,7 @@ const Header = ({
   filterOnChange,
 }: Props) => {
   const [loader, setLoader] = useState(false);
-  const { user } = useAppSelector((state) => state.auth);
+  const { user } = useSelector((state: any) => state.authUser.user);
   const [resetPasswordEmail, setResetPasswordEmail] = useState("");
   const [resetPasswordContainerVisibily, setResetPasswordContainerVisibily] =
     useState(false);

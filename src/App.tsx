@@ -5,11 +5,12 @@ import Header from "./pages/header/Header";
 import Login from "./pages/authentication/Login";
 import SignUp from "./pages/authentication/Signup";
 import { useEffect, useState } from "react";
-import { login } from "./storeReduxTools/authSlice";
+
 import { auth } from "./database/firebase";
 import { unsubscribe } from "diagnostics_channel";
-import { useAppDispatch } from "./storeReduxTools/storeHooks";
-import LoginRoutes from "./components/HOC/LoginRoutes";
+import { login } from "./storeReduxTools/authSlice";
+import { useDispatch } from "react-redux";
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AllPost from "./pages/allpost/AllPost";
@@ -22,7 +23,7 @@ import MyPost from "./pages/allpost/MyPost";
 import Guest from "./pages/allpost/Guest";
 
 const App = () => {
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user && user.email)
@@ -35,7 +36,6 @@ const App = () => {
           })
         );
     });
-
     return () => unsubscribe();
   }, [dispatch]);
 
@@ -101,7 +101,6 @@ const App = () => {
           toastMessageError={showToastMessageError}
         />
         <Routes>
-          {/* <Route element={<LoginRoutes />}> */}
           <Route path="/">
             <Route
               index
@@ -161,7 +160,7 @@ const App = () => {
               }
             />
           </Route>
-          {/* </Route> */}
+
           <Route
             path="/login"
             element={

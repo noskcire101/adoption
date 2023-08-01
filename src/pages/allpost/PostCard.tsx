@@ -9,7 +9,7 @@ import {
   titleCase,
 } from "./PostFunctions";
 import { useEffect, useState } from "react";
-import { useAppSelector } from "../../storeReduxTools/storeHooks";
+import { useSelector, useDispatch } from "react-redux";
 import { getDownloadURL, listAll, ref } from "firebase/storage";
 import { storage } from "../../database/firebase";
 
@@ -62,10 +62,7 @@ const PostCard = ({
   guest,
   toastM,
 }: Props) => {
-  console.log(heart, "postcard");
-
-  const { user } = useAppSelector((state) => state.auth);
-
+  const { user } = useSelector((state: any) => state.authUser.user);
   const [liked, setLiked] = useState(
     userId && heart ? checkUserifLiked(heart, userId) : false
   );

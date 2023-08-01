@@ -5,13 +5,11 @@ import { getAllDocsInACollection } from "./PostFunctions";
 import { Link, useNavigate } from "react-router-dom";
 import { petsFormFinal } from "../../yupModels/Form";
 import PostCard from "./PostCard";
-import { useAppSelector } from "../../storeReduxTools/storeHooks";
-import NeedsLoginMessage from "../../components/needsLoginMessage/NeedsLoginMessage";
 import MainContentTitle from "../../components/mainContentTitle/mainContentTitle";
 import Loader from "../../components/loader/loader";
-import { useAppDispatch } from "../../storeReduxTools/storeHooks";
 import { auth } from "../../database/firebase";
 import { login } from "../../storeReduxTools/authSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 interface Props {
   toastMessageSuccess: (param: string) => void;
@@ -51,8 +49,8 @@ const Guest = ({
   );
   const [loader, setLoader] = useState(true);
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.auth);
+  const { user } = useSelector((state: any) => state.authUser.user);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     Boolean(user) && navigate("/");

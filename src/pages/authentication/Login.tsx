@@ -13,10 +13,7 @@ import {
 } from "firebase/auth";
 import { auth, db } from "../../database/firebase";
 import { setDoc, doc } from "firebase/firestore";
-import {
-  useAppDispatch,
-  useAppSelector,
-} from "../../storeReduxTools/storeHooks";
+import { useSelector, useDispatch } from "react-redux";
 import { login } from "../../storeReduxTools/authSlice";
 import ResetPassword from "./ResetPassword";
 import { Link, useNavigate } from "react-router-dom";
@@ -38,8 +35,8 @@ const Login = ({
   const [resetPasswordContainerVisibily, setResetPasswordContainerVisibily] =
     useState(false);
   const [resetPasswordEmail, setResetPasswordEmail] = useState("");
-  const { user } = useAppSelector((state) => state.auth);
-  const dispatch = useAppDispatch();
+  const { user } = useSelector((state: any) => state.authUser.user);
+  const dispatch = useDispatch();
   const [loader, setLoader] = useState(false);
 
   const navigate = useNavigate();

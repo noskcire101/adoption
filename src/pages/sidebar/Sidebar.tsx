@@ -8,10 +8,7 @@ import { TbMoodSearch } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import { ReactNode } from "react";
 import styles from "./Sidebar.module.css";
-import {
-  useAppDispatch,
-  useAppSelector,
-} from "../../storeReduxTools/storeHooks";
+import { useSelector, useDispatch } from "react-redux";
 import SidebarItems from "./SidebarItems";
 import ResetPassword from "../authentication/ResetPassword";
 import { auth } from "../../database/firebase";
@@ -33,8 +30,9 @@ const Sidebar = ({
   const [resetPasswordEmail, setResetPasswordEmail] = useState("");
   const [resetPasswordContainerVisibily, setResetPasswordContainerVisibily] =
     useState(false);
-  const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.auth);
+  const { user } = useSelector((state: any) => state.user);
+  console.log(user);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   function closeAllTabs(

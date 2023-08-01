@@ -1,8 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  useAppDispatch,
-  useAppSelector,
-} from "../../storeReduxTools/storeHooks";
+import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import {
   addingDocument,
@@ -40,10 +37,9 @@ const CreatePost = ({
   const categories = images;
   const [cover, setCover] = useState(categories[0]?.name ?? 0);
   const navigate = useNavigate();
-  const { user } = useAppSelector((state) => state.auth);
+  const { user } = useSelector((state: any) => state.authUser.user);
+  const dispatch = useDispatch();
   const [loader, setLoader] = useState(false);
-
-  const dispatch = useAppDispatch();
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user && user.email) {

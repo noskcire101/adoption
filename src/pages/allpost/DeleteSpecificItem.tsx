@@ -1,5 +1,4 @@
-import { Dispatch, FC, SetStateAction, useState } from "react";
-import { useAppSelector } from "../../storeReduxTools/storeHooks";
+import { useState } from "react";
 import Loader from "../../components/loader/loader";
 import { deletingItemTotally } from "./PostFunctions";
 import { useNavigate } from "react-router-dom";

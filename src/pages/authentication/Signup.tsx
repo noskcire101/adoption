@@ -10,10 +10,7 @@ import {
 } from "firebase/auth";
 import { auth, db } from "../../database/firebase";
 import { setDoc, doc } from "firebase/firestore";
-import {
-  useAppDispatch,
-  useAppSelector,
-} from "../../storeReduxTools/storeHooks";
+import { useSelector, useDispatch } from "react-redux";
 import { login } from "../../storeReduxTools/authSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { convertToTitleCase } from "../../reusableFunctions/covert";
@@ -32,8 +29,8 @@ const Signup = ({
   hideSearchfunction();
   const [buttonDisabling, setbuttonDisabling] = useState(false);
   const [loader, setLoader] = useState(false);
-  const { user } = useAppSelector((state) => state.auth);
-  const dispatch = useAppDispatch();
+  const { user } = useSelector((state: any) => state.authUser.user);
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
   useEffect(() => {

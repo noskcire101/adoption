@@ -9,12 +9,9 @@ import {
   getAllInfoInADocument,
   titleCase,
 } from "./PostFunctions";
-import {
-  useAppDispatch,
-  useAppSelector,
-} from "../../storeReduxTools/storeHooks";
-import Loader from "../../components/loader/loader";
 import { login } from "../../storeReduxTools/authSlice";
+import { useSelector, useDispatch } from "react-redux";
+import Loader from "../../components/loader/loader";
 
 interface Props {
   hideSearchfunction(): void;
@@ -23,7 +20,8 @@ interface Props {
 const PostDetails = ({ hideSearchfunction }: Props) => {
   hideSearchfunction();
   const { id } = useParams();
-  const { user } = useAppSelector((state) => state.auth);
+  const { user } = useSelector((state: any) => state.authUser.user);
+  const dispatch = useDispatch();
   const [loader, setLoader] = useState(true);
   const [petData, setPetData] = useState<any>({});
   const [userData, setUserData] = useState<any>({});
@@ -45,7 +43,6 @@ const PostDetails = ({ hideSearchfunction }: Props) => {
     indexOfLastItemInCurrentBatch
   );
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user && user.email) {
