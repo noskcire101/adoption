@@ -145,11 +145,11 @@ const CreatePost = ({
         "Please make sure to upload atleast one image of your pet"
       );
     } else {
-      setLoader(true);
+      // setLoader(true);
       const coverImage = cover + "<Ñ:v4>" + v4();
       const uid = user?.id;
       const heart: any = [];
-      const timestamp = new Date();
+      // const timestamp = new Date();
       const {
         street,
         city,
@@ -165,8 +165,8 @@ const CreatePost = ({
         vaccinated,
         reason,
       } = data;
-      const petsDirectory = collection(db, "pets");
-      await addingDocument(petsDirectory, {
+
+      const MongoData = {
         coverImage,
         street,
         city,
@@ -182,44 +182,76 @@ const CreatePost = ({
         vaccinated,
         reason,
         uid,
-        timestamp,
         heart,
-      })
-        .then((petIdfromDb) => {
-          const uploadImages = async (petIdfromDb: any) => {
-            let successChecker = false;
-            if (images == undefined) {
-              successChecker = true;
-            }
-            for (let i = 0; i < images.length; i++) {
-              const customRef = ref(
-                storage,
-                `/pets/${petIdfromDb}/${NewImageName(
-                  cover,
-                  images[i].name,
-                  coverImage
-                )}`
-              );
-              await uploadBytes(customRef, images[i].blob)
-                .then(() => {
-                  successChecker = true;
-                })
-                .catch((error) => {
-                  toastMessageError(error);
-                });
-            }
-            if (successChecker) {
-              toastMessageSuccess("New post successfully created");
-              setLoader(false);
-              navigate("/");
-            }
-          };
-          uploadImages(petIdfromDb);
-        })
-        .catch((error) => {
-          toastMessageError("Error occured while uploading images");
-          setLoader(false);
-        });
+      };
+      console.log(MongoData);
+      const response = await fetch("http://localhost:4000/api/pets", {
+        method: "POST",
+        body: JSON.stringify(MongoData),
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+      const json = await response.json();
+      response.ok
+        ? toastMessageSuccess("success adding in mongoDB")
+        : toastMessageError(json.error);
+
+      // const petsDirectory = collection(db, "pets");
+      // await addingDocument(petsDirectory, {
+      //   coverImage,
+      //   street,
+      //   city,
+      //   state,
+      //   contact,
+      //   fbaccount,
+      //   pet,
+      //   type,
+      //   gender,
+      //   breed,
+      //   birthdate,
+      //   dewormed,
+      //   vaccinated,
+      //   reason,
+      //   uid,
+      //   timestamp,
+      //   heart,
+      // })
+      //   .then((petIdfromDb) => {
+      //     const uploadImages = async (petIdfromDb: any) => {
+      //       let successChecker = false;
+      //       if (images == undefined) {
+      //         successChecker = true;
+      //       }
+      //       for (let i = 0; i < images.length; i++) {
+      //         const customRef = ref(
+      //           storage,
+      //           `/pets/${petIdfromDb}/${NewImageName(
+      //             cover,
+      //             images[i].name,
+      //             coverImage
+      //           )}`
+      //         );
+      //         await uploadBytes(customRef, images[i].blob)
+      //           .then(() => {
+      //             successChecker = true;
+      //           })
+      //           .catch((error) => {
+      //             toastMessageError(error);
+      //           });
+      //       }
+      //       if (successChecker) {
+      //         toastMessageSuccess("New post successfully created");
+      //         setLoader(false);
+      //         navigate("/");
+      //       }
+      //     };
+      //     uploadImages(petIdfromDb);
+      //   })
+      //   .catch((error) => {
+      //     toastMessageError("Error occured while uploading images");
+      //     setLoader(false);
+      //   });
     }
   };
 

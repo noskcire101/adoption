@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import styles from "./AllPost.module.css";
 import Pagination from "../../components/pagination/pagination";
 import { getAllDocsInACollection } from "./PostFunctions";
@@ -71,6 +71,8 @@ const AllPost = ({
     return () => unsubscribe();
   }, [dispatch]);
 
+  const [workouts, setWorkouts] = useState(null);
+
   useEffect(() => {
     getAllDocsInACollection(
       "pets",
@@ -85,10 +87,21 @@ const AllPost = ({
     ).catch((error) => console.error(error));
   }, [filter, currentPage]);
 
+  useEffect(() => {
+    const FetchWorkouts = async () => {
+      const response = await fetch("http://localhost:4000/api/workouts");
+      const json = await response.json();
+      response.ok && setWorkouts(json);
+    };
+    FetchWorkouts();
+  }, []);
+  workouts && console.log(workouts);
+
   const MyPostHideOrNot = dataFromDB.filter((param: any) =>
     param.uid.includes(user?.id)
   );
   const PageTitle = "List For Adoption";
+
   return (
     <>
       <MainContentTitle
@@ -96,7 +109,6 @@ const AllPost = ({
         title={PageTitle}
         guest={false}
       />
-
       <div
         style={{ display: user && user ? "block" : "none" }}
         className="overflow-auto mx-[0%]"

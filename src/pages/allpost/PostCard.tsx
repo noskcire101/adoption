@@ -62,8 +62,6 @@ const PostCard = ({
   guest,
   toastM,
 }: Props) => {
-  console.log(heart, "postcard");
-
   const { user } = useAppSelector((state) => state.auth);
 
   const [liked, setLiked] = useState(
@@ -73,7 +71,7 @@ const PostCard = ({
   const [likedCount, setLikedCount] = useState(heart.length);
   const [viewMoreShow, setViewMoreShow] = useState({ display: "none" });
   const [cover, setCover] = useState<any>(null);
-  console.log(likedCount);
+
   useEffect(() => {
     setLikedCount(heart.length);
     setLiked(userId && heart ? checkUserifLiked(heart, userId) : false);
